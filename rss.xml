@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title></title>
+        <link>undefined</link>
+        <description>undefined</description>
+        <lastBuildDate>Tue, 07 Dec 2021 04:31:08 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>Joplin Pages Publisher</generator>
+        <item>
+            <title><![CDATA[Hello World]]></title>
+            <guid>f056a2ba35984d57b50d8bc9155bc2a8</guid>
+            <pubDate>Tue, 07 Dec 2021 04:16:02 GMT</pubDate>
+            <content:encoded><![CDATA[<h1 id="hello-world">Hello World</h1>
+]]></content:encoded>
+        </item>
+    </channel>
+</rss>
