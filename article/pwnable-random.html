@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>pwnable  random - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">pwnable  random</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1651041748202"
+                  >2022-04-27 14:42</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1651041767437"
+                  >2022-04-27 14:42</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p><strong>Tips:</strong></p>
+<p><strong>rand()函数请查看Security下相关文档</strong></p>
+<hr />
+<div><pre class="hljs"><code>Daddy, teach me how <span class="hljs-keyword">to</span> use <span class="hljs-built_in">random</span> value <span class="hljs-keyword">in</span> programming!
+
+ssh <span class="hljs-built_in">random</span><span class="hljs-symbol">@pwnable</span>.kr -p2222 (pw:guest)</code></pre></div>
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>{
+    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> random;
+    random = rand();	<span class="hljs-comment">// random value!</span>
+
+    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> key=<span class="hljs-number">0</span>;
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, &amp;key);
+
+    <span class="hljs-keyword">if</span>( (key ^ random) == <span class="hljs-number">0xdeadbeef</span> ){
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Good!\n"</span>);
+        system(<span class="hljs-string">"/bin/cat flag"</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Wrong, maybe you should try 2^32 cases.\n"</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre></div>
+<hr />
+<p><strong>经过查阅得知：</strong></p>
+<p><code>rand()</code> 的内部实现是用线性同余法做的，它不是真的随机数，因其周期特别长，故在一定的范围里可看成是随机的。</p>
+<p><code>rand()</code>返回一随机数值的范围在 <code>0 至 RAND_MAX</code>间。</p>
+<p><code>RAND_MAX</code>的范围最少是在 <code>32767</code> 之间<code>(int)</code>。</p>
+<p>用<code>unsigned int</code> 双字节是 <code>65535</code>，四字节是 <code>4294967295</code>的整数范围。</p>
+<p><code>0~RAND_MAX</code> 每个数字被选中的机率是相同的。</p>
+<p>用户未设定随机数种子时，系统默认的随机数种子为<code>1</code>。</p>
+<p><code>rand()</code>产生的是伪随机数字，每次执行时是相同的; 若要不同, 用函数<code>srand()</code>初始化它</p>
+<hr />
+<p>在本题目中并没有使用srand()函数,故而rand()生成的随机数实际上是固定的</p>
+<p><strong>适用gdb分析</strong></p>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># objdump -t -j .text random                                                                                                                                  127 ⨯</span>
+
+random:     file format elf64-x86-64
+
+SYMBOL TABLE:
+0000000000400510 l    d  .text	0000000000000000              .text
+000000000040053c l     F .text	0000000000000000              call_gmon_start
+0000000000400560 l     F .text	0000000000000000              __do_global_dtors_aux
+00000000004005d0 l     F .text	0000000000000000              frame_dummy
+0000000000400710 l     F .text	0000000000000000              __do_global_ctors_aux
+0000000000400700 g     F .text	0000000000000002              __libc_csu_fini
+0000000000400670 g     F .text	0000000000000089              __libc_csu_init
+0000000000400510 g     F .text	0000000000000000              _start
+00000000004005f4 g     F .text	0000000000000073              main</code></pre></div>
+<div><pre class="hljs"><code>pwndbg&gt; disass main
+Dump of assembler code <span class="hljs-keyword">for</span> <span class="hljs-keyword">function</span> main:
+   0x00000000004005f4 &lt;+0&gt;:	push   rbp
+   0x00000000004005f5 &lt;+1&gt;:	mov    rbp,rsp
+   0x00000000004005f8 &lt;+4&gt;:	sub    rsp,0x10
+   0x00000000004005fc &lt;+8&gt;:	mov    eax,0x0
+   0x0000000000400601 &lt;+13&gt;:	call   0x400500 &lt;rand@plt&gt;
+   0x0000000000400606 &lt;+18&gt;:	mov    DWORD PTR [rbp-0x4],eax
+   0x0000000000400609 &lt;+21&gt;:	mov    DWORD PTR [rbp-0x8],0x0
+   0x0000000000400610 &lt;+28&gt;:	mov    eax,0x400760
+   0x0000000000400615 &lt;+33&gt;:	lea    rdx,[rbp-0x8]
+   0x0000000000400619 &lt;+37&gt;:	mov    rsi,rdx
+   0x000000000040061c &lt;+40&gt;:	mov    rdi,rax
+   0x000000000040061f &lt;+43&gt;:	mov    eax,0x0
+   0x0000000000400624 &lt;+48&gt;:	call   0x4004f0 &lt;__isoc99_scanf@plt&gt;
+   0x0000000000400629 &lt;+53&gt;:	mov    eax,DWORD PTR [rbp-0x8]
+   0x000000000040062c &lt;+56&gt;:	xor    eax,DWORD PTR [rbp-0x4]
+   0x000000000040062f &lt;+59&gt;:	cmp    eax,0xdeadbeef
+   0x0000000000400634 &lt;+64&gt;:	jne    0x400656 &lt;main+98&gt;
+   0x0000000000400636 &lt;+66&gt;:	mov    edi,0x400763
+   0x000000000040063b &lt;+71&gt;:	call   0x4004c0 &lt;puts@plt&gt;
+   0x0000000000400640 &lt;+76&gt;:	mov    edi,0x400769
+   0x0000000000400645 &lt;+81&gt;:	mov    eax,0x0
+   0x000000000040064a &lt;+86&gt;:	call   0x4004d0 &lt;system@plt&gt;
+   0x000000000040064f &lt;+91&gt;:	mov    eax,0x0
+   0x0000000000400654 &lt;+96&gt;:	jmp    0x400665 &lt;main+113&gt;
+   0x0000000000400656 &lt;+98&gt;:	mov    edi,0x400778
+   0x000000000040065b &lt;+103&gt;:	call   0x4004c0 &lt;puts@plt&gt;
+   0x0000000000400660 &lt;+108&gt;:	mov    eax,0x0
+   0x0000000000400665 &lt;+113&gt;:	leave  
+   0x0000000000400666 &lt;+114&gt;:	ret    
+End of assembler dump.</code></pre></div>
+<p><img src="/_resources/f1b67d38ffe2466c876f8f3de3ad01e9.png" /></p>
+<p>在rand@plt后设置断点然后运行，可以得到random随机数RAX为0x6b8b4567</p>
+<p><strong>由于^(异或)运算是可逆的，可以得到key:</strong></p>
+<p>key =0x6b8b4567^0xdeadbeef = 3039230856(可以用python shell计算得出)</p>
+<hr />
+<p><strong>本地运行：</strong></p>
+<div><pre class="hljs"><code>┌──(root💀kali)-[~/pwnable/random]
+└─<span class="hljs-comment"># ./random</span>
+3039230856
+Good!
+/bin/cat: flag: No such file or directory</code></pre></div>
+<p><strong>pwnable.kr运行：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-comment"># -*- coding:utf-8 -*-</span>
+
+<span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+<span class="hljs-keyword">try</span>:
+    s = ssh(host=<span class="hljs-string">'pwnable.kr'</span>,user=<span class="hljs-string">'random'</span>,password=<span class="hljs-string">'guest'</span>,port=<span class="hljs-number">2222</span>)
+    p = s.process(<span class="hljs-string">'./random'</span>)
+    p.sendline(<span class="hljs-string">'3039230856\n'</span>)
+    p.interactive()
+<span class="hljs-keyword">except</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'error'</span>)</code></pre></div>
+<p><strong><img src="/_resources/8d0618819d9f41f19505792a3b95e946.png" alt="dadebc0086407133f8d23be98637b8ea.png" width="1077" height="301" class="jop-noMdConv" /></strong></p>
+</div>
+      </article>
+    </div>
+  </body>
+</html>

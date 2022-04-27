@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>pwnable   fd  - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">pwnable   fd </h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1651041692515"
+                  >2022-04-27 14:41</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1651041706784"
+                  >2022-04-27 14:41</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><img src="/_resources/c774c598191645eea4fd4a0a697df47f.png" alt="63c93ec7d8e30f0017d628cf6d998227.png" width="668" height="439" class="jop-noMdConv" />
+<p><mark><strong>ssh fd@pwnable.kr -p2222 (pw:guest)</strong></mark></p>
+<img src="/_resources/0f3dba1dccbe4e5a91463813e47687fa.png" alt="e7214056bbe241c8dfd6dbc0cf05a9a3.png" width="617" height="621" class="jop-noMdConv" />
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
+<span class="hljs-type">char</span> buf[<span class="hljs-number">32</span>];
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[], <span class="hljs-type">char</span>* envp[])</span>{
+    <span class="hljs-keyword">if</span>(argc&lt;<span class="hljs-number">2</span>){
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"pass argv[1] a number\n"</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+    <span class="hljs-type">int</span> fd = atoi( argv[<span class="hljs-number">1</span>] ) - <span class="hljs-number">0x1234</span>;
+    <span class="hljs-type">int</span> len = <span class="hljs-number">0</span>;
+    len = read(fd, buf, <span class="hljs-number">32</span>);
+    <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">strcmp</span>(<span class="hljs-string">"LETMEWIN\n"</span>, buf)){
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"good job :)\n"</span>);
+        system(<span class="hljs-string">"/bin/cat flag"</span>);
+        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);
+    }
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"learn about Linux file IO\n"</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+
+}</code></pre></div>
+<p><mark>这里要注意linux相关函数的具体使用技巧</mark></p>
+<div><pre class="hljs"><code>atoi() — Convert <span class="hljs-built_in">Character</span> <span class="hljs-built_in">String</span> <span class="hljs-keyword">to</span> <span class="hljs-built_in">Integer</span></code></pre></div>
+<div><pre class="hljs"><code>Linux standard IO streams
+
+A Linux <span class="hljs-built_in">shell</span>, such <span class="hljs-keyword">as</span> Bash, receives input <span class="hljs-keyword">and</span> sends output <span class="hljs-keyword">as</span> sequences <span class="hljs-keyword">or</span> streams <span class="hljs-keyword">of</span> <span class="hljs-keyword">characters</span>. Each <span class="hljs-keyword">character</span> is independent <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> <span class="hljs-literal">one</span> <span class="hljs-keyword">before</span> <span class="hljs-keyword">it</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">the</span> <span class="hljs-literal">one</span> <span class="hljs-keyword">after</span> <span class="hljs-keyword">it</span>. The <span class="hljs-keyword">characters</span> are <span class="hljs-keyword">not</span> organized <span class="hljs-keyword">into</span> structured records <span class="hljs-keyword">or</span> fixed-size blocks. Streams are accessed <span class="hljs-keyword">using</span> <span class="hljs-built_in">file</span> IO techniques, whether <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">the</span> actual stream <span class="hljs-keyword">of</span> <span class="hljs-keyword">characters</span> comes <span class="hljs-built_in">from</span> <span class="hljs-keyword">or</span> goes <span class="hljs-built_in">to</span> <span class="hljs-keyword">a</span> <span class="hljs-built_in">file</span>, <span class="hljs-keyword">a</span> keyboard, <span class="hljs-keyword">a</span> window <span class="hljs-keyword">on</span> <span class="hljs-title">a</span> <span class="hljs-title">display</span>, <span class="hljs-title">or</span> <span class="hljs-title">some</span> <span class="hljs-title">other</span> <span class="hljs-title">IO</span> <span class="hljs-title">device</span>. <span class="hljs-title">Linux</span> <span class="hljs-title">shells</span> <span class="hljs-title">use</span> <span class="hljs-title">three</span> <span class="hljs-title">standard</span> <span class="hljs-title">I</span>/<span class="hljs-title">O</span> <span class="hljs-title">streams</span>, <span class="hljs-title">each</span> <span class="hljs-title">of</span> <span class="hljs-title">which</span> <span class="hljs-title">is</span> <span class="hljs-title">associated</span> <span class="hljs-title">with</span> <span class="hljs-title">a</span> <span class="hljs-title">well-known</span> <span class="hljs-title">file</span> <span class="hljs-title">descriptor</span>:
+
+<span class="hljs-keyword">stdout</span> is <span class="hljs-keyword">the</span> standard output stream, which displays output <span class="hljs-built_in">from</span> commands. It has <span class="hljs-built_in">file</span> descriptor <span class="hljs-number">1.</span>
+<span class="hljs-keyword">stderr</span> is <span class="hljs-keyword">the</span> standard error stream, which displays error output <span class="hljs-built_in">from</span> commands. It has <span class="hljs-built_in">file</span> descriptor <span class="hljs-number">2.</span>
+<span class="hljs-keyword">stdin</span> is <span class="hljs-keyword">the</span> standard input stream, which provides input <span class="hljs-built_in">to</span> commands. It has <span class="hljs-built_in">file</span> descriptor <span class="hljs-number">0.</span>
+
+Input streams provide input <span class="hljs-built_in">to</span> programs, usually <span class="hljs-built_in">from</span> terminal keystrokes. Output streams print <span class="hljs-keyword">text</span> <span class="hljs-keyword">characters</span>, usually <span class="hljs-built_in">to</span> <span class="hljs-keyword">the</span> terminal. The terminal was originally <span class="hljs-keyword">an</span> ASCII typewriter <span class="hljs-keyword">or</span> display terminal, but now, <span class="hljs-keyword">it</span> is more often <span class="hljs-keyword">a</span> <span class="hljs-keyword">text</span> window <span class="hljs-keyword">on</span> <span class="hljs-title">a</span> <span class="hljs-title">graphical</span> <span class="hljs-title">desktop</span>.</code></pre></div>
+<img src="/_resources/de6e81d4052444938d658b2f339ee821.png" alt="fe5c3756554e25860ac52dcefe8b8e29.png" width="793" height="218" class="jop-noMdConv" />
+<p>分析：fd.c需要传入一个参数，然后将传入的字符串参数通过atoi参数转换为整形并减去 0x1234</p>
+<p>由上已知，如果fd为0的话，则程序将从stdin读入数据至buff</p>
+<p>故而传入参数为0x1234的十进制4660</p>
+<div><pre class="hljs"><code>└─# echo $((num=0x1234))
+4660</code></pre></div>
+<p>然后再匹配strcmp中的字符串"LETMEWIN\n"，即可得到flag</p>
+<img src="/_resources/cb5a56ad19cf401e87e4205f7986a332.png" alt="792b0d9b56f414147ba53f4e48902456.png" width="634" height="238" class="jop-noMdConv" /></div>
+      </article>
+    </div>
+  </body>
+</html>
