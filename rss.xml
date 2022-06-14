@@ -4,9 +4,206 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Thu, 05 May 2022 12:20:05 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 14 Jun 2022 00:47:11 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
+        <item>
+            <title><![CDATA[pwnable  input]]></title>
+            <guid>cac400ed268b4a9298d463626b545cdc</guid>
+            <pubDate>Tue, 14 Jun 2022 08:42:10 GMT</pubDate>
+            <content:encoded><![CDATA[<p>ssh input2@pwnable.kr -p2222 (pw:guest)</p>
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/socket.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;arpa/inet.h&gt;</span></span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[], <span class="hljs-type">char</span>* envp[])</span>{
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Welcome to pwnable.kr\n"</span>);
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Let's see if you know how to give input to program\n"</span>);
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Just give me correct inputs then you will get the flag :)\n"</span>);
+
+        <span class="hljs-comment">// argv</span>
+        <span class="hljs-keyword">if</span>(argc != <span class="hljs-number">100</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strcmp</span>(argv[<span class="hljs-string">'A'</span>],<span class="hljs-string">"\x00"</span>)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strcmp</span>(argv[<span class="hljs-string">'B'</span>],<span class="hljs-string">"\x20\x0a\x0d"</span>)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Stage 1 clear!\n"</span>);
+
+        <span class="hljs-comment">// stdio</span>
+        <span class="hljs-type">char</span> buf[<span class="hljs-number">4</span>];
+        read(<span class="hljs-number">0</span>, buf, <span class="hljs-number">4</span>);
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">memcmp</span>(buf, <span class="hljs-string">"\x00\x0a\x00\xff"</span>, <span class="hljs-number">4</span>)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        read(<span class="hljs-number">2</span>, buf, <span class="hljs-number">4</span>);
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">memcmp</span>(buf, <span class="hljs-string">"\x00\x0a\x02\xff"</span>, <span class="hljs-number">4</span>)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Stage 2 clear!\n"</span>);
+
+        <span class="hljs-comment">// env</span>
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strcmp</span>(<span class="hljs-string">"\xca\xfe\xba\xbe"</span>, getenv(<span class="hljs-string">"\xde\xad\xbe\xef"</span>))) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Stage 3 clear!\n"</span>);
+
+        <span class="hljs-comment">// file</span>
+        FILE* fp = fopen(<span class="hljs-string">"\x0a"</span>, <span class="hljs-string">"r"</span>);
+        <span class="hljs-keyword">if</span>(!fp) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>( fread(buf, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, fp)!=<span class="hljs-number">1</span> ) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>( <span class="hljs-built_in">memcmp</span>(buf, <span class="hljs-string">"\x00\x00\x00\x00"</span>, <span class="hljs-number">4</span>) ) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        fclose(fp);
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Stage 4 clear!\n"</span>);
+
+        <span class="hljs-comment">// network</span>
+        <span class="hljs-type">int</span> sd, cd;
+        <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_in</span> <span class="hljs-title">saddr</span>, <span class="hljs-title">caddr</span>;</span>
+        sd = socket(AF_INET, SOCK_STREAM, <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">if</span>(sd == <span class="hljs-number">-1</span>){
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"socket error, tell admin\n"</span>);
+                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        saddr.sin_family = AF_INET;
+        saddr.sin_addr.s_addr = INADDR_ANY;
+        saddr.sin_port = htons( atoi(argv[<span class="hljs-string">'C'</span>]) );
+        <span class="hljs-keyword">if</span>(bind(sd, (<span class="hljs-keyword">struct</span> sockaddr*)&amp;saddr, <span class="hljs-keyword">sizeof</span>(saddr)) &lt; <span class="hljs-number">0</span>){
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"bind error, use another port\n"</span>);
+                <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+        }
+        listen(sd, <span class="hljs-number">1</span>);
+        <span class="hljs-type">int</span> c = <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> sockaddr_in);
+        cd = accept(sd, (<span class="hljs-keyword">struct</span> sockaddr *)&amp;caddr, (<span class="hljs-type">socklen_t</span>*)&amp;c);
+        <span class="hljs-keyword">if</span>(cd &lt; <span class="hljs-number">0</span>){
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"accept error, tell admin\n"</span>);
+                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        <span class="hljs-keyword">if</span>( recv(cd, buf, <span class="hljs-number">4</span>, <span class="hljs-number">0</span>) != <span class="hljs-number">4</span> ) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">memcmp</span>(buf, <span class="hljs-string">"\xde\xad\xbe\xef"</span>, <span class="hljs-number">4</span>)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Stage 5 clear!\n"</span>);
+
+        <span class="hljs-comment">// here's your flag</span>
+        system(<span class="hljs-string">"/bin/cat flag"</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre></div>
+<p>可以看到，该题目分为五个阶段，分别是 argv、stdio、env、file、network，接下来逐个及进行分析：</p>
+<h2 id="第一阶段argv">第一阶段：argv</h2>
+<div><pre class="hljs"><code>        <span class="hljs-comment">// argv</span>
+        <span class="hljs-keyword">if</span>(argc != <span class="hljs-number">100</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strcmp</span>(argv[<span class="hljs-string">'A'</span>],<span class="hljs-string">"\x00"</span>)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strcmp</span>(argv[<span class="hljs-string">'B'</span>],<span class="hljs-string">"\x20\x0a\x0d"</span>)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Stage 1 clear!\n"</span>);</code></pre></div>
+<p>要求输入参数100个，且第A=65个参数为"\x00" 第B=66个参数为"\x20\x0a\x0d"</p>
+<p>对应的writeup如下</p>
+<div><pre class="hljs"><code><span class="hljs-comment"># -*- coding:utf-8 -*-</span>
+<span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+<span class="hljs-comment">#argv</span>
+args = [<span class="hljs-string">'a'</span>]*<span class="hljs-number">100</span>
+args[<span class="hljs-number">65</span>] = <span class="hljs-string">'\x00'</span>
+args[<span class="hljs-number">66</span>] = <span class="hljs-string">'\x20\x0a\x0d'</span>
+p = process(executable=<span class="hljs-string">'./input'</span>,argv=args) 
+p.interactive()</code></pre></div>
+<h2 id="第二阶段stdio">第二阶段：stdio</h2>
+<div><pre class="hljs"><code>        <span class="hljs-comment">// stdio</span>
+        <span class="hljs-type">char</span> buf[<span class="hljs-number">4</span>];
+        read(<span class="hljs-number">0</span>, buf, <span class="hljs-number">4</span>);  <span class="hljs-comment">//输入流0-Stdin</span>
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">memcmp</span>(buf, <span class="hljs-string">"\x00\x0a\x00\xff"</span>, <span class="hljs-number">4</span>)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        read(<span class="hljs-number">2</span>, buf, <span class="hljs-number">4</span>); <span class="hljs-comment">//错误输出流2-stderr</span>
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">memcmp</span>(buf, <span class="hljs-string">"\x00\x0a\x02\xff"</span>, <span class="hljs-number">4</span>)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Stage 2 clear!\n"</span>);</code></pre></div>
+<p><strong>Linux把所有的东西看做文件，其中0,1,2比较特殊，分别代表输入流0-Stdin，输出流1-stdout和错误输出流2-stderr</strong></p>
+<p><strong><code>memcmp(buf, "\x00\x0a\x00\xff", 4)</code>这个命令，作用是从给定的两个内存地址开始，比较指定的字节个数。这里就是比较<code>buf</code>开始的4个字节和<code>"\x00\x0a\x00\xff"</code></strong></p>
+<p><strong>buf是通过<code>read(0, buf, 4)</code>写入的。之前的题目中也有遇见过<code>read</code>函数</strong></p>
+<p><strong>fd = 0，也对应了程序中的标准化输入,可以修改程序的标准化输入（stdin）来实现输入不可见字符</strong></p>
+<p><strong>fd = 2，对应了程序中的标准化错误;标准化错误无法通过命令行输入来修改，需要通过创建通道的方式重定向程序的标准化错误信息</strong></p>
+<div><pre class="hljs"><code>    stdin = “\x00\x0a\x00\xff”
+    stderr = “\x00\x0a\x02\xff”
+</code></pre></div>
+<h2 id="第三阶段env">第三阶段：env</h2>
+<div><pre class="hljs"><code>        <span class="hljs-comment">// env</span>
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strcmp</span>(<span class="hljs-string">"\xca\xfe\xba\xbe"</span>, getenv(<span class="hljs-string">"\xde\xad\xbe\xef"</span>))) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Stage 3 clear!\n"</span>);</code></pre></div>
+<p>**char <em>getenv(const char <em>name) 搜索 name 所指向的环境字符串，并返回相关的值给字符串,环境变量的格式为name＝value</em></em></p>
+<div><pre class="hljs"><code>env = {<span class="hljs-string">"\xde\xad\xbe\xef"</span>:<span class="hljs-string">"\xca\xfe\xba\xbe"</span>}</code></pre></div>
+<h2 id="第四阶段file">第四阶段：file</h2>
+<div><pre class="hljs"><code>        <span class="hljs-comment">// file</span>
+        FILE* fp = fopen(<span class="hljs-string">"\x0a"</span>, <span class="hljs-string">"r"</span>);
+        <span class="hljs-keyword">if</span>(!fp) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>( fread(buf, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, fp)!=<span class="hljs-number">1</span> ) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>( <span class="hljs-built_in">memcmp</span>(buf, <span class="hljs-string">"\x00\x00\x00\x00"</span>, <span class="hljs-number">4</span>) ) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        fclose(fp);
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Stage 4 clear!\n"</span>);</code></pre></div>
+<p><strong>fread函数：</strong></p>
+<p>**<code>size_t fread(void *buffer, size_t size, size_t count FILE *stream)</code></p>
+<div><pre class="hljs"><code><span class="hljs-comment">#file</span>
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">"\x0a"</span>,<span class="hljs-string">"w+"</span>) <span class="hljs-keyword">as</span> f:
+    f.write(<span class="hljs-string">"\x00\x00\x00\x00"</span>)
+</code></pre></div>
+<h2 id="第五阶段network">第五阶段：network</h2>
+<div><pre class="hljs"><code>        <span class="hljs-comment">// network</span>
+        <span class="hljs-type">int</span> sd, cd;
+        <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_in</span> <span class="hljs-title">saddr</span>, <span class="hljs-title">caddr</span>;</span>
+        sd = socket(AF_INET, SOCK_STREAM, <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">if</span>(sd == <span class="hljs-number">-1</span>){
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"socket error, tell admin\n"</span>);
+                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        saddr.sin_family = AF_INET;
+        saddr.sin_addr.s_addr = INADDR_ANY;
+        saddr.sin_port = htons( atoi(argv[<span class="hljs-string">'C'</span>]) );
+        <span class="hljs-keyword">if</span>(bind(sd, (<span class="hljs-keyword">struct</span> sockaddr*)&amp;saddr, <span class="hljs-keyword">sizeof</span>(saddr)) &lt; <span class="hljs-number">0</span>){
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"bind error, use another port\n"</span>);
+                <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+        }
+        listen(sd, <span class="hljs-number">1</span>);
+        <span class="hljs-type">int</span> c = <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> sockaddr_in);
+        cd = accept(sd, (<span class="hljs-keyword">struct</span> sockaddr *)&amp;caddr, (<span class="hljs-type">socklen_t</span>*)&amp;c);
+        <span class="hljs-keyword">if</span>(cd &lt; <span class="hljs-number">0</span>){
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"accept error, tell admin\n"</span>);
+                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        <span class="hljs-keyword">if</span>( recv(cd, buf, <span class="hljs-number">4</span>, <span class="hljs-number">0</span>) != <span class="hljs-number">4</span> ) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">memcmp</span>(buf, <span class="hljs-string">"\xde\xad\xbe\xef"</span>, <span class="hljs-number">4</span>)) <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Stage 5 clear!\n"</span>);</code></pre></div>
+<div><pre class="hljs"><code>args[<span class="hljs-number">67</span>] = <span class="hljs-string">'8888'</span>
+conn = connect(<span class="hljs-string">'127.0.0.1'</span>,<span class="hljs-number">8888</span>)
+conn.send(<span class="hljs-string">b'\xde\xad\xbe\xef'</span>)
+conn.close()</code></pre></div>
+<h2 id="完整的writeup如下">完整的writeup如下</h2>
+<div><pre class="hljs"><code><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+<span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">import</span> socket
+
+<span class="hljs-comment">#argv</span>
+args = [<span class="hljs-string">'a'</span>]*<span class="hljs-number">100</span>
+args[<span class="hljs-number">65</span>] = <span class="hljs-string">'\x00'</span>
+args[<span class="hljs-number">66</span>] = <span class="hljs-string">'\x20\x0a\x0d'</span>
+args[<span class="hljs-number">67</span>] = <span class="hljs-string">'8888'</span> //<span class="hljs-keyword">for</span> network -- <span class="hljs-built_in">set</span> port to args[<span class="hljs-string">'C'</span>]
+
+
+<span class="hljs-comment">#stdio</span>
+stdinr, stdinw = os.pipe()
+stderrr, stderrw = os.pipe()
+os.write(stdinw,<span class="hljs-string">b"\x00\x0a\x00\xff"</span>)
+os.write(stderrw,<span class="hljs-string">b"\x00\x0a\x02\xff"</span>)
+
+<span class="hljs-comment">#env</span>
+env = {<span class="hljs-string">"\xde\xad\xbe\xef"</span>:<span class="hljs-string">"\xca\xfe\xba\xbe"</span>}
+
+<span class="hljs-comment">#file</span>
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">"\x0a"</span>,<span class="hljs-string">"w+"</span>) <span class="hljs-keyword">as</span> f:
+    f.write(<span class="hljs-string">"\x00\x00\x00\x00"</span>)
+
+
+p = process(executable=<span class="hljs-string">'./input'</span>,argv=args,stdin=stdinr,stderr=stderrr,env=env) 
+
+<span class="hljs-comment">#network</span>
+conn = connect(<span class="hljs-string">'127.0.0.1'</span>,<span class="hljs-number">8888</span>)
+conn.send(<span class="hljs-string">b'\xde\xad\xbe\xef'</span>)
+conn.close()
+
+p.interactive()
+nv=env) 
+p.interactive()
+ve()
+
+p.interactive()</code></pre></div>
+]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[pwnable  collision]]></title>
             <guid>b181e0f64ccf4719a3623d5c5854655a</guid>
