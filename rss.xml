@@ -4,7 +4,7 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Tue, 14 Jun 2022 00:49:26 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 14 Jun 2022 00:49:46 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
         <item>
@@ -172,7 +172,7 @@ conn.close()</code></pre></div>
 args = [<span class="hljs-string">'a'</span>]*<span class="hljs-number">100</span>
 args[<span class="hljs-number">65</span>] = <span class="hljs-string">'\x00'</span>
 args[<span class="hljs-number">66</span>] = <span class="hljs-string">'\x20\x0a\x0d'</span>
-args[<span class="hljs-number">67</span>] = <span class="hljs-string">'8888'</span> //<span class="hljs-keyword">for</span> network -- <span class="hljs-built_in">set</span> port to args[<span class="hljs-string">'C'</span>]
+args[<span class="hljs-number">67</span>] = <span class="hljs-string">'8888'</span> <span class="hljs-comment">#for network -- set port to args['C']</span>
 
 
 <span class="hljs-comment">#stdio</span>
