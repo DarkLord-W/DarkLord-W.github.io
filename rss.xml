@@ -4,13 +4,13 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Tue, 06 Sep 2022 08:08:47 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 06 Sep 2022 08:12:24 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
         <item>
             <title><![CDATA[stack_test]]></title>
-            <guid>d4567724f99d43baa86e8fe55ac2898a</guid>
-            <pubDate>Tue, 06 Sep 2022 08:06:39 GMT</pubDate>
+            <guid>497607a1a4824f7aba04d7cff0c979a9</guid>
+            <pubDate>Tue, 06 Sep 2022 07:10:42 GMT</pubDate>
             <content:encoded><![CDATA[<p>栈溢出简单题目</p>
 <div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
@@ -76,9 +76,9 @@ conn.sendline(<span class="hljs-built_in">bytes</span>(<span class="hljs-string"
 ]]></content:encoded>
         </item>
         <item>
-            <title><![CDATA[pwnable  input]]></title>
-            <guid>cac400ed268b4a9298d463626b545cdc</guid>
-            <pubDate>Tue, 14 Jun 2022 08:42:10 GMT</pubDate>
+            <title><![CDATA[pwnable--input]]></title>
+            <guid>9d29bde5dbbf449191b2a88f107c886e</guid>
+            <pubDate>Tue, 14 Jun 2022 08:39:12 GMT</pubDate>
             <content:encoded><![CDATA[<p>ssh input2@pwnable.kr -p2222 (pw:guest)</p>
 <div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
@@ -273,79 +273,9 @@ p.interactive()</code></pre></div>
 ]]></content:encoded>
         </item>
         <item>
-            <title><![CDATA[pwnable  collision]]></title>
-            <guid>b181e0f64ccf4719a3623d5c5854655a</guid>
-            <pubDate>Wed, 27 Apr 2022 07:30:18 GMT</pubDate>
-            <content:encoded><![CDATA[<p><strong>参考：</strong><a title="https://cloud.tencent.com/developer/article/1516391" href="https://cloud.tencent.com/developer/article/1516391">pwnable-Col</a></p>
-<p><strong>涉及知识点：</strong></p>
-<p>1.指针类型转换</p>
-<p>2.大小端序</p>
-<p>3.字符串转换ASCII码</p>
-<p>4.哈希碰撞</p>
-<hr />
-<img src="/_resources/19d6f8a121584d54acd4e9fcb4d1c256.png" alt="ff2797e2e0b0d1f6edbc067daf78e56f.png" width="681" height="452" class="jop-noMdConv" />
-<p><mark>ssh col@pwnable.kr -p2222 (pw:guest)</mark></p>
-<p><mark><img src="/_resources/f1c1316409134b36b6ab351184af4403.png" alt="8cb20b43c6286a8f14c934b62488c749.png" width="765" height="763" class="jop-noMdConv" /></mark></p>
-<p>查看文件：<img src="/home/darklord/.config/marktext/images/2022-04-12-18-35-19-image.png" /></p>
-<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
-<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> hashcode = <span class="hljs-number">0x21DD09EC</span>;
-<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-title function_">check_password</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* p)</span>{
-    <span class="hljs-type">int</span>* ip = (<span class="hljs-type">int</span>*)p;
-
-    <span class="hljs-type">int</span> i;
-    <span class="hljs-type">int</span> res=<span class="hljs-number">0</span>;
-    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">5</span>; i++){
-        res += ip[i];
-    }
-    <span class="hljs-keyword">return</span> res;
-}
-
-<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span>{
-    <span class="hljs-keyword">if</span>(argc&lt;<span class="hljs-number">2</span>){
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"usage : %s [passcode]\n"</span>, argv[<span class="hljs-number">0</span>]);
-        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-    }
-    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strlen</span>(argv[<span class="hljs-number">1</span>]) != <span class="hljs-number">20</span>){
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"passcode length should be 20 bytes\n"</span>);
-        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-    }
-
-    <span class="hljs-keyword">if</span>(hashcode == check_password( argv[<span class="hljs-number">1</span>] )){
-        system(<span class="hljs-string">"/bin/cat flag"</span>);
-        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-    }
-    <span class="hljs-keyword">else</span>
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"wrong passcode.\n"</span>);
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}</code></pre></div>
-<p>可以在col.c中看到这句提示：passcode length should be 20 bytes–&gt;密码长度应该为20个字节</p>
-<p>传入check_password的是一个不可变字符串指针，然后将其强制转变为整数型指针；</p>
-<p>之后进行一共循环5次的for循环累加；</p>
-<p>p长度为20个字节，转换后ip长度依然是20个字节，结合前面查看文件类型，可以推出一共ip有5个整数，每个整数长度为4个字节</p>
-<p>hashcode的结构应该是：<code>hashcode = A + B + C + D + E=0x21DD09EC</code>；</p>
-<p>答案可以有很多种，只要满足五个相加结果为0x21DD09EC即可</p>
-<div><pre class="hljs"><code>┌──(root💀kali)-[~]
-└─# echo 'obase=10; ibase=16; 21DD09EC' | bc
-568134124</code></pre></div>
-<div><pre class="hljs"><code>└─# bc
-568134124/5
-113626824
-113626824*5
-568134120</code></pre></div>
-<div><pre class="hljs"><code>└─# echo 'obase=16; ibase=10; 113626824' | bc
-6C5CEC8</code></pre></div>
-<p>可以看到，0x21DD09EC整除5余数为4,则五个整数可以为0x6C5CEC8×4 + (0x6C5CEC8+4=0x6C5CECC)=0x6C5CEC8×4 + 0x6C5CECC</p>
-<p><strong>结果如下：</strong></p>
-<div><pre class="hljs"><code>'\xC8\xCE\xC5\x06' * 4 + '\xCC\xCE\xC5\x06'</code></pre></div>
-<p><img src="/_resources/fcb632314e63431cab92ecfe348a2fd3.png" /></p>
-<p>**PS:**这里要注意\xC8\xCE\xC5\x06及\xCC\xCE\xC5\x06都是小端序格式</p>
-]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[pwnable  random]]></title>
-            <guid>dea67531cf8f41caa3f1126732696a46</guid>
-            <pubDate>Wed, 27 Apr 2022 06:42:28 GMT</pubDate>
+            <title><![CDATA[pwnable--random]]></title>
+            <guid>6e9d26c570a741f787d19433889b0e19</guid>
+            <pubDate>Sun, 17 Apr 2022 15:48:04 GMT</pubDate>
             <content:encoded><![CDATA[<p><strong>Tips:</strong></p>
 <p><strong>rand()函数请查看Security下相关文档</strong></p>
 <hr />
@@ -455,9 +385,9 @@ Good!
 ]]></content:encoded>
         </item>
         <item>
-            <title><![CDATA[pwnable  passcode]]></title>
-            <guid>d557a099a2674799ad990e071dd3ac8b</guid>
-            <pubDate>Wed, 27 Apr 2022 06:42:19 GMT</pubDate>
+            <title><![CDATA[pwnable--passcode]]></title>
+            <guid>838ea7bd19a343acb2ade0ab1790935b</guid>
+            <pubDate>Tue, 12 Apr 2022 15:14:02 GMT</pubDate>
             <content:encoded><![CDATA[<p><a title="https://blog.csdn.net/qq_20307987/article/details/51303824" href="https://blog.csdn.net/qq_20307987/article/details/51303824">参考</a></p>
 <p><strong>知识点：</strong></p>
 <div><pre class="hljs"><code><span class="hljs-built_in">EIP</span>、<span class="hljs-built_in">EBP</span>、<span class="hljs-built_in">ESP</span>的作用：
@@ -699,9 +629,9 @@ End of assembler dump.</code></pre></div>
 <img src="/_resources/a95a61dbeba2422686840960aaef7611.png" alt="db8b2fc0245bad16909810e9269ea724.png" width="933" height="556" class="jop-noMdConv" />]]></content:encoded>
         </item>
         <item>
-            <title><![CDATA[pwnable  flag]]></title>
-            <guid>a8fa04b68deb45be85305eb9609ede7a</guid>
-            <pubDate>Wed, 27 Apr 2022 06:41:52 GMT</pubDate>
+            <title><![CDATA[pwnable--flag--(reverse)]]></title>
+            <guid>eaa12948723d4268b116c2375b2313b6</guid>
+            <pubDate>Tue, 12 Apr 2022 14:21:34 GMT</pubDate>
             <content:encoded><![CDATA[<h3 id="psxxd十六进制编辑器kali">PS:xxd十六进制编辑器–kali</h3>
 <hr />
 <div><pre class="hljs"><code>Papa brought me a<span class="hljs-built_in"> packed </span>present! let's open it.
@@ -746,9 +676,79 @@ I will malloc() and strcpy the flag there. take it.</code></pre></div>
 <img src="/_resources/a4f5f036ab244e4e81d3af2a869fc19e.png" alt="4a8e2574afe63ed666996c8f2306b19a.png" width="993" height="571" class="jop-noMdConv" />]]></content:encoded>
         </item>
         <item>
-            <title><![CDATA[pwnable   fd ]]></title>
-            <guid>7f8d7e093d9e40ad81a729bd14a73146</guid>
-            <pubDate>Wed, 27 Apr 2022 06:41:32 GMT</pubDate>
+            <title><![CDATA[pwnable--collision]]></title>
+            <guid>fa684c42c2c8405388ff251599217ba9</guid>
+            <pubDate>Fri, 01 Apr 2022 13:29:36 GMT</pubDate>
+            <content:encoded><![CDATA[<p><strong>参考：</strong><a title="https://cloud.tencent.com/developer/article/1516391" href="https://cloud.tencent.com/developer/article/1516391">pwnable-Col</a></p>
+<p><strong>涉及知识点：</strong></p>
+<p>1.指针类型转换</p>
+<p>2.大小端序</p>
+<p>3.字符串转换ASCII码</p>
+<p>4.哈希碰撞</p>
+<hr />
+<img src="/_resources/19d6f8a121584d54acd4e9fcb4d1c256.png" alt="ff2797e2e0b0d1f6edbc067daf78e56f.png" width="681" height="452" class="jop-noMdConv" />
+<p><mark>ssh col@pwnable.kr -p2222 (pw:guest)</mark></p>
+<p><mark><img src="/_resources/f1c1316409134b36b6ab351184af4403.png" alt="8cb20b43c6286a8f14c934b62488c749.png" width="765" height="763" class="jop-noMdConv" /></mark></p>
+<p>查看文件：<img src="/home/darklord/.config/marktext/images/2022-04-12-18-35-19-image.png" /></p>
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
+<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> hashcode = <span class="hljs-number">0x21DD09EC</span>;
+<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-title function_">check_password</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* p)</span>{
+    <span class="hljs-type">int</span>* ip = (<span class="hljs-type">int</span>*)p;
+
+    <span class="hljs-type">int</span> i;
+    <span class="hljs-type">int</span> res=<span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">5</span>; i++){
+        res += ip[i];
+    }
+    <span class="hljs-keyword">return</span> res;
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span>{
+    <span class="hljs-keyword">if</span>(argc&lt;<span class="hljs-number">2</span>){
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"usage : %s [passcode]\n"</span>, argv[<span class="hljs-number">0</span>]);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strlen</span>(argv[<span class="hljs-number">1</span>]) != <span class="hljs-number">20</span>){
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"passcode length should be 20 bytes\n"</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-keyword">if</span>(hashcode == check_password( argv[<span class="hljs-number">1</span>] )){
+        system(<span class="hljs-string">"/bin/cat flag"</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"wrong passcode.\n"</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre></div>
+<p>可以在col.c中看到这句提示：passcode length should be 20 bytes–&gt;密码长度应该为20个字节</p>
+<p>传入check_password的是一个不可变字符串指针，然后将其强制转变为整数型指针；</p>
+<p>之后进行一共循环5次的for循环累加；</p>
+<p>p长度为20个字节，转换后ip长度依然是20个字节，结合前面查看文件类型，可以推出一共ip有5个整数，每个整数长度为4个字节</p>
+<p>hashcode的结构应该是：<code>hashcode = A + B + C + D + E=0x21DD09EC</code>；</p>
+<p>答案可以有很多种，只要满足五个相加结果为0x21DD09EC即可</p>
+<div><pre class="hljs"><code>┌──(root💀kali)-[~]
+└─# echo 'obase=10; ibase=16; 21DD09EC' | bc
+568134124</code></pre></div>
+<div><pre class="hljs"><code>└─# bc
+568134124/5
+113626824
+113626824*5
+568134120</code></pre></div>
+<div><pre class="hljs"><code>└─# echo 'obase=16; ibase=10; 113626824' | bc
+6C5CEC8</code></pre></div>
+<p>可以看到，0x21DD09EC整除5余数为4,则五个整数可以为0x6C5CEC8×4 + (0x6C5CEC8+4=0x6C5CECC)=0x6C5CEC8×4 + 0x6C5CECC</p>
+<p><strong>结果如下：</strong></p>
+<div><pre class="hljs"><code>'\xC8\xCE\xC5\x06' * 4 + '\xCC\xCE\xC5\x06'</code></pre></div>
+<p><img src="/_resources/fcb632314e63431cab92ecfe348a2fd3.png" /></p>
+<p>**PS:**这里要注意\xC8\xCE\xC5\x06及\xCC\xCE\xC5\x06都是小端序格式</p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[pwnable--fd -- (File descriptor)]]></title>
+            <guid>115d6be93e25453aa01b188ed5d03b9a</guid>
+            <pubDate>Fri, 01 Apr 2022 10:21:50 GMT</pubDate>
             <content:encoded><![CDATA[<img src="/_resources/c774c598191645eea4fd4a0a697df47f.png" alt="63c93ec7d8e30f0017d628cf6d998227.png" width="668" height="439" class="jop-noMdConv" />
 <p><mark><strong>ssh fd@pwnable.kr -p2222 (pw:guest)</strong></mark></p>
 <img src="/_resources/0f3dba1dccbe4e5a91463813e47687fa.png" alt="e7214056bbe241c8dfd6dbc0cf05a9a3.png" width="617" height="621" class="jop-noMdConv" />
@@ -794,9 +794,9 @@ Input streams provide input <span class="hljs-built_in">to</span> programs, usua
 <img src="/_resources/cb5a56ad19cf401e87e4205f7986a332.png" alt="792b0d9b56f414147ba53f4e48902456.png" width="634" height="238" class="jop-noMdConv" />]]></content:encoded>
         </item>
         <item>
-            <title><![CDATA[pwnable  bof ]]></title>
-            <guid>f4899cbe78724d55b433c39aa455c41c</guid>
-            <pubDate>Wed, 27 Apr 2022 06:40:41 GMT</pubDate>
+            <title><![CDATA[pwnable--bof]]></title>
+            <guid>9f58b975bea84015a9458f0e78409afc</guid>
+            <pubDate>Tue, 22 Feb 2022 07:42:39 GMT</pubDate>
             <content:encoded><![CDATA[<h2 id="bofc">bof.c</h2>
 <div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
