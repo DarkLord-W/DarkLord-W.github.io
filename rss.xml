@@ -4,7 +4,7 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Wed, 14 Sep 2022 01:52:41 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 14 Sep 2022 01:58:05 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
         <item>
@@ -118,7 +118,7 @@ SYMBOL TABLE:
 <p>接下来进行分析</p>
 <p>按照题目要求是从V5变量溢出至easy函数，再V2变量溢出至normal函数，最后再溢出至shell函数</p>
 <p>但是由于该elf文件并未开启PIE保护（地址随机化），可以直接对main函数中的V5变量进行溢出至shell函数</p>
-<p>可见分析中V5变量的偏移地址为 [bp-200H]，即为十进制的512,故而v5变量距栈底距离长度为512</p>
+<p>可见分析中V5变量的偏移地址为 [bp-200H]，即为十进制的512,故而v5变量距栈底距离长度为512，还要加上8个长度以覆盖段基地址（64位为8个字节，32位为4个）</p>
 <p>再分析查看shel函数的起始地址，可见为0X4005f6</p>
 <div><pre class="hljs"><code>gdb-peda$ disass shell
 Dump of assembler code for function shell:
