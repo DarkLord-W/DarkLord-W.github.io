@@ -4,7 +4,7 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Mon, 17 Oct 2022 09:17:37 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 17 Oct 2022 09:19:41 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
         <item>
@@ -68,7 +68,7 @@ Breakpoint 2 at 0x804a080</code></pre></div>
 <p>可以看到无效地址为0x41384141，然后使用pattern_offset判断具体偏移距离为112</p>
 <div><pre class="hljs"><code>gdb-peda$ pattern_offset 0x41384141
 1094205761 found at offset: 112</code></pre></div>
-<p>然后我们生成shellcode，可以使用pwntools的shellcratft，如下</p>
+<p>然后我们生成shellcode，可以使用pwntools的shellcraft，如下</p>
 <div><pre class="hljs"><code>┌──(root㉿kali)-[~/pwn]
 └─<span class="hljs-comment"># python</span>
 Python <span class="hljs-number">3.8</span><span class="hljs-number">.0</span> (default, Jul <span class="hljs-number">12</span> <span class="hljs-number">2022</span>, <span class="hljs-number">11</span>:<span class="hljs-number">34</span>:<span class="hljs-number">11</span>) 
