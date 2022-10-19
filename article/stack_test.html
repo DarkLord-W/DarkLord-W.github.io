@@ -24,7 +24,7 @@
                 ></span
               >
               <span
-                >Updated At：<time datetime="1666141468736"
+                >Updated At：<time datetime="1666141596174"
                   >2022</time
                 ></span
               >
@@ -68,7 +68,7 @@ Partial RELRO   <span class="hljs-keyword">No</span> canary found   NX disabled 
 <p><strong>我们的目的是对vulnerable函数中的gets输入点进行数据溢出，从而修改其return返回值为pwn()函数，达到执行pwn函数的目的</strong></p>
 <p><strong>首先找到vulnerable函数中gets获取的变量s的段内偏移地址：</strong></p>
 <p><strong><img src="/_resources/a898287adeb84577b0054c5f5a995246.png" alt="690a194ff230444007887547e4514e77.png" width="1023" height="689" class="jop-noMdConv" /></strong></p>
-<p>如上图所示，gets函数下一行即为s变量的段内偏移地址为[rbp-0xc]，0xc转化为十进制即为12,所以s变量的偏移长度为12,即距离段基地质长度为12</p>
+<p>如上图所示，gets函数下一行即为s变量的段内偏移地址为[rbp-0xc]，0xc转化为十进制即为12,所以s变量的偏移长度为12,即距离段基地址长度为12</p>
 <p><strong>由于该elf文件为64位，在堆栈上占8个字节，32位则是4个字节</strong></p>
 <p>故而溢出数据的长度为12+8（其中12是s变量到段基地址的长度，8是为了覆盖段基地址），总的20字节可以使得数据溢出刚好与返回地址持平，再加上一段想要执行的地址，便可以使得返回地址返回为目标地址</p>
 <p><strong>接下来查看pwn函数的地址</strong></p>
