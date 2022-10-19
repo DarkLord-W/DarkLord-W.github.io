@@ -24,7 +24,7 @@
                 ></span
               >
               <span
-                >Updated At：<time datetime="1662829575536"
+                >Updated At：<time datetime="1666141468736"
                   >2022</time
                 ></span
               >
@@ -63,7 +63,7 @@
 RELRO           <span class="hljs-keyword">STACK</span> CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified       Fortifiable <span class="hljs-keyword">FILE</span>
 Partial RELRO   <span class="hljs-keyword">No</span> canary found   NX disabled   <span class="hljs-keyword">No</span> PIE          <span class="hljs-keyword">No</span> RPATH   <span class="hljs-keyword">No</span> RUNPATH   41 Symbols        <span class="hljs-keyword">No</span>    0               1  ./stack_test</code></pre></div>
 <p>分析源码，main函数调用vulnerable函数，vulnerable函数功能为获取用户输入并打印</p>
-<p>可见输入函数并对输入进行长度限制，可以考虑在输入点进行溢出操作，从而修改返回地址，让其指向溢出数据中的一段指令(shellcode)</p>
+<p>可见输入函数并未对输入进行长度限制，可以考虑在输入点进行溢出操作，从而修改返回地址，让其指向溢出数据中的一段指令(shellcode)</p>
 <p>接下来使用gdb分析编译出的elf文件</p>
 <p><strong>我们的目的是对vulnerable函数中的gets输入点进行数据溢出，从而修改其return返回值为pwn()函数，达到执行pwn函数的目的</strong></p>
 <p><strong>首先找到vulnerable函数中gets获取的变量s的段内偏移地址：</strong></p>
