@@ -4,7 +4,7 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Thu, 20 Oct 2022 08:15:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 20 Oct 2022 08:36:04 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
         <item>
@@ -99,8 +99,7 @@ sh.interactive()</code></pre></div>
             <title><![CDATA[bamboofox-ret2syscall-rop]]></title>
             <guid>7c1b032bd2b9439590fb3407fb4a70cd</guid>
             <pubDate>Mon, 10 Oct 2022 03:20:22 GMT</pubDate>
-            <content:encoded><![CDATA[<p><a href="/article/bamboofox-ret2syscall-rop">bamboofox-ret2syscall-rop</a></p>
-<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+            <content:encoded><![CDATA[<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
 
 <span class="hljs-type">char</span> *shell = <span class="hljs-string">"/bin/sh"</span>;
