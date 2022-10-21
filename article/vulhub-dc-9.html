@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>vulhub    DC-9 - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">vulhub    DC-9</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1666164041278"
+                  >2022</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1666344123091"
+                  >2022</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p>Download <strong>link：<a title="https://www.vulnhub.com/entry/dc-9,412/" href="https://www.vulnhub.com/entry/dc-9,412/">https://www.vulnhub.com/entry/dc-9,412/</a></strong></p>
+<p><strong>扫描主机，靶机ip为192.168.56.11</strong></p>
+<p><strong><img src="/_resources/c14a748cd4c546f99196ab92e8f7faee.png" alt="de32b30940077a1ff349d8d083c2ac07.png" width="872" height="471" class="jop-noMdConv" /></strong></p>
+<p><strong>靶机开放22和80端口</strong></p>
+<p><strong>访问80端口web服务</strong></p>
+<p><strong><img src="/_resources/b01f9f9ec4564042a576f301e2549ca9.png" alt="40ff85d50fa1e8c7b7f4fd17d54d474c.png" width="873" height="293" class="jop-noMdConv" /></strong></p>
+<p><strong>扫描站点目录</strong></p>
+<p><strong><img src="/_resources/9b2832348f51482db9dc124776f969ba.png" alt="2ba7373b7d450c69a5632cac13c4f19e.png" width="703" height="567" class="jop-noMdConv" /></strong></p>
+<p><strong>访问站点各个页面</strong></p>
+<p><strong><img src="/_resources/c2bdc686819846a0964fa4af105774d5.png" alt="29f5270580d0770da7666ac47593b839.png" width="987" height="539" class="jop-noMdConv" /></strong></p>
+<p><strong>通过测试可以发现search.php页面存在sql注入</strong></p>
+<p><strong>保存请求数据使用sqlmap进行自动化注入</strong></p>
+<p><strong><img src="/_resources/4eb72bf1f2d54fb08de0fcf7f692c856.png" /></strong></p>
+<p><strong>逐个dbs,tables,columns,最后dump数据</strong></p>
+<p><strong>先dump users<img src="/_resources/3289c25787094228be308c95d0cc9211.png" /></strong></p>
+<p><strong>用users库中的表登录web，全部失败</strong></p>
+<p><strong>那么dump Staff库中的数据，发现存在账户密码<code>admin/transorbital1</code>，使用该账户密码成功登录后台</strong></p>
+<p><strong><img src="/_resources/1efb05e8bcc144b197edde462bbefef4.png" /></strong></p>
+<p><strong><img src="/_resources/f5307e037cb241b19cdee31ebf6ea362.png" /></strong></p>
+<p><strong>注意到登录后台后页面下方存在<code>File does not exist</code>的提示，尝试在页面后添加<code>?file=路径</code>，多次尝试，成功读取出/etc/passwd文件</strong></p>
+<p><strong><img src="/_resources/cb3f9205b65f436281485d4c12b7b2c4.png" /></strong></p>
+<p><strong>接下来对文件进行fuzz遍历，查看linux系统中任务调度情况<code>/proc/sched_debug</code></strong></p>
+<p><strong><img src="/_resources/f33a67a9cd7b4520b589c16bd13b9c98.png" /></strong></p>
+<p><strong>发现存在knockd服务，查询得知</strong></p>
+<div><pre class="hljs"><code>敲门（knock）指的是我们从自己的客户端设备（<span class="hljs-built_in">pc</span>、笔记本或者手机）向服务器<span class="hljs-built_in">IP</span>发送一系列实现约好的暗号，而服务器上需要相应的安装接收暗号的服务knockd，它在接收到正确的暗号的时候，会临时性的为敲门者开一段时间的门并随后关上（当然也能够配置成一直开着），我们要在这几秒钟里面登录成功并且保持连接，如果不小心断了连接就要重新敲门。
+
+<span class="hljs-symbol">knock</span>动作的实质就是连续的向指定的<span class="hljs-built_in">ip</span>的约定的端口连续的发送多个tcp或者udp包，比如我们可以通过*telnet 服务器地址 端口号* 命令来发送tcp包，也可以直接在浏览器地址栏里面用 http:<span class="hljs-comment">//服务器地址:端口号 的方式来让浏览器发出与服务器指定端口tcp握手的SYN包。但是最好用的还是直接下载knock工具（windows版、mac版），用 knock 服务器地址 端口号 的方式来实现敲门</span></code></pre></div>
+<p>读取knockd的配置文件<code>/etc/knockd.conf</code>，得到ssh开门密码 <code>9842,8475,7469(倒序)</code></p>
+<p><img src="/_resources/89b26993e1204a02842f8bc130bfafb8.png" /></p>
+<p>安装knockd并对靶机实行ssh开门</p>
+<p><strong><img src="/_resources/87c48adad4aa4cc7ac480408da0d02be.png" alt="6dde7d80df886d0c60e9d4aed8f0d727.png" width="818" height="584" class="jop-noMdConv" /></strong></p>
+<p><strong>使用之前sql注入爆破出来的用户名和密码进行ssh爆破</strong></p>
+<p><strong><img src="/_resources/65903d7169bf4cba9942088804bec244.png" alt="4167d487643ae3c6d4b405bbecebe702.png" width="998" height="341" class="jop-noMdConv" /></strong></p>
+<p><strong>爆破出来三组用户名密码</strong></p>
+<p><strong>其他两个用户都没有什么文件也没有sudo权限，ssh登录janitor发现一个密码txt文件<img src="/_resources/c5e2c1e4bc8e40e58f4b2f8781bb3212.png" /></strong></p>
+<p><strong>使用上面的密码继续进行ssh爆破</strong></p>
+<p><strong><img src="/_resources/7ee501ceefbc4db2ba183498e6c81f8b.png" alt="4f470bf9838244a77c2c1c8e358413ab.png" width="973" height="413" class="jop-noMdConv" /></strong></p>
+<p><strong>得到一个新用户名密码</strong><code>login: fredf password: B4-Tru3-001</code></p>
+<p><strong>ssh登录该用户，查看sudo权限如下</strong></p>
+<p><img src="/_resources/b4354fc41bbd4c2f916f81cee9e5b06d.png" /></p>
+<p><strong>该用户有一个不用root密码就可以执行的文件<code>/opt/devstuff/dist/test/test</code></strong></p>
+<p><strong>执行该test文件，显示test.py</strong></p>
+<div><pre class="hljs"><code>fredf@dc-9:~$ /opt/devstuff/dist/<span class="hljs-built_in">test</span>/<span class="hljs-built_in">test</span> 
+Usage: python test.py <span class="hljs-built_in">read</span> append</code></pre></div>
+<p>切换到<code>/opt/devstuff</code>目录下，找到该test.py文件，如下图</p>
+<p><strong><img src="/_resources/9b62613e345c4cb289400bb938fc2cbd.png" /></strong></p>
+<p><strong>发现这个python脚本的功能是打开一个文件读取信息，追加写入另一个文件中</strong></p>
+<p><strong>那我们构造一个具有root权限的用户并写入passwd文件中，就可以提权</strong></p>
+<div><pre class="hljs"><code>fredf@dc-9:~$ openssl passwd -1 -salt sob 123
+$1$sob<span class="hljs-variable">$BmJLmGFTRiB9Pzlip0Dpa0</span></code></pre></div>
+<p>构造用户<code>sob:$1$sob$BmJLmGFTRiB9Pzlip0Dpa0:0:0::/root:/bin/bash</code></p>
+<div><pre class="hljs"><code>fredf@dc-9:~$ <span class="hljs-built_in">echo</span> <span class="hljs-string">'sob:$1$sob$BmJLmGFTRiB9Pzlip0Dpa0:0:0::/root:/bin/bash'</span> &gt; ./hack.txt
+fredf@dc-9:~$ cat hack.txt 
+sob:$1$sob<span class="hljs-variable">$BmJLmGFTRiB9Pzlip0Dpa0</span>:0:0::/root:/bin/bash</code></pre></div>
+<p>然后写入用户至<code>/etc/passwd</code></p>
+<p><img src="/_resources/e9c3e0fa45534a92853926aab58164db.png" /></p>
+<p><img src="/_resources/b010b1e10bb448ada17146743560fe44.png" /></p>
+<p>切换至sob用户,成功获得root权限</p>
+<p><img src="/_resources/966c76f7ab1f44e6b91aec4aae39b7b2.png" /></p>
+</div>
+      </article>
+    </div>
+  </body>
+</html>

@@ -4,9 +4,74 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Thu, 20 Oct 2022 08:36:04 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 21 Oct 2022 09:22:32 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
+        <item>
+            <title><![CDATA[vulhub    DC-9]]></title>
+            <guid>5e32b55091c449e084b4d9a059f4a5ca</guid>
+            <pubDate>Wed, 19 Oct 2022 07:20:41 GMT</pubDate>
+            <content:encoded><![CDATA[<p>Download <strong>link：<a title="https://www.vulnhub.com/entry/dc-9,412/" href="https://www.vulnhub.com/entry/dc-9,412/">https://www.vulnhub.com/entry/dc-9,412/</a></strong></p>
+<p><strong>扫描主机，靶机ip为192.168.56.11</strong></p>
+<p><strong><img src="/_resources/c14a748cd4c546f99196ab92e8f7faee.png" alt="de32b30940077a1ff349d8d083c2ac07.png" width="872" height="471" class="jop-noMdConv" /></strong></p>
+<p><strong>靶机开放22和80端口</strong></p>
+<p><strong>访问80端口web服务</strong></p>
+<p><strong><img src="/_resources/b01f9f9ec4564042a576f301e2549ca9.png" alt="40ff85d50fa1e8c7b7f4fd17d54d474c.png" width="873" height="293" class="jop-noMdConv" /></strong></p>
+<p><strong>扫描站点目录</strong></p>
+<p><strong><img src="/_resources/9b2832348f51482db9dc124776f969ba.png" alt="2ba7373b7d450c69a5632cac13c4f19e.png" width="703" height="567" class="jop-noMdConv" /></strong></p>
+<p><strong>访问站点各个页面</strong></p>
+<p><strong><img src="/_resources/c2bdc686819846a0964fa4af105774d5.png" alt="29f5270580d0770da7666ac47593b839.png" width="987" height="539" class="jop-noMdConv" /></strong></p>
+<p><strong>通过测试可以发现search.php页面存在sql注入</strong></p>
+<p><strong>保存请求数据使用sqlmap进行自动化注入</strong></p>
+<p><strong><img src="/_resources/4eb72bf1f2d54fb08de0fcf7f692c856.png" /></strong></p>
+<p><strong>逐个dbs,tables,columns,最后dump数据</strong></p>
+<p><strong>先dump users<img src="/_resources/3289c25787094228be308c95d0cc9211.png" /></strong></p>
+<p><strong>用users库中的表登录web，全部失败</strong></p>
+<p><strong>那么dump Staff库中的数据，发现存在账户密码<code>admin/transorbital1</code>，使用该账户密码成功登录后台</strong></p>
+<p><strong><img src="/_resources/1efb05e8bcc144b197edde462bbefef4.png" /></strong></p>
+<p><strong><img src="/_resources/f5307e037cb241b19cdee31ebf6ea362.png" /></strong></p>
+<p><strong>注意到登录后台后页面下方存在<code>File does not exist</code>的提示，尝试在页面后添加<code>?file=路径</code>，多次尝试，成功读取出/etc/passwd文件</strong></p>
+<p><strong><img src="/_resources/cb3f9205b65f436281485d4c12b7b2c4.png" /></strong></p>
+<p><strong>接下来对文件进行fuzz遍历，查看linux系统中任务调度情况<code>/proc/sched_debug</code></strong></p>
+<p><strong><img src="/_resources/f33a67a9cd7b4520b589c16bd13b9c98.png" /></strong></p>
+<p><strong>发现存在knockd服务，查询得知</strong></p>
+<div><pre class="hljs"><code>敲门（knock）指的是我们从自己的客户端设备（<span class="hljs-built_in">pc</span>、笔记本或者手机）向服务器<span class="hljs-built_in">IP</span>发送一系列实现约好的暗号，而服务器上需要相应的安装接收暗号的服务knockd，它在接收到正确的暗号的时候，会临时性的为敲门者开一段时间的门并随后关上（当然也能够配置成一直开着），我们要在这几秒钟里面登录成功并且保持连接，如果不小心断了连接就要重新敲门。
+
+<span class="hljs-symbol">knock</span>动作的实质就是连续的向指定的<span class="hljs-built_in">ip</span>的约定的端口连续的发送多个tcp或者udp包，比如我们可以通过*telnet 服务器地址 端口号* 命令来发送tcp包，也可以直接在浏览器地址栏里面用 http:<span class="hljs-comment">//服务器地址:端口号 的方式来让浏览器发出与服务器指定端口tcp握手的SYN包。但是最好用的还是直接下载knock工具（windows版、mac版），用 knock 服务器地址 端口号 的方式来实现敲门</span></code></pre></div>
+<p>读取knockd的配置文件<code>/etc/knockd.conf</code>，得到ssh开门密码 <code>9842,8475,7469(倒序)</code></p>
+<p><img src="/_resources/89b26993e1204a02842f8bc130bfafb8.png" /></p>
+<p>安装knockd并对靶机实行ssh开门</p>
+<p><strong><img src="/_resources/87c48adad4aa4cc7ac480408da0d02be.png" alt="6dde7d80df886d0c60e9d4aed8f0d727.png" width="818" height="584" class="jop-noMdConv" /></strong></p>
+<p><strong>使用之前sql注入爆破出来的用户名和密码进行ssh爆破</strong></p>
+<p><strong><img src="/_resources/65903d7169bf4cba9942088804bec244.png" alt="4167d487643ae3c6d4b405bbecebe702.png" width="998" height="341" class="jop-noMdConv" /></strong></p>
+<p><strong>爆破出来三组用户名密码</strong></p>
+<p><strong>其他两个用户都没有什么文件也没有sudo权限，ssh登录janitor发现一个密码txt文件<img src="/_resources/c5e2c1e4bc8e40e58f4b2f8781bb3212.png" /></strong></p>
+<p><strong>使用上面的密码继续进行ssh爆破</strong></p>
+<p><strong><img src="/_resources/7ee501ceefbc4db2ba183498e6c81f8b.png" alt="4f470bf9838244a77c2c1c8e358413ab.png" width="973" height="413" class="jop-noMdConv" /></strong></p>
+<p><strong>得到一个新用户名密码</strong><code>login: fredf password: B4-Tru3-001</code></p>
+<p><strong>ssh登录该用户，查看sudo权限如下</strong></p>
+<p><img src="/_resources/b4354fc41bbd4c2f916f81cee9e5b06d.png" /></p>
+<p><strong>该用户有一个不用root密码就可以执行的文件<code>/opt/devstuff/dist/test/test</code></strong></p>
+<p><strong>执行该test文件，显示test.py</strong></p>
+<div><pre class="hljs"><code>fredf@dc-9:~$ /opt/devstuff/dist/<span class="hljs-built_in">test</span>/<span class="hljs-built_in">test</span> 
+Usage: python test.py <span class="hljs-built_in">read</span> append</code></pre></div>
+<p>切换到<code>/opt/devstuff</code>目录下，找到该test.py文件，如下图</p>
+<p><strong><img src="/_resources/9b62613e345c4cb289400bb938fc2cbd.png" /></strong></p>
+<p><strong>发现这个python脚本的功能是打开一个文件读取信息，追加写入另一个文件中</strong></p>
+<p><strong>那我们构造一个具有root权限的用户并写入passwd文件中，就可以提权</strong></p>
+<div><pre class="hljs"><code>fredf@dc-9:~$ openssl passwd -1 -salt sob 123
+$1$sob<span class="hljs-variable">$BmJLmGFTRiB9Pzlip0Dpa0</span></code></pre></div>
+<p>构造用户<code>sob:$1$sob$BmJLmGFTRiB9Pzlip0Dpa0:0:0::/root:/bin/bash</code></p>
+<div><pre class="hljs"><code>fredf@dc-9:~$ <span class="hljs-built_in">echo</span> <span class="hljs-string">'sob:$1$sob$BmJLmGFTRiB9Pzlip0Dpa0:0:0::/root:/bin/bash'</span> &gt; ./hack.txt
+fredf@dc-9:~$ cat hack.txt 
+sob:$1$sob<span class="hljs-variable">$BmJLmGFTRiB9Pzlip0Dpa0</span>:0:0::/root:/bin/bash</code></pre></div>
+<p>然后写入用户至<code>/etc/passwd</code></p>
+<p><img src="/_resources/e9c3e0fa45534a92853926aab58164db.png" /></p>
+<p><img src="/_resources/b010b1e10bb448ada17146743560fe44.png" /></p>
+<p>切换至sob用户,成功获得root权限</p>
+<p><img src="/_resources/966c76f7ab1f44e6b91aec4aae39b7b2.png" /></p>
+]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[ret2shellcode]]></title>
             <guid>f35be5b5193f4424809aea8a46cc9783</guid>
@@ -1018,54 +1083,6 @@ I will malloc() and strcpy the flag there. take it.</code></pre></div>
 <p><img src="/_resources/fcb632314e63431cab92ecfe348a2fd3.png" /></p>
 <p>**PS:**这里要注意\xC8\xCE\xC5\x06及\xCC\xCE\xC5\x06都是小端序格式</p>
 ]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[pwnable--fd -- (File descriptor)]]></title>
-            <guid>115d6be93e25453aa01b188ed5d03b9a</guid>
-            <pubDate>Fri, 01 Apr 2022 10:21:50 GMT</pubDate>
-            <content:encoded><![CDATA[<img src="/_resources/c774c598191645eea4fd4a0a697df47f.png" alt="63c93ec7d8e30f0017d628cf6d998227.png" width="668" height="439" class="jop-noMdConv" />
-<p><mark><strong>ssh fd@pwnable.kr -p2222 (pw:guest)</strong></mark></p>
-<img src="/_resources/0f3dba1dccbe4e5a91463813e47687fa.png" alt="e7214056bbe241c8dfd6dbc0cf05a9a3.png" width="617" height="621" class="jop-noMdConv" />
-<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
-<span class="hljs-type">char</span> buf[<span class="hljs-number">32</span>];
-<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[], <span class="hljs-type">char</span>* envp[])</span>{
-    <span class="hljs-keyword">if</span>(argc&lt;<span class="hljs-number">2</span>){
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"pass argv[1] a number\n"</span>);
-        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-    }
-    <span class="hljs-type">int</span> fd = atoi( argv[<span class="hljs-number">1</span>] ) - <span class="hljs-number">0x1234</span>;
-    <span class="hljs-type">int</span> len = <span class="hljs-number">0</span>;
-    len = read(fd, buf, <span class="hljs-number">32</span>);
-    <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">strcmp</span>(<span class="hljs-string">"LETMEWIN\n"</span>, buf)){
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"good job :)\n"</span>);
-        system(<span class="hljs-string">"/bin/cat flag"</span>);
-        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);
-    }
-    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"learn about Linux file IO\n"</span>);
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-
-}</code></pre></div>
-<p><mark>这里要注意linux相关函数的具体使用技巧</mark></p>
-<div><pre class="hljs"><code>atoi() — Convert <span class="hljs-built_in">Character</span> <span class="hljs-built_in">String</span> <span class="hljs-keyword">to</span> <span class="hljs-built_in">Integer</span></code></pre></div>
-<div><pre class="hljs"><code>Linux standard IO streams
-
-A Linux <span class="hljs-built_in">shell</span>, such <span class="hljs-keyword">as</span> Bash, receives input <span class="hljs-keyword">and</span> sends output <span class="hljs-keyword">as</span> sequences <span class="hljs-keyword">or</span> streams <span class="hljs-keyword">of</span> <span class="hljs-keyword">characters</span>. Each <span class="hljs-keyword">character</span> is independent <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> <span class="hljs-literal">one</span> <span class="hljs-keyword">before</span> <span class="hljs-keyword">it</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">the</span> <span class="hljs-literal">one</span> <span class="hljs-keyword">after</span> <span class="hljs-keyword">it</span>. The <span class="hljs-keyword">characters</span> are <span class="hljs-keyword">not</span> organized <span class="hljs-keyword">into</span> structured records <span class="hljs-keyword">or</span> fixed-size blocks. Streams are accessed <span class="hljs-keyword">using</span> <span class="hljs-built_in">file</span> IO techniques, whether <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">the</span> actual stream <span class="hljs-keyword">of</span> <span class="hljs-keyword">characters</span> comes <span class="hljs-built_in">from</span> <span class="hljs-keyword">or</span> goes <span class="hljs-built_in">to</span> <span class="hljs-keyword">a</span> <span class="hljs-built_in">file</span>, <span class="hljs-keyword">a</span> keyboard, <span class="hljs-keyword">a</span> window <span class="hljs-keyword">on</span> <span class="hljs-title">a</span> <span class="hljs-title">display</span>, <span class="hljs-title">or</span> <span class="hljs-title">some</span> <span class="hljs-title">other</span> <span class="hljs-title">IO</span> <span class="hljs-title">device</span>. <span class="hljs-title">Linux</span> <span class="hljs-title">shells</span> <span class="hljs-title">use</span> <span class="hljs-title">three</span> <span class="hljs-title">standard</span> <span class="hljs-title">I</span>/<span class="hljs-title">O</span> <span class="hljs-title">streams</span>, <span class="hljs-title">each</span> <span class="hljs-title">of</span> <span class="hljs-title">which</span> <span class="hljs-title">is</span> <span class="hljs-title">associated</span> <span class="hljs-title">with</span> <span class="hljs-title">a</span> <span class="hljs-title">well-known</span> <span class="hljs-title">file</span> <span class="hljs-title">descriptor</span>:
-
-<span class="hljs-keyword">stdout</span> is <span class="hljs-keyword">the</span> standard output stream, which displays output <span class="hljs-built_in">from</span> commands. It has <span class="hljs-built_in">file</span> descriptor <span class="hljs-number">1.</span>
-<span class="hljs-keyword">stderr</span> is <span class="hljs-keyword">the</span> standard error stream, which displays error output <span class="hljs-built_in">from</span> commands. It has <span class="hljs-built_in">file</span> descriptor <span class="hljs-number">2.</span>
-<span class="hljs-keyword">stdin</span> is <span class="hljs-keyword">the</span> standard input stream, which provides input <span class="hljs-built_in">to</span> commands. It has <span class="hljs-built_in">file</span> descriptor <span class="hljs-number">0.</span>
-
-Input streams provide input <span class="hljs-built_in">to</span> programs, usually <span class="hljs-built_in">from</span> terminal keystrokes. Output streams print <span class="hljs-keyword">text</span> <span class="hljs-keyword">characters</span>, usually <span class="hljs-built_in">to</span> <span class="hljs-keyword">the</span> terminal. The terminal was originally <span class="hljs-keyword">an</span> ASCII typewriter <span class="hljs-keyword">or</span> display terminal, but now, <span class="hljs-keyword">it</span> is more often <span class="hljs-keyword">a</span> <span class="hljs-keyword">text</span> window <span class="hljs-keyword">on</span> <span class="hljs-title">a</span> <span class="hljs-title">graphical</span> <span class="hljs-title">desktop</span>.</code></pre></div>
-<img src="/_resources/de6e81d4052444938d658b2f339ee821.png" alt="fe5c3756554e25860ac52dcefe8b8e29.png" width="793" height="218" class="jop-noMdConv" />
-<p>分析：fd.c需要传入一个参数，然后将传入的字符串参数通过atoi参数转换为整形并减去 0x1234</p>
-<p>由上已知，如果fd为0的话，则程序将从stdin读入数据至buff</p>
-<p>故而传入参数为0x1234的十进制4660</p>
-<div><pre class="hljs"><code>└─# echo $((num=0x1234))
-4660</code></pre></div>
-<p>然后再匹配strcmp中的字符串"LETMEWIN\n"，即可得到flag</p>
-<img src="/_resources/cb5a56ad19cf401e87e4205f7986a332.png" alt="792b0d9b56f414147ba53f4e48902456.png" width="634" height="238" class="jop-noMdConv" />]]></content:encoded>
         </item>
     </channel>
 </rss>
