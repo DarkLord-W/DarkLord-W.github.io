@@ -4,11 +4,11 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Tue, 16 May 2023 09:51:15 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 17 May 2023 06:32:41 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
         <item>
-            <title><![CDATA[PwnMe-challenges-train-sniper-02]]></title>
+            <title><![CDATA[pwn-sniper-02]]></title>
             <guid>f9969a3586cb47c3aaba7f15ea3dfc83</guid>
             <pubDate>Fri, 05 May 2023 02:30:47 GMT</pubDate>
             <content:encoded><![CDATA[<p><strong>漏洞程序源码如下：</strong></p>
@@ -99,7 +99,7 @@ io.interactive()</code></pre></div>
 ]]></content:encoded>
         </item>
         <item>
-            <title><![CDATA[PwnMe-challenges-train-sniper-01]]></title>
+            <title><![CDATA[pwn-sniper-01]]></title>
             <guid>330571c9c2c24e97b19e1a564bca38ca</guid>
             <pubDate>Mon, 03 Apr 2023 07:01:38 GMT</pubDate>
             <content:encoded><![CDATA[<p><strong>漏洞程序源码如下：</strong></p>
