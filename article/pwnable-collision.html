@@ -24,15 +24,34 @@
                 ></span
               >
               <span
-                >Updated At：<time datetime="1662451876379"
-                  >2022</time
+                >Updated At：<time datetime="1684308237502"
+                  >2023</time
                 ></span
               >
             </div>
             
           </div>
         </header>
-        <div class="article-content markdown-body"><p><strong>参考：</strong><a title="https://cloud.tencent.com/developer/article/1516391" href="https://cloud.tencent.com/developer/article/1516391">pwnable-Col</a></p>
+        <div class="article-content markdown-body"><p>#include &lt;stdlib.h&gt;</p>
+<p>#include &lt;unistd.h&gt;</p>
+<p>#include &lt;stdio.h&gt;</p>
+<p>#include &lt;string.h&gt;</p>
+<p>void win()</p>
+<p>{</p>
+<p>printf(“code flow successfully changed\n”);</p>
+<p>}</p>
+<p>int main(int argc, char **argv)</p>
+<p>{</p>
+<p>volatile int (*fp)();</p>
+<p>char buffer[64];</p>
+<p>fp = 0;</p>
+<p>gets(buffer);</p>
+<p>if(fp) {</p>
+<p>printf(“calling function pointer, jumping to 0x%08x\n”, fp);</p>
+<p>fp();</p>
+<p>}</p>
+<p>}</p>
+<p><strong>参考：</strong><a title="https://cloud.tencent.com/developer/article/1516391" href="https://cloud.tencent.com/developer/article/1516391">pwnable-Col</a></p>
 <p><strong>涉及知识点：</strong></p>
 <p>1.指针类型转换</p>
 <p>2.大小端序</p>

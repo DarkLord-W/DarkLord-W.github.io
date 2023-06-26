@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>Protostar_stack0 - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">Protostar_stack0</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1687334864708"
+                  >2023</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1687747424766"
+                  >2023</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p>运行程序，如下</p>
+<p><strong><img src="/_resources/106b7585a8c6488db678f6b08b4b0c86.png" alt="83700502108d559cffdad6d2ce4fe38b.png" width="452" height="117" class="jop-noMdConv" /></strong></p>
+<p>查看反编译代码</p>
+<div><pre class="hljs"><code><span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>
+{
+    undefined auStack84 [<span class="hljs-number">64</span>];
+    <span class="hljs-type">int32_t</span> iStack20;
+    
+    iStack20 = <span class="hljs-number">0</span>;
+    gets(auStack84);
+    <span class="hljs-keyword">if</span> (iStack20 == <span class="hljs-number">0</span>) {
+        <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Try again?"</span>);
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-built_in">puts</span>(<span class="hljs-string">"you have changed the \'modified\' variable"</span>);
+    }
+    <span class="hljs-keyword">return</span>;
+}</code></pre></div>
+<p>本题目逻辑很简单，获取输入，输入数组长度为64,只需要输出长度超过64溢出修改iStack20就OK，如下</p>
+<img src="/_resources/5d1b3df1c56746ff9a7218bcf543da08.png" alt="16d3ca07733170a42997a21dc383b46e.png" width="952" height="245" class="jop-noMdConv" /></div>
+      </article>
+    </div>
+  </body>
+</html>

