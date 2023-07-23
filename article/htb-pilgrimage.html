@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>HTB Pilgrimage - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">HTB Pilgrimage</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1690113930373"
+                  >2023</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1690124712298"
+                  >2023</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><div><pre class="hljs"><code>└─$ sudo nmap -sS -sV -sC -Pn -T4 -A 10.10.11.219
+[sudo] password <span class="hljs-keyword">for</span> kali: 
+Starting Nmap 7.93 ( https://nmap.org ) at 2023-07-23 20:04 CST
+Nmap scan report <span class="hljs-keyword">for</span> 10.10.11.219
+Host is up (0.11s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.4p1 Debian 5+deb11u1 (protocol 2.0)
+| ssh-hostkey: 
+|   3072 20be60d295f628c1b7e9e81706f168f3 (RSA)
+|   256 0eb6a6a8c99b4173746e70180d5fe0af (ECDSA)
+|_  256 d14e293c708669b4d72cc80b486e9804 (ED25519)
+80/tcp open  http    nginx 1.18.0
+|_http-title: Did not follow redirect to http://pilgrimage.htb/
+|_http-server-header: nginx/1.18.0
+No exact OS matches <span class="hljs-keyword">for</span> host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.93%E=4%D=7/23%OT=22%CT=1%CU=38038%PV=Y%DS=2%DC=T%G=Y%TM=64BD176
+OS:D%P=x86_64-pc-linux-gnu)SEQ(SP=FD%GCD=1%ISR=108%TI=Z%CI=Z%II=I%TS=A)OPS(
+OS:O1=M53AST11NW7%O2=M53AST11NW7%O3=M53ANNT11NW7%O4=M53AST11NW7%O5=M53AST11
+OS:NW7%O6=M53AST11)WIN(W1=FE88%W2=FE88%W3=FE88%W4=FE88%W5=FE88%W6=FE88)ECN(
+OS:R=Y%DF=Y%T=40%W=FAF0%O=M53ANNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS
+OS:%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R=
+OS:Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=
+OS:R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T
+OS:=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=
+OS:S)
+
+Network Distance: 2 hops
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE (using port 3389/tcp)
+HOP RTT       ADDRESS
+1   110.99 ms 10.10.16.1
+2   110.99 ms 10.10.11.219
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap <span class="hljs-keyword">done</span>: 1 IP address (1 host up) scanned <span class="hljs-keyword">in</span> 33.49 seconds</code></pre></div>
+<p>添加相应的hosts记录</p>
+<div><pre class="hljs"><code><span class="hljs-number">10.10.11.219</span>	pilgrimage.htb</code></pre></div>
+<img src="/_resources/832f15d1b56340fbb2f1c77407380b81.png" alt="f9f76307d28ff3ea260cf5cbf54816f2.png" width="586" height="381" class="jop-noMdConv" />
+<p>扫描web目录</p>
+<img src="/_resources/9b7309f8811d4a8ab4bdd67c7d4da1fc.png" alt="e2efee00571e384bfef90939e26ed1c8.png" width="589" height="247" class="jop-noMdConv" />
+<p>使用githack导出站点源码</p>
+<img src="/_resources/23c03d6aed9c4dbbaf00b1921bf3b5ab.png" alt="0fea32b86d507fac48243631a4075cf1.png" width="623" height="125" class="jop-noMdConv" />
+<p>查看其中二进制程序</p>
+<div><pre class="hljs"><code>└─$ ./magick -version
+Version: ImageMagick 7.1.0-49 beta Q16-HDRI x86_64 c243c9281:20220911 https://imagemagick.org
+Copyright: (C) 1999 ImageMagick Studio LLC
+License: https://imagemagick.org/script/license.php
+Features: Cipher DPC HDRI OpenMP(4.5) 
+Delegates (built-in): bzlib djvu fontconfig freetype jbig jng jpeg lcms lqr lzma openexr png raqm tiff webp x xml zlib
+Compiler: gcc (7.5)</code></pre></div>
+<p>发现是ImageMagick 7.1.0-49，查找发现存在CVE-2022-44268漏洞，如下</p>
+<img src="/_resources/df14670aae3a48f2a53b6e0076c88e2f.png" alt="36dc8986711e3295a9497a725d8f9419.png" width="486" height="65" class="jop-noMdConv" />
+<p>尝试利用该漏洞，<code>https://github.com/Sybil-Scan/imagemagick-lfi-poc</code></p>
+<p>生成一个带恶意命令的图片并上传，等到存在漏洞的ImageMagick程序执行命令后，再下载被转换后包含有命令执行结果的图片到本地进行解析</p>
+<p>审计代码可以发现在登录成功跳转首页后会连接数据库<code>$db = new PDO('sqlite:/var/db/pilgrimage');</code></p>
+<p>则生成如下命令图片</p>
+<img src="/_resources/c3c007e44b284c48bd5836a94fdf22c9.png" alt="0b9312969c539780200c355ae79bf0b0.png" width="588" height="191" class="jop-noMdConv" />
+<p>接下来开始利用漏洞</p>
+<p>读取下载的文件</p>
+<p><code>identify -verbose 64bd24f347fd2.png</code></p>
+<p>使用CyberChef解码读取的数据<code>https://gchq.github.io/CyberChef</code></p>
+<img src="/_resources/f4a9d37fa0724123acd1229f215027e0.png" alt="81d9b8149e9fedbf5482b9457c882fbc.png" width="628" height="289" class="jop-noMdConv" />
+<p>发现一个帐号密码，还是使用xxd转换一下sqlite数据库格式</p>
+<p>将图片文件中二进制段的数据单独保存为一个txt文件<code>b.txt</code></p>
+<p>再使用xxd将其转换为.sqlite文件</p>
+<p><code>xxd -r -p b.txt data.sqlite</code></p>
+<p>使用sqlite3读取文件并<code>.dump</code></p>
+<p><img src="/_resources/81cf9b515328427d95bb22b38cc86274.png" /></p>
+<p>得到<code>emily/abigchonkyboi123</code></p>
+<p>ssh使用该账号密码成功连接</p>
+<img src="/_resources/48c8e79ccee74a218216eb311e9c271a.png" alt="848985a97478c7f3ae0084ae2d0f17cb.png" width="587" height="247" class="jop-noMdConv" />
+<p>得到user flag</p>
+<img src="/_resources/455a160f14074e0fa05e9e2008f19178.png" alt="542f6938637a458610702eeb4c6ee0af.png" width="390" height="86" class="jop-noMdConv" />
+<p>接下来尝试提权得到root flag</p>
+<p>sudo不可用</p>
+<div><pre class="hljs"><code>emily@pilgrimage:/$ sudo -l
+[sudo] password <span class="hljs-keyword">for</span> emily: 
+Sorry, user emily may not run sudo on pilgrimage.</code></pre></div>
+<p><code>ps -aux</code>查看后台进程发现一个shell脚本在以root身份运行</p>
+<img src="/_resources/674049ea0cc74fa68d8129a4b10aabe3.png" alt="411472798f3d50774ce993dd9c20a85a.png" width="700" height="123" class="jop-noMdConv" />
+<p>查看该shell脚本</p>
+<div><pre class="hljs"><code><span class="hljs-meta">#!/bin/bash</span>
+
+blacklist=(<span class="hljs-string">"Executable script"</span> <span class="hljs-string">"Microsoft executable"</span>)
+
+/usr/bin/inotifywait -m -e create /var/www/pilgrimage.htb/shrunk/ | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> FILE; <span class="hljs-keyword">do</span>
+        filename=<span class="hljs-string">"/var/www/pilgrimage.htb/shrunk/<span class="hljs-subst">$(/usr/bin/echo <span class="hljs-string">"<span class="hljs-variable">$FILE</span>"</span> | /usr/bin/tail -n 1 | /usr/bin/sed -n -e 's/^.*CREATE //p')</span>"</span>
+        binout=<span class="hljs-string">"<span class="hljs-subst">$(/usr/local/bin/binwalk -e <span class="hljs-string">"<span class="hljs-variable">$filename</span>"</span>)</span>"</span>
+        <span class="hljs-keyword">for</span> banned <span class="hljs-keyword">in</span> <span class="hljs-string">"<span class="hljs-variable">${blacklist[@]}</span>"</span>; <span class="hljs-keyword">do</span>
+                <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$binout</span>"</span> == *<span class="hljs-string">"<span class="hljs-variable">$banned</span>"</span>* ]]; <span class="hljs-keyword">then</span>
+                        /usr/bin/rm <span class="hljs-string">"<span class="hljs-variable">$filename</span>"</span>
+                        <span class="hljs-built_in">break</span>
+                <span class="hljs-keyword">fi</span>
+        <span class="hljs-keyword">done</span>
+<span class="hljs-keyword">done</span></code></pre></div>
+<p>发现该shell脚本中有两个bin文件执行，依次查看</p>
+<p><code>/usr/bin/inotifywait</code> 没发现啥有价值的</p>
+<p><code>/usr/local/bin/binwalk</code></p>
+<img src="/_resources/18525621a4cf48e7afb3c04518fd4b42.png" alt="8f2898bc92fa3b13df7a04f1c8d40640.png" width="552" height="131" class="jop-noMdConv" />
+<p>发现binwalk 为V2.3.2的版本，查找发现有(CVE-2022-4510)RCE漏洞</p>
+<p>执行exp脚本会生成一个图片马，将其上传复制到<code>/var/www/pilgrimage.htb/shrunk/</code>目录下</p>
+<p><code>https://www.exploit-db.com/exploits/51249</code></p>
+<img src="/_resources/3f1c95dc51504421b44738a3d5049644.png" alt="ee64040402b0899ac6baad5454a677c6.png" width="665" height="318" class="jop-noMdConv" />
+<p><img src="/_resources/862a44089d1e4b34903f2436c6785828.png" /></p>
+<p>本地开启对应端口监听</p>
+<p><img src="/_resources/31c2610f5fc9440dab84e5cb190b4de0.png" /></p>
+<p>成功获得反弹shell及root flag</p>
+</div>
+      </article>
+    </div>
+  </body>
+</html>
