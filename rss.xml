@@ -4,7 +4,7 @@
         <title></title>
         <link>undefined</link>
         <description>undefined</description>
-        <lastBuildDate>Sun, 26 Nov 2023 08:29:51 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 26 Nov 2023 08:32:19 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>Joplin Pages Publisher</generator>
         <item>
@@ -93,7 +93,7 @@ Num     Type           Disp Enb Address    What
 8       breakpoint     keep y   0x0804841d in main at stack4/stack4.c:16
 9       breakpoint     keep y   0x0804841e in main at stack4/stack4.c:16</code></pre></div>
 <p><code>0x8048408 &lt;main&gt;: push ebp：</code></p>
-<p><strong>1、将当前函数的基址指针（ebp）的值压入栈中，保存当前函数的栈帧</strong></p>
+<p><strong>1、</strong><code>push ebp:</code><strong>将当前函数的基址指针（ebp）的值压入栈中，保存当前函数的栈帧</strong></p>
 <div><pre class="hljs"><code>(gdb) r
 Starting program: /opt/protostar/bin/stack4 
 [Thread debugging using libthread_db enabled]
@@ -136,7 +136,7 @@ gs             0x63                99
 0xffffcfcc:     0xffffd064      0xf7e1dff4      0x08048430      0xf7ffcba0
 0xffffcfdc:     0x00000000      0xf25e5086      0x89ae3a96      0x00000000
 0xffffcfec:     0x00000000      0x00000000      0xf7ffcba0      0x00000000</code></pre></div>
-<p>执行<code>push ebp</code>后，而<code>esp 0xffffcfac -&gt; 0xffffcfa8</code></p>
+<p>执行<code>push ebp</code>后，<code>esp 0xffffcfac -&gt; 0xffffcfa8</code></p>
 <p>2、<code>mov ebp,esp：</code><strong>将当前栈指针的值赋给基址指针，建立当前函数的栈帧。</strong></p>
 <div><pre class="hljs"><code>(gdb) n
 
@@ -177,7 +177,7 @@ gs             0x63                99
 0xffffcfc8:     0x00000001      0xffffd064      0xf7e1dff4      0x08048430
 0xffffcfd8:     0xf7ffcba0      0x00000000      0xf25e5086      0x89ae3a96
 0xffffcfe8:     0x00000000      0x00000000      0x00000000      0xf7ffcba0</code></pre></div>
-<p> 执行<code>mov ebp,esp</code>后，而<code>ebp = esp = 0xffffcfa8</code></p>
+<p> 执行<code>mov ebp,esp</code>后，<code>ebp = esp = 0xffffcfa8</code></p>
 <p>3、<code>and esp,0xfffffff0：</code><strong>将栈指针与0xfffffff0进行按位与操作，将栈指针向下舍入到16字节边界，以对齐栈。</strong></p>
 <div><pre class="hljs"><code>(gdb) n
 
