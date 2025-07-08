@@ -1,0 +1,14 @@
+/* 增大目录字体大小 */
+.md-nav--secondary .md-nav__link {
+    font-size: 0.8rem !important;
+}
+
+/* 如果你也想增大主导航的字体 */
+.md-nav--primary .md-nav__link {
+    font-size: 0.8rem !important;
+}
+
+/* 右侧目录（如果启用） */
+.md-sidebar--secondary .md-nav__link {
+    font-size: 0.8rem !important;
+}

@@ -1,0 +1,25 @@
+name: ci
+on:
+  push:
+    branches:
+      - master
+      - main
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4  # 更新到 v4
+      - uses: actions/setup-python@v5  # 更新到 v5
+        with:
+          python-version: 3.x
+      # 更新缓存操作到 v3/v4 并修复 key
+      - uses: actions/cache@v4  # 或 @v3
+        with:
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}  # 推荐使用哈希文件
+          path: .cache
+      - run: pip install mkdocs-material
+      - run: pip install mkdocs-roamlinks-plugin
+      - run: pip install mkdocs-rss-plugin
+      - run: mkdocs gh-deploy --force
