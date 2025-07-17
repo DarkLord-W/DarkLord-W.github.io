@@ -122,7 +122,6 @@ james@overpass-prod:~$ ls
 todo.txt  user.txt
 james@overpass-prod:~$ cat user.txt 
 thm{65c1aaf000506e56996822c6281e6bf7}
-
 ```
 
 #### 查看todo.txt:
