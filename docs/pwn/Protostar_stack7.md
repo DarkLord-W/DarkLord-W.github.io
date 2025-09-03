@@ -7,8 +7,8 @@ The metasploit tool “msfelfscan” can make searching for suitable instruction
 
 This level is at /opt/protostar/bin/stack7
 ```
-### Source code
-
+Source code
+---
 ```c
 #include <stdlib.h>
 #include <unistd.h>
@@ -201,7 +201,7 @@ printf@plt = 080483e4
 main_addr = 08048545
 ```
 
-##### 栈布局如下：
+**栈布局如下：**
 ```
 +------------------+
 |   缓冲区填充     | 80 bytes
