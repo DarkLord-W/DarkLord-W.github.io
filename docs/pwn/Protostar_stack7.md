@@ -7,8 +7,10 @@ The metasploit tool “msfelfscan” can make searching for suitable instruction
 
 This level is at /opt/protostar/bin/stack7
 ```
+
 Source code
 ---
+
 ```c
 #include <stdlib.h>
 #include <unistd.h>
@@ -40,6 +42,7 @@ int main(int argc, char **argv)
   getpath();
 }
 ```
+
 ---
 
 ```c
@@ -58,10 +61,10 @@ SYMBOL TABLE:
 080484c4 g     F .text  00000081              getpath
 080485ca g     F .text  00000000              .hidden __i686.get_pc_thunk.bx
 08048545 g     F .text  0000000f              main
-
 ```
 
 **计算偏移量*(可以看到偏移量为80)*
+
 ```C
 └─$ gdb-peda
 Successfully imported six module
@@ -202,6 +205,7 @@ main_addr = 08048545
 ```
 
 **栈布局如下：**
+
 ```
 +------------------+
 |   缓冲区填充     | 80 bytes
@@ -305,7 +309,6 @@ binsh_addr = libc_base + binsh_offset
 
 **下面是完整的exp:**
 
-
 ```python
 from pwn import *
 
@@ -372,5 +375,3 @@ p.interactive()
 ```
 
 ![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250903102336550.png)
-
-
