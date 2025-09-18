@@ -30,7 +30,7 @@ theme:
       links: []      # 清空页脚的链接区域（如果不需要额外链接可留空）
 
     features:
-      # ➡️ 删除了 toc.integrate 以避免文件内标题出现在左侧
+      # 删除了 toc.integrate 以避免文件内标题出现在左侧
       - navigation.sections # 左导航分组，支持折叠
       - navigation.expand   # 自动展开当前文档所在的目录
 
