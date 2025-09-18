@@ -3,7 +3,7 @@ site_name: DarkLord-W's Blog
 theme:
     name: 'material'
     
-    logo: https://avatars.githubusercontent.com/u/42199147 
+    logo: https://avatars.githubusercontent.com/u/42199147   
     
     palette:
 
@@ -23,18 +23,14 @@ theme:
         icon: material/weather-night  #图标，月亮
         name: Switch to light mode
         
+    # 新增：启用导航折叠
+    navigation:
+      collapse: true  # 这个选项可以让左侧菜单可折叠
+        
 # 新增 footer 配置
     footer:
       copyright: "Powered By Darklord-W"  # 清空版权区域内容（包含默认的 Made with... 文字）
       links: []      # 清空页脚的链接区域（如果不需要额外链接可留空）
-
-    features:   # ✅ 新增
-      - navigation.instant
-      - navigation.expand
-      - navigation.sections
-      - navigation.top
-      - navigation.tracking
-      - navigation.hide   # 左侧支持折叠/隐藏
 
 
 # Extensions
@@ -59,9 +55,10 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-
-  - toc:
-      permalink: true
+  
+  # --- 禁用 TOC 自动生成右侧目录 ---
+  #- toc:
+  #    permalink: true
       
      
 plugins:
@@ -78,7 +75,7 @@ plugins:
 
 
 extra:
-  favicon: https://avatars.githubusercontent.com/u/42199147 
+  favicon: https://avatars.githubusercontent.com/u/42199147   
   generator: false  # 这行会移除 "Made with Material for MkDocs"
   
 extra_css:
@@ -87,5 +84,5 @@ extra_css:
 extra_javascript:
   - javascripts/mathjax.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
-  -  https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js 
-  - https://unpkg.com/mermaid/dist/mermaid.min.js  
+  -    https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js   
+  - https://unpkg.com/mermaid/dist/mermaid.min.js   
