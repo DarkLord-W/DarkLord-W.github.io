@@ -33,7 +33,6 @@ theme:
       links: []      # 清空页脚的链接区域（如果不需要额外链接可留空）
 
     features:
-      - toc.integrate       # 把目录集成到左栏，关闭右侧 TOC
       - navigation.sections # 左导航分组，支持折叠
       - navigation.expand   # 自动展开当前文档所在的目录
 
