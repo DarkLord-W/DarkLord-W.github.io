@@ -1,14 +1,16 @@
-/* 增大目录字体大小 */
+/* 增大目录字体大小（右侧 TOC，现已禁用）
 .md-nav--secondary .md-nav__link {
     font-size: 0.8rem !important;
 }
+*/
 
-/* 如果你也想增大主导航的字体 */
+/* 左侧主导航字体大小 */
 .md-nav--primary .md-nav__link {
-    font-size: 0.8rem !important;
+    font-size: 0.9rem !important;  /* 原本是 0.8rem，这里稍微放大一点更清晰 */
 }
 
-/* 右侧目录（如果启用） */
+/* 右侧目录（如果启用，现在已禁用）
 .md-sidebar--secondary .md-nav__link {
     font-size: 0.8rem !important;
 }
+*/
