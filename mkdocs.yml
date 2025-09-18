@@ -1,51 +1,48 @@
 site_name: DarkLord-W's Blog
 
 theme:
-    name: 'material'
-    
-    logo: https://avatars.githubusercontent.com/u/42199147   
-    
-    palette:
+  name: 'material'
+  
+  logo: https://avatars.githubusercontent.com/u/42199147   
+
+  palette:
 
     # Light mode
     - media: "(prefers-color-scheme: light)" 
-      scheme: default  #配色方案：浅色模式
-      primary: indigo  #原色，默认蓝，用于标题、侧边栏、文本链接和其他几个组件
-      accent: indigo  #强调色，默认蓝，可以交互的元素如悬停链接、按钮和滚动条
+      scheme: default  # 配色方案：浅色模式
+      primary: indigo  # 原色
+      accent: indigo   # 强调色
       toggle:
-        icon: material/weather-sunny #图标，太阳
+        icon: material/weather-sunny
         name: Switch to dark mode
         
     # Dark mode       
     - media: "(prefers-color-scheme: dark)"  
-      scheme: slate  #配色方案：深色模式
+      scheme: slate   # 配色方案：深色模式
       toggle:
-        icon: material/weather-night  #图标，月亮
+        icon: material/weather-night
         name: Switch to light mode
         
-    # 新增：启用导航折叠
-    navigation:
-      collapse: true  # 这个选项可以让左侧菜单可折叠
-        
-# 新增 footer 配置
-    footer:
-      copyright: "Powered By Darklord-W"  # 清空版权区域内容（包含默认的 Made with... 文字）
-      links: []      # 清空页脚的链接区域（如果不需要额外链接可留空）
+  # 启用左侧导航折叠
+  navigation:
+    collapse: true 
 
-    features:
-      - navigation.sections # 左导航分组，支持折叠
-      - navigation.expand   # 自动展开当前文档所在的目录
+  # 页脚配置
+  footer:
+    copyright: "Powered By Darklord-W"
+    links: []
+
+  features:
+    - navigation.sections   # 左导航分组，支持折叠
+    - navigation.expand     # 自动展开当前目录
+    # 不要 toc.integrate（避免文件内部标题插入左边导航）
 
 
-# Extensions
+# Markdown 扩展
 markdown_extensions:
   - footnotes
-  # - attr_list
   - pymdownx.arithmatex:
       generic: true
-  # - pymdownx.superfences
-  # - pymdownx.details
-  # - pymdownx.magiclink
   - pymdownx.tasklist:
       custom_checkbox: true
   - def_list
@@ -59,34 +56,35 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  
-  # --- 禁用 TOC 自动生成右侧目录 ---
-  #- toc:
-  #    permalink: true
-      
-     
+
+  # 仅启用 H1 作为目录（禁止 H2/H3 出现在左侧）
+  - toc:
+      permalink: false
+      toc_depth: 1
+
+
+# 插件
 plugins:
   - search
   - roamlinks
   - rss:
-      match_path: blog/posts/.* 
+      match_path: blog/posts/.*
       date_from_meta:
         as_creation: date
       categories:
         - categories
         - tags
-        
 
 
 extra:
   favicon: https://avatars.githubusercontent.com/u/42199147   
-  generator: false  # 这行会移除 "Made with Material for MkDocs"
-  
+  generator: false  # 移除 "Made with Material for MkDocs"
+
 extra_css:
   - stylesheets/extra.css
 
 extra_javascript:
   - javascripts/mathjax.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
-  -    https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js   
-  - https://unpkg.com/mermaid/dist/mermaid.min.js   
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://unpkg.com/mermaid/dist/mermaid.min.js

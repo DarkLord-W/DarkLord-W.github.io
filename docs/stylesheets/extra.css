@@ -4,6 +4,17 @@
 }
 */
 
+/* 隐藏左侧导航中当前文件下的所有内部标题层级 */
+.md-nav--primary .md-nav__item--active > .md-nav__link ~ .md-nav {
+    display: none !important;
+}
+
+/* 或者使用这个更直接的选择器 */
+.md-nav--primary .md-nav--secondary {
+    display: none !important;
+}
+
+
 /* 左侧主导航字体大小 */
 .md-nav--primary .md-nav__link {
     font-size: 0.8rem !important;  /* 原本是 0.8rem，这里稍微放大一点更清晰 */
@@ -22,3 +33,5 @@
 .md-content {
     max-width: 100% !important;    /* 内容区拉伸至全宽 */
 }
+
+
