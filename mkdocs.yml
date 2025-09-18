@@ -32,6 +32,11 @@ theme:
       copyright: "Powered By Darklord-W"  # 清空版权区域内容（包含默认的 Made with... 文字）
       links: []      # 清空页脚的链接区域（如果不需要额外链接可留空）
 
+    features:
+      - toc.integrate       # 把目录集成到左栏，关闭右侧 TOC
+      - navigation.sections # 左导航分组，支持折叠
+      - navigation.expand   # 自动展开当前文档所在的目录
+
 
 # Extensions
 markdown_extensions:
@@ -84,5 +89,5 @@ extra_css:
 extra_javascript:
   - javascripts/mathjax.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
-  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js   
-  - https://unpkg.com/mermaid/dist/mermaid.min.js
+  -    https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js   
+  - https://unpkg.com/mermaid/dist/mermaid.min.js   

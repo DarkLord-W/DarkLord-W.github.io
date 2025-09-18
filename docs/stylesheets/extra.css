@@ -6,7 +6,7 @@
 
 /* 左侧主导航字体大小 */
 .md-nav--primary .md-nav__link {
-    font-size: 0.9rem !important;  /* 原本是 0.8rem，这里稍微放大一点更清晰 */
+    font-size: 0.8rem !important;  /* 原本是 0.8rem，这里稍微放大一点更清晰 */
 }
 
 /* 右侧目录（如果启用，现在已禁用）
@@ -15,19 +15,10 @@
 }
 */
 
-/* 完全隐藏右侧 TOC 栏 */
+/* --- 新增：彻底移除右侧 TOC 栏并拓宽正文 --- */
 .md-sidebar--secondary {
-    display: none !important;
+    display: none !important;      /* 完全隐藏右侧目录栏 */
 }
-
-/* 让内容区域占满整个宽度 */
 .md-content {
-    max-width: none !important;
-}
-
-/* 调整内容区域的边距，让它更居中 */
-.md-content__inner {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 80rem; /* 可以根据需要调整最大宽度 */
+    max-width: 100% !important;    /* 内容区拉伸至全宽 */
 }
