@@ -4,31 +4,21 @@
 }
 */
 
+/* 左侧主导航字体大小 */
+.md-nav--primary .md-nav__link {
+    font-size: 0.8rem !important;  
+}
+
 /* 右侧目录（如果启用，现在已禁用）
 .md-sidebar--secondary .md-nav__link {
     font-size: 0.8rem !important;
 }
 */
 
-
-/* 左侧主导航字体大小 */
-.md-nav--primary .md-nav__link {
-    font-size: 0.8rem !important;
-}
-
-/* 隐藏左侧导航中文件的内部标题层级 */
-.md-nav--primary .md-nav--secondary {
-    display: none !important;
-}
-
-/* 完全隐藏右侧目录栏 */
+/* --- 新增：彻底移除右侧 TOC 栏并拓宽正文 --- */
 .md-sidebar--secondary {
-    display: none !important;  /* 完全隐藏右侧目录栏 */
+    display: none !important;      /* 完全隐藏右侧目录栏 */
 }
-
-/* 内容区拉伸至全宽 */
 .md-content {
-    max-width: 100% !important; /* 内容区拉伸至全宽 */
+    max-width: 100% !important;    /* 内容区拉伸至全宽 */
 }
-
-
