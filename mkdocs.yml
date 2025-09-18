@@ -23,16 +23,14 @@ theme:
         icon: material/weather-night  #图标，月亮
         name: Switch to light mode
         
-    # 新增：启用导航折叠
-    # ⚠️ 删除 navigation: collapse: true，Material 9.x 里无效
-        
-# 新增 footer 配置
+    # ➡️ 删除了无效的 navigation.collapse 段落
+    # 新增 footer 配置
     footer:
       copyright: "Powered By Darklord-W"  # 清空版权区域内容（包含默认的 Made with... 文字）
       links: []      # 清空页脚的链接区域（如果不需要额外链接可留空）
 
     features:
-      # - toc.integrate       # 删除，避免文档小标题出现在左栏
+      # ➡️ 删除了 toc.integrate 以避免文件内标题出现在左侧
       - navigation.sections # 左导航分组，支持折叠
       - navigation.expand   # 自动展开当前文档所在的目录
 
