@@ -2,8 +2,6 @@
 
 # 项目
 
-自己在 GitHub 上维护的仓库，12 个。排序按最近在用的优先，不是按 star。
-
 </div>
 
 <div class="grid cards" markdown>
