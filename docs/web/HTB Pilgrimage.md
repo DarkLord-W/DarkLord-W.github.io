@@ -51,15 +51,15 @@ Nmap done: 1 IP address (1 host up) scanned in 33.49 seconds
 10.10.11.219	pilgrimage.htb
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/f9f76307d28ff3ea260cf5cbf54816f2.png" alt="f9f76307d28ff3ea260cf5cbf54816f2.png" width="586" height="381" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/f9f76307d28ff3ea260cf5cbf54816f2.png" alt="f9f76307d28ff3ea260cf5cbf54816f2.png" width="586" height="381" class="jop-noMdConv">
 
 扫描web目录
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/e2efee00571e384bfef90939e26ed1c8.png" alt="e2efee00571e384bfef90939e26ed1c8.png" width="589" height="247" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/e2efee00571e384bfef90939e26ed1c8.png" alt="e2efee00571e384bfef90939e26ed1c8.png" width="589" height="247" class="jop-noMdConv">
 
 使用githack导出站点源码
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/0fea32b86d507fac48243631a4075cf1.png" alt="0fea32b86d507fac48243631a4075cf1.png" width="623" height="125" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/0fea32b86d507fac48243631a4075cf1.png" alt="0fea32b86d507fac48243631a4075cf1.png" width="623" height="125" class="jop-noMdConv">
 
 查看其中二进制程序
 
@@ -75,7 +75,7 @@ Compiler: gcc (7.5)
 
 发现是ImageMagick 7.1.0-49，查找发现存在CVE-2022-44268漏洞，如下
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/36dc8986711e3295a9497a725d8f9419.png" alt="36dc8986711e3295a9497a725d8f9419.png" width="486" height="65" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/36dc8986711e3295a9497a725d8f9419.png" alt="36dc8986711e3295a9497a725d8f9419.png" width="486" height="65" class="jop-noMdConv">
 
 尝试利用该漏洞，`https://github.com/Sybil-Scan/imagemagick-lfi-poc`
 
@@ -85,7 +85,7 @@ Compiler: gcc (7.5)
 
 则生成如下命令图片
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/0b9312969c539780200c355ae79bf0b0.png" alt="0b9312969c539780200c355ae79bf0b0.png" width="588" height="191" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/0b9312969c539780200c355ae79bf0b0.png" alt="0b9312969c539780200c355ae79bf0b0.png" width="588" height="191" class="jop-noMdConv">
 
 接下来开始利用漏洞
 
@@ -95,7 +95,7 @@ Compiler: gcc (7.5)
 
 使用CyberChef解码读取的数据`https://gchq.github.io/CyberChef`
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/81d9b8149e9fedbf5482b9457c882fbc.png" alt="81d9b8149e9fedbf5482b9457c882fbc.png" width="628" height="289" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/81d9b8149e9fedbf5482b9457c882fbc.png" alt="81d9b8149e9fedbf5482b9457c882fbc.png" width="628" height="289" class="jop-noMdConv">
 
 发现一个帐号密码，还是使用xxd转换一下sqlite数据库格式
 
@@ -107,17 +107,17 @@ Compiler: gcc (7.5)
 
 使用sqlite3读取文件并`.dump`
 
-![4cc11a27023942444367b65ad08527e9.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/4cc11a27023942444367b65ad08527e9.png)
+![4cc11a27023942444367b65ad08527e9.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/4cc11a27023942444367b65ad08527e9.png)
 
 得到`emily/abigchonkyboi123`
 
 ssh使用该账号密码成功连接
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/848985a97478c7f3ae0084ae2d0f17cb.png" alt="848985a97478c7f3ae0084ae2d0f17cb.png" width="587" height="247" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/848985a97478c7f3ae0084ae2d0f17cb.png" alt="848985a97478c7f3ae0084ae2d0f17cb.png" width="587" height="247" class="jop-noMdConv">
 
 得到user flag
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/542f6938637a458610702eeb4c6ee0af.png" alt="542f6938637a458610702eeb4c6ee0af.png" width="390" height="86" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/542f6938637a458610702eeb4c6ee0af.png" alt="542f6938637a458610702eeb4c6ee0af.png" width="390" height="86" class="jop-noMdConv">
 
 接下来尝试提权得到root flag
 
@@ -131,7 +131,7 @@ Sorry, user emily may not run sudo on pilgrimage.
 
 `ps -aux`查看后台进程发现一个shell脚本在以root身份运行
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/411472798f3d50774ce993dd9c20a85a.png" alt="411472798f3d50774ce993dd9c20a85a.png" width="700" height="123" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/411472798f3d50774ce993dd9c20a85a.png" alt="411472798f3d50774ce993dd9c20a85a.png" width="700" height="123" class="jop-noMdConv">
 
 查看该shell脚本
 
@@ -158,7 +158,7 @@ done
 
 `/usr/local/bin/binwalk`
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/8f2898bc92fa3b13df7a04f1c8d40640.png" alt="8f2898bc92fa3b13df7a04f1c8d40640.png" width="552" height="131" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/8f2898bc92fa3b13df7a04f1c8d40640.png" alt="8f2898bc92fa3b13df7a04f1c8d40640.png" width="552" height="131" class="jop-noMdConv">
 
 发现binwalk 为V2.3.2的版本，查找发现有(CVE-2022-4510)RCE漏洞
 
@@ -166,14 +166,14 @@ done
 
 `https://www.exploit-db.com/exploits/51249`
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/ee64040402b0899ac6baad5454a677c6.png" alt="ee64040402b0899ac6baad5454a677c6.png" width="665" height="318" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/ee64040402b0899ac6baad5454a677c6.png" alt="ee64040402b0899ac6baad5454a677c6.png" width="665" height="318" class="jop-noMdConv">
 
-![db07c1912730ada6140a78d5f7951b41.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/db07c1912730ada6140a78d5f7951b41.png)
+![db07c1912730ada6140a78d5f7951b41.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/db07c1912730ada6140a78d5f7951b41.png)
 
-![20d48b52fdb12b80a5bcf9db08953f0d.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20d48b52fdb12b80a5bcf9db08953f0d.png)
+![20d48b52fdb12b80a5bcf9db08953f0d.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20d48b52fdb12b80a5bcf9db08953f0d.png)
 
 本地开启对应端口监听
 
-![c3e6277f89258a141aba8ceecab8726d.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/c3e6277f89258a141aba8ceecab8726d.png)
+![c3e6277f89258a141aba8ceecab8726d.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/c3e6277f89258a141aba8ceecab8726d.png)
 
 成功获得反弹shell及root flag

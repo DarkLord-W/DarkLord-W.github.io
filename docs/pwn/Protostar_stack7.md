@@ -374,4 +374,4 @@ p.sendline(payload2)
 p.interactive()
 ```
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250903102336550.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250903102336550.png)

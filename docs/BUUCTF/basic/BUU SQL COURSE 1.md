@@ -1,22 +1,22 @@
 **启动靶机，访问目标地址：**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251012201400520.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251012201400520.png)
 
 **点击测试：**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251012202537213.png)
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251012202601702.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251012202537213.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251012202601702.png)
 
 **尝试3-2**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251012202651006.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251012202651006.png)
 
 **可以判断该处存在数字型注入**
 
 ---
 
 **burp抓包，发现实际请求的地址是：`/backend/content_detail.php?id=2`**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251012203042522.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251012203042522.png)
 
 **直接上sqlmap**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251012203724237.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251012203724237.png)
 
 **爆破库表列**
 ```c
@@ -143,4 +143,4 @@ Table: admin
 ---
 
 **使用获取到的用户名密码登陆**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251012205503260.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251012205503260.png)

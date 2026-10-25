@@ -61,8 +61,8 @@ I will malloc() and strcpy the flag there. take it.
 
 发现是UPX加壳，在linux下使用 `upx -d flag` 脱壳，然后使用IDA打开
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/ee86bb80ab597e956ad0a23c8b524869.png" alt="ee86bb80ab597e956ad0a23c8b524869.png" width="1056" height="521" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/ee86bb80ab597e956ad0a23c8b524869.png" alt="ee86bb80ab597e956ad0a23c8b524869.png" width="1056" height="521" class="jop-noMdConv">
 
 **双击flag跳转至下图，得到flag**
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/4a8e2574afe63ed666996c8f2306b19a.png" alt="4a8e2574afe63ed666996c8f2306b19a.png" width="993" height="571" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/4a8e2574afe63ed666996c8f2306b19a.png" alt="4a8e2574afe63ed666996c8f2306b19a.png" width="993" height="571" class="jop-noMdConv">

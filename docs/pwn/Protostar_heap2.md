@@ -188,4 +188,4 @@ strcpy(auth->name, "a\n");      // 写入 "a\n\0" 到 name，但 name 需要 32 
 由于字符串内容（如 `'a'`、`'s'`）的 ASCII 值非零，`auth->auth` 被读作非零值，从而触发 `login` 成功，输出 `"you have logged in already!\n"`。
 ```
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250927173728580.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250927173728580.png)

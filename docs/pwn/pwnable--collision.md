@@ -56,11 +56,11 @@ fp();
 
 * * *
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/ff2797e2e0b0d1f6edbc067daf78e56f.png" alt="ff2797e2e0b0d1f6edbc067daf78e56f.png" width="681" height="452" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/ff2797e2e0b0d1f6edbc067daf78e56f.png" alt="ff2797e2e0b0d1f6edbc067daf78e56f.png" width="681" height="452" class="jop-noMdConv">
 
 ==ssh col@pwnable.kr -p2222 (pw:guest)==
 
-==<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/8cb20b43c6286a8f14c934b62488c749.png" alt="8cb20b43c6286a8f14c934b62488c749.png" width="765" height="763" class="jop-noMdConv">==
+==<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/8cb20b43c6286a8f14c934b62488c749.png" alt="8cb20b43c6286a8f14c934b62488c749.png" width="765" height="763" class="jop-noMdConv">==
 
 查看文件：![](/home/darklord/.config/marktext/images/2022-04-12-18-35-19-image.png)
 
@@ -138,6 +138,6 @@ hashcode的结构应该是：`hashcode = A + B + C + D + E=0x21DD09EC`；
 '\xC8\xCE\xC5\x06' * 4 + '\xCC\xCE\xC5\x06'
 ```
 
-![155363ff93ce9ee4dbc41f990441f004.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/155363ff93ce9ee4dbc41f990441f004.png)
+![155363ff93ce9ee4dbc41f990441f004.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/155363ff93ce9ee4dbc41f990441f004.png)
 
 \*\*PS:\*\*这里要注意\\xC8\\xCE\\xC5\\x06及\\xCC\\xCE\\xC5\\x06都是小端序格式

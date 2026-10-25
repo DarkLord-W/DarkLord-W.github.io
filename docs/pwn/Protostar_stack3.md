@@ -6,11 +6,11 @@ created: 2023-11-07 11:37:55Z
 
 **运行该程序，得到：**
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/fd20d5017e983f4e3989e72748790aed.png" alt="fd20d5017e983f4e3989e72748790aed.png" width="188" height="44" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/fd20d5017e983f4e3989e72748790aed.png" alt="fd20d5017e983f4e3989e72748790aed.png" width="188" height="44" class="jop-noMdConv">
 
 **checksec:**
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/b4ffe4d135417fa767acccdbc6bb7faa.png" alt="b4ffe4d135417fa767acccdbc6bb7faa.png" width="286" height="119" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/b4ffe4d135417fa767acccdbc6bb7faa.png" alt="b4ffe4d135417fa767acccdbc6bb7faa.png" width="286" height="119" class="jop-noMdConv">
 
 **objdump:**
 

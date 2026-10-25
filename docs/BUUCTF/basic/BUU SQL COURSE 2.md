@@ -1,8 +1,8 @@
 **启动靶机，访问目标地址：**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251018171813321.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251018171813321.png)
 
 **点击测试，发现id参数处存在漏洞**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251018172011172.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251018172011172.png)
 
 **那么，测试库表列的数据**
 ```c
@@ -58,7 +58,7 @@ Table: admin
 ```
 
 **使用爆破出来的用户密码登陆，失败**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251018173259863.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251018173259863.png)
 
 **重新获取ctftraining数据库中的数据：**
 ```c

@@ -285,7 +285,7 @@ except Exception as e:
     sys.exit(1)
 
 ```
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250827104457601.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250827104457601.png)
 
 ---
 ### 2、常规情况（ASLR开启）
@@ -651,6 +651,6 @@ p.sendline(payload2)
 p.interactive()
 
 ```
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250827191040800.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250827191040800.png)
 
 ---

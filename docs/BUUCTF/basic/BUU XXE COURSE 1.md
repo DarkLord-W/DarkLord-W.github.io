@@ -1,10 +1,10 @@
 **启动靶机，访问目标地址：**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251015164932610.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251015164932610.png)
 
 **随便输入用户名密码并点击登陆，然后再抓包，可以看到post数据部分是xml格式**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251015165132457.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251015165132457.png)
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251015165300166.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251015165300166.png)
 
 **构造xxe payload:**
 将
@@ -37,7 +37,7 @@ admin
 </root>
 ```
 **可以看到成功读取/etc/passwd文件**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251015165941160.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251015165941160.png)
 
 **接下来读取flag**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251015170021608.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251015170021608.png)

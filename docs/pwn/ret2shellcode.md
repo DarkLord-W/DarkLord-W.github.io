@@ -61,7 +61,7 @@ SYMBOL TABLE:
 
 查看分析其源码
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/faad731de44f8d04102ba8a76ce645f7.png" alt="faad731de44f8d04102ba8a76ce645f7.png" width="979" height="503" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/faad731de44f8d04102ba8a76ce645f7.png" alt="faad731de44f8d04102ba8a76ce645f7.png" width="979" height="503" class="jop-noMdConv">
 
 可以看到，程序会获取输入的buf变量值，并将其复制至buf2变量中
 
@@ -74,11 +74,11 @@ Breakpoint 2 at 0x804a080
 
 查看buf2数据段是否存在读写权限
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/a4d57206454dffe9c7c22714dedfb98b.png" alt="a4d57206454dffe9c7c22714dedfb98b.png" width="923" height="491" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/a4d57206454dffe9c7c22714dedfb98b.png" alt="a4d57206454dffe9c7c22714dedfb98b.png" width="923" height="491" class="jop-noMdConv">
 
 接下来通过动态调试判断buf变量偏移距离
 
-![54bdd41c824ab74a33f7914a7210b30e.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/54bdd41c824ab74a33f7914a7210b30e.png)![94580980aa451eb4eded04968680b699.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/94580980aa451eb4eded04968680b699.png)
+![54bdd41c824ab74a33f7914a7210b30e.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/54bdd41c824ab74a33f7914a7210b30e.png)![94580980aa451eb4eded04968680b699.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/94580980aa451eb4eded04968680b699.png)
 
 可以看到无效地址为0x41384141，然后使用pattern_offset判断具体偏移距离为112
 

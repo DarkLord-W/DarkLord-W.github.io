@@ -4,11 +4,11 @@ updated: 2022-09-06 08:11:22Z
 created: 2022-04-01 10:21:50Z
 ---
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/63c93ec7d8e30f0017d628cf6d998227.png" alt="63c93ec7d8e30f0017d628cf6d998227.png" width="668" height="439" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/63c93ec7d8e30f0017d628cf6d998227.png" alt="63c93ec7d8e30f0017d628cf6d998227.png" width="668" height="439" class="jop-noMdConv">
 
 ==**ssh fd@pwnable.kr -p2222 (pw:guest)**==
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/e7214056bbe241c8dfd6dbc0cf05a9a3.png" alt="e7214056bbe241c8dfd6dbc0cf05a9a3.png" width="617" height="621" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/e7214056bbe241c8dfd6dbc0cf05a9a3.png" alt="e7214056bbe241c8dfd6dbc0cf05a9a3.png" width="617" height="621" class="jop-noMdConv">
 
 ```c
 #include <stdio.h>
@@ -52,7 +52,7 @@ stdin is the standard input stream, which provides input to commands. It has fil
 Input streams provide input to programs, usually from terminal keystrokes. Output streams print text characters, usually to the terminal. The terminal was originally an ASCII typewriter or display terminal, but now, it is more often a text window on a graphical desktop.
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/fe5c3756554e25860ac52dcefe8b8e29.png" alt="fe5c3756554e25860ac52dcefe8b8e29.png" width="793" height="218" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/fe5c3756554e25860ac52dcefe8b8e29.png" alt="fe5c3756554e25860ac52dcefe8b8e29.png" width="793" height="218" class="jop-noMdConv">
 
 分析：fd.c需要传入一个参数，然后将传入的字符串参数通过atoi参数转换为整形并减去 0x1234
 
@@ -67,4 +67,4 @@ Input streams provide input to programs, usually from terminal keystrokes. Outpu
 
 然后再匹配strcmp中的字符串"LETMEWIN\\n"，即可得到flag
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/792b0d9b56f414147ba53f4e48902456.png" alt="792b0d9b56f414147ba53f4e48902456.png" width="634" height="238">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/792b0d9b56f414147ba53f4e48902456.png" alt="792b0d9b56f414147ba53f4e48902456.png" width="634" height="238">

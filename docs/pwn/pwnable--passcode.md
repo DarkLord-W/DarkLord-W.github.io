@@ -249,13 +249,13 @@ GOT protection: Partial RELRO | GOT functions: 9
 
 下断点分析welcome函数
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/0e7c8ab7b10fa001580f5933a6ae2ed8.png" alt="0e7c8ab7b10fa001580f5933a6ae2ed8.png" width="721" height="557" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/0e7c8ab7b10fa001580f5933a6ae2ed8.png" alt="0e7c8ab7b10fa001580f5933a6ae2ed8.png" width="721" height="557" class="jop-noMdConv">
 
 **welcome函数ebp为0xffffd498**
 
 **且启动了gs栈检测，所以不能将返回地址直接覆盖为目标地址**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/6419dc61c9c0f05b2b34458d7015ddb1.png" alt="6419dc61c9c0f05b2b34458d7015ddb1.png" width="905" height="547" class="jop-noMdConv">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/6419dc61c9c0f05b2b34458d7015ddb1.png" alt="6419dc61c9c0f05b2b34458d7015ddb1.png" width="905" height="547" class="jop-noMdConv">**
 
 可以看到，在`0x8048639 <welcome+48>: call 0x80484a0 <__isoc99_scanf@plt>` 是输入name的字符串提示，那么下一个地是就是name的地址
 
@@ -263,7 +263,7 @@ GOT protection: Partial RELRO | GOT functions: 9
 
 继续往下走
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/dad60098217a99f1636bc8b51292ccde.png" alt="dad60098217a99f1636bc8b51292ccde.png" width="814" height="475" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/dad60098217a99f1636bc8b51292ccde.png" alt="dad60098217a99f1636bc8b51292ccde.png" width="814" height="475" class="jop-noMdConv">
 
 可以看到输入的name值aaaaaa的地址是0xffffd428
 
@@ -271,11 +271,11 @@ GOT protection: Partial RELRO | GOT functions: 9
 
 继续执行，跳转至login函数
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/99d4e02163a0c9845b4f1da867be32d3.png" alt="99d4e02163a0c9845b4f1da867be32d3.png" width="807" height="699" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/99d4e02163a0c9845b4f1da867be32d3.png" alt="99d4e02163a0c9845b4f1da867be32d3.png" width="807" height="699" class="jop-noMdConv">
 
 **可以发现login函数ebp也是0xffffd498，故welcome函数和login函数有相同的ebp**
 
-** <img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/edcbf79e8e6ec8df60c743cb5f79779c.png" alt="edcbf79e8e6ec8df60c743cb5f79779c.png" width="962" height="577" class="jop-noMdConv">**
+** <img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/edcbf79e8e6ec8df60c743cb5f79779c.png" alt="edcbf79e8e6ec8df60c743cb5f79779c.png" width="962" height="577" class="jop-noMdConv">**
 
 **passcode1:edx,DWORD PTR \[ebp-0x10\]**
 
@@ -317,4 +317,4 @@ except:
 
 执行exp得到flag，如下图所示：
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/db8b2fc0245bad16909810e9269ea724.png" alt="db8b2fc0245bad16909810e9269ea724.png" width="933" height="556" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/db8b2fc0245bad16909810e9269ea724.png" alt="db8b2fc0245bad16909810e9269ea724.png" width="933" height="556" class="jop-noMdConv">

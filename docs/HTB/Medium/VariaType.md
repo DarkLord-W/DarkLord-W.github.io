@@ -1,4 +1,4 @@
-![image.png|1208](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260321200202287.png)
+![image.png|1208](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260321200202287.png)
 
 ---
 ## 信息收集
@@ -98,15 +98,15 @@ bm                      [Status: 301, Size: 169, Words: 5, Lines: 8, Duration: 1
 echo "10.129.244.202 variatype.htb portal.variatype.htb" | sudo tee -a /etc/hosts
 ```
 ### 访问web页面
-![image.png|853](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260321211217055.png)
+![image.png|853](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260321211217055.png)
 
-![image.png|846](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260322204422911.png)
-
-
-![image.png|800](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260321213728892.png)
+![image.png|846](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260322204422911.png)
 
 
-![image.png|800](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260321213334041.png)
+![image.png|800](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260321213728892.png)
+
+
+![image.png|800](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260321213334041.png)
 
 
 ### 扫描portal.variatype.htb目录
@@ -316,7 +316,7 @@ index 0000000..615e621
 
 
 
-![image.png|1013](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260322203712126.png)
+![image.png|1013](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260322203712126.png)
 
 ### 搜索 fontTools的漏洞，得到fontTools varLib CVE-2025-66034 
 
@@ -364,7 +364,7 @@ www-data@variatype:~/portal.variatype.htb/public/files$
 
 ```
 
-![image.png|1019](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260322212008873.png)
+![image.png|1019](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260322212008873.png)
 
 ---
 ## 横向移动
@@ -929,7 +929,7 @@ cat /root/root.txt
 66e32156a28e987f45dda3449a46a342
 
 ```
-![image.png|1023](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260323200242658.png)
+![image.png|1023](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260323200242658.png)
 
 ---
 # varlib_cve_2025_66034.py:

@@ -113,7 +113,7 @@ Dump of assembler code for function main:
 End of assembler dump.
 ```
 
-![d074505f4564200ab4741f1b8d1807de.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/d074505f4564200ab4741f1b8d1807de.png)
+![d074505f4564200ab4741f1b8d1807de.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/d074505f4564200ab4741f1b8d1807de.png)
 
 在rand@plt后设置断点然后运行，可以得到random随机数RAX为0x6b8b4567
 
@@ -149,4 +149,4 @@ except:
     print('error')
 ```
 
-**<img src="https://raw.githubusercontent.com/DarkLord-W/CloudImages/main/images/dadebc0086407133f8d23be98637b8ea.png" alt="dadebc0086407133f8d23be98637b8ea.png" width="1077" height="301">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/dadebc0086407133f8d23be98637b8ea.png" alt="dadebc0086407133f8d23be98637b8ea.png" width="1077" height="301">**

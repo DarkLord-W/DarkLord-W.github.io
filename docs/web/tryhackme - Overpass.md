@@ -20,7 +20,7 @@ PORT   STATE SERVICE
 ```
 
 ### 访问80端口：
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250709180205031.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250709180205031.png)
 
 
 ### 对站点进行目录扫描：
@@ -88,10 +88,10 @@ async function login() {
 ```
 #### 可以看到，如果登陆返回的statusOrCookie === "Incorrect credentials"，则显示登陆失败，否则跳转到adminstatusOrCookie === "Incorrect credentials"页面
 #### 那么，抓包并修改返回值Incorrect credentials，成功登陆阳台：
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250709181813152.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250709181813152.png)
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250709182059844.png)
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250709182125770.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250709182059844.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250709182125770.png)
 
 ### 将admin页面的RSA 文件保存到本地命名为id_rsa，并使用john破解密码,得到密码  james13：
 ```bash
@@ -173,4 +173,4 @@ ff02::2 ip6-allrouters
 
 ```
 #### 尝试将hosts解析修改成自己攻击ip,并在本地开启http服务，放置一个`buildscript.sh`，`buildscript.sh`设置反向shell命令，并开启监听,成功获得root shell：
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250709184721131.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250709184721131.png)

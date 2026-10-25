@@ -133,4 +133,4 @@ sh.sendline(b'a'*56 + p32(buf2_addr))
 sh.interactive()
 ```
 
-![933f0062a25887296164e0b5b07357f0.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/933f0062a25887296164e0b5b07357f0.png)
+![933f0062a25887296164e0b5b07357f0.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/933f0062a25887296164e0b5b07357f0.png)

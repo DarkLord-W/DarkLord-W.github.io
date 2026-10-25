@@ -1,7 +1,7 @@
 
 **拓扑环境如下：**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/bef7b75eef14033f45e83eae60525f79.png" alt="bef7b75eef14033f45e83eae60525f79.png" width="577" height="408">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/bef7b75eef14033f45e83eae60525f79.png" alt="bef7b75eef14033f45e83eae60525f79.png" width="577" height="408">**
 
 **http://vulnstack.qiyuanxuetang.net/vuln/detail/3/**
 
@@ -113,14 +113,14 @@ Nmap done: 256 IP addresses (4 hosts up) scanned in 111.65 seconds
 ```
 
 ### 访问192.168.111.80的80端口发现是空白页面，访问7001端口发现是weblogic,使用工具检测相关漏洞：
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821170045054.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821170045054.png)
 ### 发现存在cve_2016_0638（其实还有好几个，工具比较老其他的没检测出来）
 ### 写入冰蝎内存马，并成功连接
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821170239737.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821170239737.png)
 
 ## 内网渗透
 ### cs开启监听，并制作木马，通过冰蝎进行上传，成功获取到shell
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821170403051.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821170403051.png)
 
 ---
 ## 上线域控DC
@@ -572,13 +572,13 @@ List of hosts:
 ```
 
 ### 点击`show targets in table view`按钮，查看域主机信息
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821171225769.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821171225769.png)
 
 ### 选择10.10.10.10，右键点击jump -> psexec,选择hash,然后创建一个smb监听从10.10.10.80作为跳板传回来的session
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821195545576.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821195545576.png)
 
 ### 成功上线域控DC
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821195728676.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821195728676.png)
 
 ---
 ## 横向渗透
@@ -637,12 +637,12 @@ msf6 auxiliary(scanner/smb/smb_ms17_010) > run
 ### 确认存在ms17-010，尝试利用msf 进行漏洞攻击，尝试多个利用方式都失败
 
 ### 在DC的session中执行`portscan 10.10.10.0/24 445 arp 200`,终于扫描到10.10.10.201（也就是PC）
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821200307660.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821200307660.png)
 ### 同样利用psexec 进行哈希传递，上线PC
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821200522143.png)
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821200557917.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821200522143.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821200557917.png)
 ### 目前为止，所有域主机均已上线
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821200646392.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821200646392.png)
 
 ---
 ## 权限维持
@@ -813,10 +813,10 @@ S-1-5-21-2756371121-2868759905-3853650604-500
 ```
 
 ### 制作金票据 -> 右键access->Golden Ticket
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821202322780.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821202322780.png)
 
 ### 成功创建Golden Ticket
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821202410292.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821202410292.png)
 
 ### 访问域控DC的c盘
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250821202831105.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250821202831105.png)

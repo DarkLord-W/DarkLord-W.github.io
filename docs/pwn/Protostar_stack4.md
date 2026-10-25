@@ -6,7 +6,7 @@ created: 2023-11-22 02:31:02Z
 
 **运行该程序，得到：**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/ccb9efc32f7aa26df31421d720649538.png" alt="ccb9efc32f7aa26df31421d720649538.png" width="554" height="89" class="jop-noMdConv">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/ccb9efc32f7aa26df31421d720649538.png" alt="ccb9efc32f7aa26df31421d720649538.png" width="554" height="89" class="jop-noMdConv">**
 
 ### **Source code:**
 
@@ -587,17 +587,17 @@ gs             0x63                99
 
 然后我们观察输入后的栈结构，如下图所示：
 
-![cda33c621ffad14e3aa3080d83715d8c.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/cda33c621ffad14e3aa3080d83715d8c.png)
+![cda33c621ffad14e3aa3080d83715d8c.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/cda33c621ffad14e3aa3080d83715d8c.png)
 
 但是从最后的结果来看，长度为64并没有成功溢出跳转到win函数，所以我们继续往下看，寻找ret的返回地址，如下图：
 
-![09e35fd05d53af1991ea954b8a4919b3.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/09e35fd05d53af1991ea954b8a4919b3.png)
+![09e35fd05d53af1991ea954b8a4919b3.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/09e35fd05d53af1991ea954b8a4919b3.png)
 
 从上图可以看到，即将执行的`ret`的存储的返回地址就是此刻位于栈顶的`0xf7c237c5`
 
 那么，我们的目标就是：**输入足够的长度，覆盖到**`0xf7c237c5`**为止**
 
-**![71e8ba41829cfceb7764e8adc3b8f68d.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/71e8ba41829cfceb7764e8adc3b8f68d.png)**
+**![71e8ba41829cfceb7764e8adc3b8f68d.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/71e8ba41829cfceb7764e8adc3b8f68d.png)**
 
 **从上图中可以很清晰的看到，我们还需要填充(3组)x(每组4字节)=（一共12字节）的长度，才能达到返回地址前，然后再用目标地址覆盖原来的返回地址**
 
@@ -744,6 +744,6 @@ print(sh.recvline())
 
 **BinGo!!!**
 
-![9414b43f92956162a95c3e31c5a7029a.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/9414b43f92956162a95c3e31c5a7029a.png)
+![9414b43f92956162a95c3e31c5a7029a.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/9414b43f92956162a95c3e31c5a7029a.png)
 
 &nbsp;

@@ -6,11 +6,11 @@ created: 2023-06-26 03:09:04Z
 
 运行程序，如下
 
-![bfabf3b206c7f681d552ac916bc009a2.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/bfabf3b206c7f681d552ac916bc009a2.png)
+![bfabf3b206c7f681d552ac916bc009a2.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/bfabf3b206c7f681d552ac916bc009a2.png)
 
 **checksec**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/d3ae0530430fd8b497a72ade0e9fa2a2.png" alt="d3ae0530430fd8b497a72ade0e9fa2a2.png" width="430" height="218" class="jop-noMdConv">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/d3ae0530430fd8b497a72ade0e9fa2a2.png" alt="d3ae0530430fd8b497a72ade0e9fa2a2.png" width="430" height="218" class="jop-noMdConv">**
 
 查看反编译代码
 
@@ -42,7 +42,7 @@ void main(char **argv, char **envp)
 
 `` ./stack1 `python -c "print('A'*64+'\x64\x63\x62\x61')"` ``
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/c5a4931b42cb39cab0893683b1ca473b.png" alt="c5a4931b42cb39cab0893683b1ca473b.png" width="473" height="40">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/c5a4931b42cb39cab0893683b1ca473b.png" alt="c5a4931b42cb39cab0893683b1ca473b.png" width="473" height="40">
 
 &nbsp;
 

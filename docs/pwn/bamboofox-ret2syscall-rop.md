@@ -41,7 +41,7 @@ int main(void)
 
 查看源码
 
-![1e88d535f02e7bbff8c6859b8db931b9.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/1e88d535f02e7bbff8c6859b8db931b9.png)
+![1e88d535f02e7bbff8c6859b8db931b9.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/1e88d535f02e7bbff8c6859b8db931b9.png)
 
 由于开启了NX保护，无法将shellcode部署到内存中，故而尝试调用系统函数获得shell
 
@@ -151,4 +151,4 @@ sh.interactive()
 
 执行结果如下所示
 
-![a853f3cfa10b02ca4dbed505dcef59e3.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/a853f3cfa10b02ca4dbed505dcef59e3.png)
+![a853f3cfa10b02ca4dbed505dcef59e3.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/a853f3cfa10b02ca4dbed505dcef59e3.png)

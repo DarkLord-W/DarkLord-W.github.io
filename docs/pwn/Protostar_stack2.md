@@ -6,15 +6,15 @@ created: 2023-11-07 09:23:47Z
 
 **运行该程序，得到：**
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/0f48e8fdf53739b6f7d2c5331c7b00e0.png" alt="0f48e8fdf53739b6f7d2c5331c7b00e0.png" width="556" height="56" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/0f48e8fdf53739b6f7d2c5331c7b00e0.png" alt="0f48e8fdf53739b6f7d2c5331c7b00e0.png" width="556" height="56" class="jop-noMdConv">
 
 **按照输出设置环境变量后，再次执行：**
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/4c216a967c2ffbe124008e4681f06bf5.png" alt="4c216a967c2ffbe124008e4681f06bf5.png" width="382" height="129" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/4c216a967c2ffbe124008e4681f06bf5.png" alt="4c216a967c2ffbe124008e4681f06bf5.png" width="382" height="129" class="jop-noMdConv">
 
 **checksec:**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/6ef7bf5fdcaf53c4bb684cdf2779770a.png" alt="6ef7bf5fdcaf53c4bb684cdf2779770a.png" width="273" height="122" class="jop-noMdConv">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/6ef7bf5fdcaf53c4bb684cdf2779770a.png" alt="6ef7bf5fdcaf53c4bb684cdf2779770a.png" width="273" height="122" class="jop-noMdConv">**
 
 **查看其反编译代码：**
 

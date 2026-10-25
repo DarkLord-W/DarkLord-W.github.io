@@ -4,7 +4,7 @@ updated: 2022-09-14 01:57:20Z
 created: 2022-09-06 06:47:13Z
 ---
 
-<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/513ca94d7d611e2b17e9dd4f3daa3617.png" alt="513ca94d7d611e2b17e9dd4f3daa3617.png" width="800" height="326" class="jop-noMdConv">
+<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/513ca94d7d611e2b17e9dd4f3daa3617.png" alt="513ca94d7d611e2b17e9dd4f3daa3617.png" width="800" height="326" class="jop-noMdConv">
 
 首先checksec查看保护
 
@@ -44,19 +44,19 @@ SYMBOL TABLE:
 
 首先是main函数：
 
-![0eb5670a12e1c2733c70eb9b5a164e8e.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/0eb5670a12e1c2733c70eb9b5a164e8e.png)
+![0eb5670a12e1c2733c70eb9b5a164e8e.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/0eb5670a12e1c2733c70eb9b5a164e8e.png)
 
 接下来是easy函数：
 
-![da3dfb7e5b09ed18bd65af38ea6b163e.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/da3dfb7e5b09ed18bd65af38ea6b163e.png)
+![da3dfb7e5b09ed18bd65af38ea6b163e.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/da3dfb7e5b09ed18bd65af38ea6b163e.png)
 
 接下来是normal函数：
 
-![df256bc5779d10128221d6ccbc563f3c.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/df256bc5779d10128221d6ccbc563f3c.png)
+![df256bc5779d10128221d6ccbc563f3c.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/df256bc5779d10128221d6ccbc563f3c.png)
 
 最后是shell函数，执行该函数可以获得一个shell
 
-![cf93b03e8194163d13c97c8888fc28f6.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/cf93b03e8194163d13c97c8888fc28f6.png)
+![cf93b03e8194163d13c97c8888fc28f6.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/cf93b03e8194163d13c97c8888fc28f6.png)
 
 接下来进行分析
 
@@ -103,4 +103,4 @@ conn.interactive()
 
 运行结果如下，成功获取flag：
 
-![10a593e92180a0f3f4e3a20d486de6ff.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/10a593e92180a0f3f4e3a20d486de6ff.png)
+![10a593e92180a0f3f4e3a20d486de6ff.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/10a593e92180a0f3f4e3a20d486de6ff.png)

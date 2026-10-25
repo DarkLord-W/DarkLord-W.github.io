@@ -199,7 +199,7 @@ sh = process('./stack5')
 sh.sendline(payload)
 sh.interactive()
 ```
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250825203124059.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250825203124059.png)
 
 
 ---

@@ -1,14 +1,14 @@
 **访问靶机**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251020163225299.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251020163225299.png)
 
 **查看网页源码**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251020163300996.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251020163300996.png)
 
 **访问source.php**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251020163353152.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251020163353152.png)
 
 **访问hint.php,提示flag为ffffllllaaaagggg文件**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251020163506759.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251020163506759.png)
 
 **分析source.php**
 ```php
@@ -145,4 +145,4 @@ if (in_array($_page, $whitelist)) {
 /source.php?file=hint.php?./../../../../../ffffllllaaaagggg
 ```
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251020171249250.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251020171249250.png)

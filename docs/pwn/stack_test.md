@@ -55,7 +55,7 @@ Partial RELRO   No canary found   NX disabled   No PIE          No RPATH   No RU
 
 **首先找到vulnerable函数中gets获取的变量s的段内偏移地址：**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/690a194ff230444007887547e4514e77.png" alt="690a194ff230444007887547e4514e77.png" width="1023" height="689" class="jop-noMdConv">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/690a194ff230444007887547e4514e77.png" alt="690a194ff230444007887547e4514e77.png" width="1023" height="689" class="jop-noMdConv">**
 
 如上图所示，gets函数下一行即为s变量的段内偏移地址为\[rbp-0xc\]，0xc转化为十进制即为12,所以s变量的偏移长度为12,即距离段基地址长度为12
 
@@ -65,7 +65,7 @@ Partial RELRO   No canary found   NX disabled   No PIE          No RPATH   No RU
 
 **接下来查看pwn函数的地址**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/3226470517ad7646f109bb58750be083.png" alt="3226470517ad7646f109bb58750be083.png" width="1024" height="268" class="jop-noMdConv">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/3226470517ad7646f109bb58750be083.png" alt="3226470517ad7646f109bb58750be083.png" width="1024" height="268" class="jop-noMdConv">**
 
 由上图可以看到，pwn函数的起始地址为0x401136
 
@@ -101,4 +101,4 @@ print (conn.recvall())
 
 执行exp代码可得到：
 
-![3028e549394d0e8ad05b606d6adc1a27.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/3028e549394d0e8ad05b606d6adc1a27.png)
+![3028e549394d0e8ad05b606d6adc1a27.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/3028e549394d0e8ad05b606d6adc1a27.png)

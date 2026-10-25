@@ -86,11 +86,11 @@ End of assembler dump.
 - 输入字符串 `'AAAAAAAA'` 不仅被直接输出，还被存储在栈上（作为命令行参数的一部分）。当 `printf` 处理格式说明符时，它会逐步读取栈上的值。
 ```
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250911185851309.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250911185851309.png)
 **如图所示，通过使用 1200 个 `%08x。` 和一个 `[%08x]`，总共 201 个格式说明符，我们最终读取到了栈上存储输入字符串 `'AAAAAAAA'` 的位置，甚至还多读取了一段数据**
 
 **接下来减少长度，使得刚好读取到字符串 `'AAAAAAAA'` 的位置**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250911190354433.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250911190354433.png)
 
 **找到target的地址，地址为0x08049638**
 ```c
@@ -99,10 +99,10 @@ End of assembler dump.
 ```
 
 **接下来，将输入的参数替换为terget的地址**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250911194004025.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250911194004025.png)
 
 **接下来，将数据写入地址，成功输出关键句**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250911194349666.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250911194349666.png)
 
 ```c
 - `185$` → 表示“printf 从第 185 个参数拿地址值”。这个参数就是我们在前面塞进去的 `0x08049638`。

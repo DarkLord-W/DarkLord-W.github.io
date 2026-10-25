@@ -344,7 +344,7 @@ gdb-peda$ x/wx $esp+0x1c
   $(python -c "print '\xff'*4 + '\x1c\xb1\x04\x08' + '\x40\xc0\x04\x08'")
 ```
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20251011200319285.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20251011200319285.png)
 
 ---
 

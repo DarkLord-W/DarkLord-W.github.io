@@ -90,7 +90,7 @@ undefined8 main(void)
 
 **分析如下，这个程序主要是将输入的数据从缓冲区复制给buffer变量，由于read并未限制读取，我们可以输入一段shellcode将其复制到buffer中，并在输入的shellcode后添加足够长度的数据使其可以覆盖到返回值，将返回值修改指向到buffer变量，从而可以执行我们写入的shellcode，示意图如下：**
 
-**<img src="https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/16b4fc6ffa60561271c4511a9606cf6c.png" alt="16b4fc6ffa60561271c4511a9606cf6c.png" width="566" height="428" class="jop-noMdConv">**
+**<img src="https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/16b4fc6ffa60561271c4511a9606cf6c.png" alt="16b4fc6ffa60561271c4511a9606cf6c.png" width="566" height="428" class="jop-noMdConv">**
 
 **buffer变量长度为80，ebp长度为8，长度一共为88**
 
@@ -123,4 +123,4 @@ io.sendline(shellcode + b'a'*44 +p64(addr))
 io.interactive()
 ```
 
-![85fee530006bac3d1d7836fb8e48698d.png](https://cdn.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/85fee530006bac3d1d7836fb8e48698d.png)
+![85fee530006bac3d1d7836fb8e48698d.png](https://gcore.jsdelivr.net/gh/DarkLord-W/CloudImages@main/images/85fee530006bac3d1d7836fb8e48698d.png)
