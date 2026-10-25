@@ -1,10 +1,11 @@
-<div class="page-hero" markdown>
-
-# 关于
-
-Darklord，安全方向。这个站点是平时做题、复现漏洞和折腾环境的记录。
-
+<div class="poem-hero">
+  <div class="poem">
+    <span>朝游东海</span><span>暮休寒山</span>
+    <span>御六气变</span><span>乘天地间</span>
+  </div>
 </div>
+
+<p class="poem-sign">Darklord</p>
 
 ## 内容
 

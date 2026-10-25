@@ -228,3 +228,42 @@
   margin-top: 2.4em;
   font-size: 1.25rem;
 }
+
+/* ---------- 关于页：诗句作为版面主体 ---------- */
+/* 关于页没有 H1，Material 会自动补一个页面标题，这里把它居中，和诗句连成一体 */
+.md-content:has(.poem-hero) h1 {
+  text-align: center;
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 1.4rem 0 0;
+}
+.poem-hero {
+  text-align: center;
+  padding: 2.2rem 0 1.6rem;
+}
+.poem {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem 3.4rem;
+  font-size: 1.3rem;
+  letter-spacing: .2em;
+  line-height: 1.9;
+  color: var(--md-default-fg-color--light);
+}
+.poem span { display: block; }
+.poem-hero::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 1px;
+  margin: 1.8rem auto 0;
+  background: var(--md-default-fg-color--lighter);
+}
+.poem-sign {
+  text-align: center;
+  color: var(--md-default-fg-color--lighter);
+  font-size: .75rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  margin: 0 0 2.4rem;
+}
