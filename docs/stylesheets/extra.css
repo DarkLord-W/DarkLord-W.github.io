@@ -160,12 +160,6 @@
   .md-typeset img { margin: 1.1em auto; }
 }
 
-/* ---------- 主页：全宽三列卡片 ---------- */
-.md-content:has(.hero) { max-width: 54rem; }
-.md-content:has(.hero) .md-typeset .grid.cards > ul {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-}
-
 /* ---------- 主页 GitHub 图标（原来那只 Mona，本地托管） ---------- */
 .hero .mona {
   display: inline-flex;
@@ -190,3 +184,23 @@
 }
 .hero .mona:hover { border-bottom: none; }
 .hero .mona:hover img { transform: translateY(-3px); }
+
+/* ---------- 卡片型落地页：放宽到 54rem，正文页仍保持 46rem ---------- */
+.md-content:has(.grid.cards) { max-width: 54rem; }
+
+/* Material 的 .grid.cards > ul 是 display:contents，列数必须设在 .grid 容器上 */
+@media screen and (min-width: 60em) {
+  .md-content:has(.grid.cards) .grid.cards:not(.home-entry) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* 主页只有两张入口卡，固定两列并居中 */
+  .md-content:has(.hero) .home-entry {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 主页两张入口卡：居中、固定两列 */
+.md-content:has(.hero) .home-entry {
+  max-width: 46rem;
+  margin-inline: auto;
+}

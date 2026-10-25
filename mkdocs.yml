@@ -40,7 +40,8 @@ theme:
 
 nav:
   - 首页: index.md
-  - 安全笔记:
+  - 笔记:
+      - notes/index.md
       - BUUCTF:
           - buuctf/index.md
           - Web:
