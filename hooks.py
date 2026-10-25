@@ -77,7 +77,13 @@ def _values() -> dict[str, str]:
         "total": str(total),
         "groups": str(len(groups)),
         "repo": str(len(repos)),
-        "notes-line": "%d 篇 · %s" % (
+        # 分组名列全，数字只给总数与组数，避免卡片里堆一串 / 分隔的数字
+        "notes-line": "%d 篇，按 %s 分 %d 组。" % (
+            total,
+            "、".join(title for title, _ in groups),
+            len(groups),
+        ),
+        "notes-detail": "%d 篇 · %s" % (
             total,
             " / ".join("%s %d" % (title, n) for title, n in groups),
         ),
