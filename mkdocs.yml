@@ -133,6 +133,10 @@ markdown_extensions:
 hooks:
   - hooks.py
 
+# 许可说明页，需要发布但不进导航
+not_in_nav: |
+  /assets/FONTS.md
+
 plugins:
   - search:
       lang:
