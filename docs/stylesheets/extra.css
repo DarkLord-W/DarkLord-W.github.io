@@ -243,8 +243,15 @@
   align-items: center;
   gap: 2.4rem;
   padding: 2.4rem 0 3rem;
-  min-height: 68vh;
+  min-height: 64vh;
   justify-content: center;
+}
+
+.poem-scroll {
+  display: flex;
+  flex-direction: row-reverse;   /* 诗句在右、款识在左，符合从右往左的阅读方向 */
+  align-items: flex-end;
+  gap: 1.2rem;
 }
 
 .poem {
@@ -260,9 +267,15 @@
 
 .poem span {
   display: block;
+  position: relative;          /* 用 top 做错落，不干扰动画的 transform */
   animation: poem-in .9s cubic-bezier(.2, .7, .3, 1) both;
 }
-.poem span:not(:last-child) { margin-block-end: 1.2rem; }
+
+/* 四列高低与列距各不相同，读起来才有行气 */
+.poem span:nth-child(1) { top:  14px; margin-block-end: 0.9rem; }
+.poem span:nth-child(2) { top: -26px; margin-block-end: 2.0rem; font-size: .96em; }
+.poem span:nth-child(3) { top:  22px; margin-block-end: 1.1rem; }
+.poem span:nth-child(4) { top: -12px; margin-block-end: 1.5rem; font-size: 1.04em; }
 .poem span:nth-child(1) { animation-delay: .05s; }
 .poem span:nth-child(2) { animation-delay: .17s; }
 .poem span:nth-child(3) { animation-delay: .29s; }
@@ -273,10 +286,10 @@
   to   { opacity: 1; transform: none; }
 }
 
-/* 落款：印章样式 */
+/* 落款：印章样式，贴在末列左下（书法款识的位置） */
 .poem-seal {
   writing-mode: horizontal-tb;
-  margin: 0;
+  margin: 0 0 .55rem .2rem;
   padding: .38em .5em .3em;
   border: 2px solid #a63b32;
   border-radius: 2px;
@@ -306,7 +319,10 @@
 }
 
 @media screen and (max-width: 44.9375em) {
-  .poem { font-size: 1.35rem; gap: .8rem; }
+  .poem-scroll { flex-wrap: wrap; flex-direction: row; justify-content: center; }
+  .poem { font-size: 1.35rem; }
+  .poem-seal { margin: .6rem auto 0; }
+  .poem span:nth-child(n) { top: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
