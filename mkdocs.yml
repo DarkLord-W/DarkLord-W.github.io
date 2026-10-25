@@ -43,7 +43,7 @@ nav:
   - 笔记:
       - notes/index.md
       - BUUCTF:
-          - buuctf/index.md
+          - BUUCTF/index.md
           - Web:
               - HCTF 2018 WarmUp: BUUCTF/Web/HCTF 2018WarmUp.md
           - Basic:
@@ -57,13 +57,13 @@ nav:
               - BUU UPLOAD COURSE 1: BUUCTF/basic/BUU UPLOAD COURSE 1.md
               - BUU XXE COURSE 1: BUUCTF/basic/BUU XXE COURSE 1.md
       - HTB:
-          - htb/index.md
+          - HTB/index.md
           - Starting Point:
               - Oopsie: HTB/Starting-Point/Oopsie.md
           - Medium:
               - VariaType: HTB/Medium/VariaType.md
       - PortSwigger Academy:
-          - portswigger/index.md
+          - PortSwigger-Academy/index.md
           - 文件上传漏洞: PortSwigger-Academy/File upload vulnerabilities.md
       - Php:
           - php/index.md
@@ -130,6 +130,9 @@ markdown_extensions:
   - pymdownx.superfences
   - toc:
       permalink: false
+
+hooks:
+  - hooks.py
 
 plugins:
   - search:

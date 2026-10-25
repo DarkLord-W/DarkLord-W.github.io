@@ -21,7 +21,7 @@ hide:
 
     ---
 
-    50 篇，按 Pwn、BUUCTF、Web 与内网、HTB、PortSwigger、PHP 分 6 组。
+    {{stats:notes-line}}
 
     [进入笔记](notes/index.md)
 
@@ -29,7 +29,7 @@ hide:
 
     ---
 
-    12 个仓库：dwm、cicflowmeter-mg、appimage-manager、IoT-Pwn-Setup 等。
+    {{stats:repos-line}}
 
     [进入项目](projects/index.md)
 

@@ -2,7 +2,7 @@
 
 # 笔记
 
-安全方向的学习记录，共 50 篇，按来源和主题分 6 组。
+安全方向的学习记录，共 {{stats:total}} 篇，按来源和主题分 {{stats:groups}} 组。
 
 </div>
 
@@ -12,7 +12,7 @@
 
     ---
 
-    29 篇 · Protostar、pwnable.kr、ret2 系列
+    {{stats:pwn}} 篇 · Protostar、pwnable.kr、ret2 系列
 
     [进入](../pwn/index.md)
 
@@ -20,15 +20,15 @@
 
     ---
 
-    10 篇 · Web 题与基础课
+    {{stats:BUUCTF}} 篇 · Web 题与基础课
 
-    [进入](../buuctf/index.md)
+    [进入](../BUUCTF/index.md)
 
 -   __Web 与内网__
 
     ---
 
-    6 篇 · ATT&CK 红队评估、vulhub、TryHackMe
+    {{stats:web}} 篇 · ATT&CK 红队评估、vulhub、TryHackMe
 
     [进入](../web/index.md)
 
@@ -36,23 +36,23 @@
 
     ---
 
-    2 篇 · Starting Point 与中等难度靶机
+    {{stats:HTB}} 篇 · Starting Point 与中等难度靶机
 
-    [进入](../htb/index.md)
+    [进入](../HTB/index.md)
 
 -   __PortSwigger Academy__
 
     ---
 
-    1 篇 · 文件上传漏洞
+    {{stats:PortSwigger-Academy}} 篇 · 文件上传漏洞
 
-    [进入](../portswigger/index.md)
+    [进入](../PortSwigger-Academy/index.md)
 
 -   __PHP__
 
     ---
 
-    1 篇 · 反序列化
+    {{stats:php}} 篇 · 反序列化
 
     [进入](../php/index.md)
 
