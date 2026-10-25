@@ -10,6 +10,7 @@
 #   ./auto_push.sh --yes            # 跳过确认
 #   ./auto_push.sh --ssh443         # SSH over 443（github.com:22 被挡时）
 #   ./auto_push.sh --https          # HTTPS + Personal Access Token
+#   ./auto_push.sh --push-only      # 只推已有提交，不做提交
 #   ./auto_push.sh --tags           # 同时推标签
 #   ./auto_push.sh --dry-run        # 只显示将要提交的内容，不提交不推送
 #
@@ -22,6 +23,7 @@ ASSUME_YES=0
 PUSH_TAGS=0
 DRY_RUN=0
 ALLOW_LARGE=0
+PUSH_ONLY=0
 BRANCH=""
 MAX_FILE_MB=5
 
@@ -32,6 +34,7 @@ while [ $# -gt 0 ]; do
     --yes|-y)    ASSUME_YES=1 ;;
     --tags)      PUSH_TAGS=1 ;;
     --dry-run)   DRY_RUN=1 ;;
+    --push-only) PUSH_ONLY=1 ;;
     --allow-large) ALLOW_LARGE=1 ;;
     --branch)    shift; BRANCH="${1:?--branch 需要参数}" ;;
     -h|--help)   sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
@@ -97,17 +100,34 @@ else
 fi
 
 # ---------- 4. 暂存 ----------
-if [ -z "$(git status --porcelain)" ]; then
-  warn "没有检测到任何更改，退出。"
+HAVE_CHANGES=0
+[ -n "$(git status --porcelain)" ] && HAVE_CHANGES=1
+
+AHEAD=0
+if git rev-parse --verify -q "refs/remotes/origin/$BRANCH" > /dev/null; then
+  AHEAD=$(git rev-list --count "refs/remotes/origin/$BRANCH..HEAD" 2>/dev/null || echo 0)
+fi
+
+if [ "$HAVE_CHANGES" -eq 0 ] && [ "$AHEAD" -eq 0 ]; then
+  warn "没有未提交的改动，也没有待推送的提交。退出。"
   exit 0
 fi
 
-say "检测到以下更改："
-git status --short
-echo
+SKIP_COMMIT=1
+if [ "$HAVE_CHANGES" -eq 1 ]; then
+  if [ "$PUSH_ONLY" -eq 1 ]; then
+    die "--push-only 只推已有提交，但工作区还有未提交改动；请先提交或 git stash"
+  fi
+  SKIP_COMMIT=0
+  say "检测到以下更改："
+  git status --short
+  echo
+  git add -A
+else
+  warn "工作区干净，有 ${AHEAD:-未知} 个提交待推送，直接推送。"
+fi
 
-git add -A
-
+if [ "$SKIP_COMMIT" -eq 0 ]; then
 # 大文件护栏
 if [ "$ALLOW_LARGE" -eq 0 ]; then
   big=$(git diff --cached --name-only --diff-filter=ACM \
@@ -122,6 +142,7 @@ fi
 say "本次将提交："
 git diff --cached --stat
 echo
+fi
 
 if [ "$DRY_RUN" -eq 1 ]; then
   git reset -q    # 撤销刚才为了算统计做的暂存，保持工作区原样
@@ -134,13 +155,15 @@ if [ "$ASSUME_YES" -eq 0 ]; then
   [[ $ok =~ ^[Yy]$ ]] || { warn "已取消。"; exit 0; }
 fi
 
-# ---------- 5. 提交 ----------
-read -r -p "提交信息（留空用默认）: " msg
-[ -z "$msg" ] && msg="Update: $(date '+%Y-%m-%d %H:%M:%S')"
+# ---------- 5. 提交（工作区干净时跳过） ----------
+if [ "$SKIP_COMMIT" -eq 0 ]; then
+  read -r -p "提交信息（留空用默认）: " msg
+  [ -z "$msg" ] && msg="Update: $(date '+%Y-%m-%d %H:%M:%S')"
 
-git commit -q -m "$msg"
-say "已提交：$(git log -1 --format='%h %s')"
-echo
+  git commit -q -m "$msg"
+  say "已提交：$(git log -1 --format='%h %s')"
+  echo
+fi
 
 # ---------- 6. 远端领先就不推 ----------
 if git rev-parse --verify -q "origin/$BRANCH" > /dev/null; then
