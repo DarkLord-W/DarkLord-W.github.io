@@ -1,0 +1,359 @@
+/* ============================================================
+   DarkLord-W's Blog — 阅读体验样式
+   目标：长文（截图 + 代码块 + 多步骤）读起来不累
+   ============================================================ */
+
+/* ---------- 强调色：朱砂 ---------- */
+/* Material 用 [scheme][accent] 两个属性设变量，这里要用同等特异度才压得住 */
+[data-md-color-scheme="default"][data-md-color-accent="red"] {
+  --md-accent-fg-color: #ab3b30;
+  --md-typeset-a-color: #ab3b30;
+}
+[data-md-color-scheme="slate"][data-md-color-accent="red"] {
+  --md-accent-fg-color: #d0705f;
+  --md-typeset-a-color: #d0705f;
+}
+
+/* ---------- 字体：系统中文栈，零网络请求 ---------- */
+:root {
+  --md-text-font: -apple-system, BlinkMacSystemFont, "PingFang SC",
+                  "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC",
+                  "Noto Sans SC", sans-serif;
+  --md-code-font: "JetBrains Mono", "Cascadia Code", "Fira Code", Consolas,
+                  "Liberation Mono", monospace;
+}
+
+/* ---------- 版面：限宽，避免一行 150+ 字符 ---------- */
+.md-grid { max-width: 76rem; }
+
+.md-content {
+  max-width: 46rem;   /* 17px 下约 40 个汉字一行 */
+  min-width: 0;
+}
+
+@media screen and (min-width: 76.25em) {
+  .md-content { margin-inline: auto; }
+}
+
+/* ---------- 正文 ---------- */
+.md-typeset {
+  font-size: 0.85rem;      /* 17px */
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset p { margin: 1.1em 0; }
+
+.md-typeset h1 { margin-bottom: 1.2em; }
+.md-typeset h2 { margin-top: 2.2em; padding-top: .6em; }
+.md-typeset h3 { margin-top: 1.8em; }
+
+.md-typeset a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--md-typeset-a-color);
+}
+.md-typeset a:hover { border-bottom-color: transparent; }
+
+/* 站内导航按钮不要下划线 */
+.md-typeset a.md-button,
+.md-typeset .grid.cards a {
+  border-bottom: none;
+}
+
+/* ---------- 侧栏 ---------- */
+.md-nav--primary .md-nav__link {
+  font-size: 0.75rem !important;
+  line-height: 1.6;
+}
+.md-nav--secondary .md-nav__link {
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+/* 右侧目录：窄屏收起，宽屏保留 */
+@media screen and (max-width: 76.24em) {
+  .md-sidebar--secondary { display: none !important; }
+}
+
+/* ---------- 图片：居中、细边框、留白 ---------- */
+.md-typeset img {
+  display: block;
+  margin: 1.4em auto;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #d0d7de;
+  border-radius: 2px;
+  padding: 4px;
+  background: #fff;
+}
+.md-typeset img:hover { border-color: var(--md-accent-fg-color); }
+
+/* glightbox 放大后的图不要再加边框 */
+.glightbox-clean .gslide-image img {
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+/* ---------- 代码块 ---------- */
+.md-typeset pre > code {
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+.md-typeset code {
+  word-break: break-word;
+}
+
+/* ---------- 表格：宽表横向滚动 ---------- */
+.md-typeset table:not([class]) {
+  display: block;
+  overflow-x: auto;
+  font-size: 0.8rem;
+}
+
+/* ---------- 主页身份区 ---------- */
+.hero {
+  text-align: center;
+  padding: 2.4rem 0 1.2rem;
+}
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 .4rem;
+}
+.hero > p {
+  color: var(--md-default-fg-color--light);
+  margin: .4em 0;
+}
+.hero .md-button { margin: .3rem .25rem 0; }
+
+/* ---------- 仓库卡片（GitHub 风格） ---------- */
+.md-typeset .grid.cards > ul > li {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 2px;
+  padding: 1rem 1.1rem;
+  transition: border-color .15s, box-shadow .15s;
+}
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 2px 10px rgba(171, 59, 48, .12);
+}
+.md-typeset .grid.cards > ul > li > p:first-child {
+  color: var(--md-accent-fg-color);
+  font-weight: 600;
+  margin-top: 0;
+}
+.md-typeset .grid.cards > ul > li p:last-child { margin-bottom: 0; }
+
+.lang-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: .3em;
+  vertical-align: baseline;
+}
+
+/* ---------- 深色模式 ---------- */
+[data-md-color-scheme="slate"] .md-typeset img {
+  border-color: #30363d;
+  background: #0d1117;
+  opacity: .95;
+}
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover {
+  box-shadow: 0 2px 10px rgba(171, 59, 48, .25);
+}
+
+/* ---------- 移动端 ---------- */
+@media screen and (max-width: 44.9375em) {
+  .md-typeset { font-size: 0.82rem; }
+  .md-typeset img { margin: 1.1em auto; }
+}
+
+/* ---------- 主页 GitHub 图标（原来那只 Mona，本地托管） ---------- */
+.hero .mona {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  margin-top: 1.4rem;
+  border-bottom: none;
+  color: var(--md-default-fg-color--light);
+  font-size: .75rem;
+}
+.hero .mona img {
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 72px;
+  height: 72px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  transition: transform .15s;
+}
+.hero .mona:hover { border-bottom: none; }
+.hero .mona:hover img { transform: translateY(-3px); }
+
+/* ---------- 卡片型落地页：放宽到 54rem，正文页仍保持 46rem ---------- */
+.md-content:has(.grid.cards) { max-width: 54rem; }
+
+/* Material 的 .grid.cards > ul 是 display:contents，列数必须设在 .grid 容器上 */
+@media screen and (min-width: 60em) {
+  .md-content:has(.grid.cards) .grid.cards:not(.home-entry) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  /* 主页只有两张入口卡，固定两列并居中 */
+  .md-content:has(.hero) .home-entry {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 主页两张入口卡：居中、固定两列 */
+.md-content:has(.hero) .home-entry {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+/* ---------- 栏目页头部：与主页身份区同一套观感 ---------- */
+.page-hero {
+  text-align: center;
+  padding: 1.4rem 0 1.6rem;
+  margin-bottom: .4rem;
+}
+.page-hero h1 {
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0 0 .5rem;
+  letter-spacing: .02em;
+}
+.page-hero > p {
+  max-width: 34rem;
+  margin: .3rem auto;
+  color: var(--md-default-fg-color--light);
+}
+
+/* 栏目页里的分组标题稍微收一点，避免和头部抢 */
+.md-content:has(.page-hero) .md-typeset h2 {
+  margin-top: 2.4em;
+  font-size: 1.25rem;
+}
+
+/* ---------- 关于页：竖排诗句 + 印章 ---------- */
+/* 毛笔行书子集（Ma Shan Zheng，OFL），只含诗句与印章用到的 18 个字 */
+@font-face {
+  font-family: "Poem Brush";
+  src: url("../assets/poem-brush.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+/* 宋体子集，印章用 */
+@font-face {
+  font-family: "Poem Serif";
+  src: url("../assets/poem-serif.woff2") format("woff2");
+  font-weight: 400 600;
+  font-display: swap;
+}
+
+/* 整页不留标题：Material 在内容无 h1 时会自动补一个，这里隐掉 */
+.md-content:has(.poem-hero) h1 { display: none; }
+
+.poem-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  padding: 3rem 0;
+  min-height: 70vh;
+  justify-content: center;
+}
+
+.poem-wrap {
+  position: relative;
+  width: max-content;   /* 不加的话竖排容器宽度会塌成 0，印章的 right 基准就错了 */
+}
+
+.poem {
+  /* 竖排、从右往左；四个 <span> 是块级盒子，天然按 block 轴从右到左排列 */
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: "Poem Brush", "Kaiti SC", "STKaiti", "KaiTi", serif;
+  width: max-content;
+  font-size: 2.2rem;
+  letter-spacing: .28em;
+  line-height: 2.1;
+  color: var(--md-default-fg-color);
+}
+
+.poem span {
+  display: block;
+  position: relative;
+  animation: poem-in .9s cubic-bezier(.2, .7, .3, 1) both;
+}
+
+/* 四列高低与列距差得更大，读起来才有行气 */
+.poem span:nth-child(1) { top:  26px; margin-block-end: 0.8rem; }
+.poem span:nth-child(2) { top: -44px; margin-block-end: 2.4rem; font-size: .93em; }
+.poem span:nth-child(3) { top:  38px; margin-block-end: 1.0rem; }
+.poem span:nth-child(4) { top: -22px; margin-block-end: 0; font-size: 1.06em; }
+
+@keyframes poem-in {
+  from { opacity: .75; transform: translateY(-10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* 落款印章：放在诗句下方，竖排「守静」，白文 */
+.poem-seal {
+  position: absolute;
+  right: -3.2rem;
+  bottom: -.6rem;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .05em;
+  margin: 0;
+  padding: .36em .3em .28em;
+  background: #a63b32;
+  border-radius: 2px;
+  color: #fff;
+  font-family: "Poem Brush", "Poem Serif", serif;
+  font-size: .92rem;
+  line-height: 1.05;
+  letter-spacing: .02em;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .45);
+  transform: rotate(-3deg);
+  animation: seal-in .9s .55s cubic-bezier(.2, .7, .3, 1) both;
+}
+.poem-seal span { display: block; }
+
+@keyframes seal-in {
+  from { opacity: .75; transform: rotate(-3deg) translateY(-8px); }
+  to   { opacity: 1;   transform: rotate(-3deg); }
+}
+
+@media screen and (max-width: 44.9375em) {
+  /* 窄屏：改为纵向流式，印章回到诗句下方居中 */
+  .poem-wrap {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .poem { width: max-content; font-size: 1.7rem; }
+  .poem span:nth-child(n) { top: 0; }
+  .poem-seal {
+    position: static;
+    right: auto;
+    bottom: auto;
+    margin: .9rem 0 0;
+    font-size: .85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poem span, .poem-seal { animation: none; }
+}
+
+/* ---------- 页脚：全站不要底部黑条（含版权行） ---------- */
+.md-footer { display: none; }
