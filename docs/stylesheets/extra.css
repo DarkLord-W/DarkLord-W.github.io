@@ -1,36 +1,123 @@
-/* 增大目录字体大小（右侧 TOC，现已禁用）
-.md-nav--secondary .md-nav__link {
-    font-size: 0.8rem !important;
-}
-*/
+/* ============================================================
+   DarkLord-W's Blog — 阅读体验样式
+   目标：长文（截图 + 代码块 + 多步骤）读起来不累
+   ============================================================ */
 
-/* 左侧主导航字体大小 */
-.md-nav--primary .md-nav__link {
-    font-size: 0.7rem !important;  /* 原本是 0.8rem，这里稍微放大一点更清晰 */
+/* ---------- 字体：系统中文栈，零网络请求 ---------- */
+:root {
+  --md-text-font: -apple-system, BlinkMacSystemFont, "PingFang SC",
+                  "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC",
+                  "Noto Sans SC", sans-serif;
+  --md-code-font: "JetBrains Mono", "Cascadia Code", "Fira Code", Consolas,
+                  "Liberation Mono", monospace;
 }
 
-/* 右侧目录（如果启用，现在已禁用）
-.md-sidebar--secondary .md-nav__link {
-    font-size: 0.8rem !important;
-}
-*/
+/* ---------- 版面：限宽，避免一行 150+ 字符 ---------- */
+.md-grid { max-width: 76rem; }
 
-/* --- 新增：彻底移除右侧 TOC 栏并拓宽正文 --- */
-.md-sidebar--secondary {
-    display: none !important;      /* 完全隐藏右侧目录栏 */
-}
 .md-content {
-    max-width: 100% !important;    /* 内容区拉伸至全宽 */
+  max-width: 46rem;   /* 17px 下约 40 个汉字一行 */
+  min-width: 0;
 }
- 
 
-/* ========== 主页身份区 ========== */
-.hero { text-align: center; padding: 2.4rem 0 1.2rem; }
-.hero h1 { font-size: 2rem; font-weight: 600; margin: 0 0 .4rem; }
-.hero > p { color: var(--md-default-fg-color--light); }
+@media screen and (min-width: 76.25em) {
+  .md-content { margin-inline: auto; }
+}
+
+/* ---------- 正文 ---------- */
+.md-typeset {
+  font-size: 0.85rem;      /* 17px */
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  color: var(--md-default-fg-color);
+}
+
+.md-typeset p { margin: 1.1em 0; }
+
+.md-typeset h1 { margin-bottom: 1.2em; }
+.md-typeset h2 { margin-top: 2.2em; padding-top: .6em; }
+.md-typeset h3 { margin-top: 1.8em; }
+
+.md-typeset a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--md-typeset-a-color);
+}
+.md-typeset a:hover { border-bottom-color: transparent; }
+
+/* 站内导航按钮不要下划线 */
+.md-typeset a.md-button,
+.md-typeset .grid.cards a {
+  border-bottom: none;
+}
+
+/* ---------- 侧栏 ---------- */
+.md-nav--primary .md-nav__link {
+  font-size: 0.75rem !important;
+  line-height: 1.6;
+}
+.md-nav--secondary .md-nav__link {
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+/* 右侧目录：窄屏收起，宽屏保留 */
+@media screen and (max-width: 76.24em) {
+  .md-sidebar--secondary { display: none !important; }
+}
+
+/* ---------- 图片：居中、细边框、留白 ---------- */
+.md-typeset img {
+  display: block;
+  margin: 1.4em auto;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 4px;
+  background: #fff;
+}
+.md-typeset img:hover { border-color: #0969da; }
+
+/* glightbox 放大后的图不要再加边框 */
+.glightbox-clean .gslide-image img {
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+/* ---------- 代码块 ---------- */
+.md-typeset pre > code {
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+.md-typeset code {
+  word-break: break-word;
+}
+
+/* ---------- 表格：宽表横向滚动 ---------- */
+.md-typeset table:not([class]) {
+  display: block;
+  overflow-x: auto;
+  font-size: 0.8rem;
+}
+
+/* ---------- 主页身份区 ---------- */
+.hero {
+  text-align: center;
+  padding: 2.4rem 0 1.2rem;
+}
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 .4rem;
+}
+.hero > p {
+  color: var(--md-default-fg-color--light);
+  margin: .4em 0;
+}
 .hero .md-button { margin: .3rem .25rem 0; }
 
-/* ========== 仓库卡片（GitHub 风格） ========== */
+/* ---------- 仓库卡片（GitHub 风格） ---------- */
 .md-typeset .grid.cards > ul > li {
   border: 1px solid var(--md-default-fg-color--lightest);
   border-radius: 6px;
@@ -44,7 +131,10 @@
 .md-typeset .grid.cards > ul > li > p:first-child {
   color: #0969da;
   font-weight: 600;
+  margin-top: 0;
 }
+.md-typeset .grid.cards > ul > li p:last-child { margin-bottom: 0; }
+
 .lang-dot {
   display: inline-block;
   width: 9px;
@@ -52,4 +142,20 @@
   border-radius: 50%;
   margin-right: .3em;
   vertical-align: baseline;
+}
+
+/* ---------- 深色模式 ---------- */
+[data-md-color-scheme="slate"] .md-typeset img {
+  border-color: #30363d;
+  background: #0d1117;
+  opacity: .95;
+}
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover {
+  box-shadow: 0 3px 12px rgba(9, 105, 218, .25);
+}
+
+/* ---------- 移动端 ---------- */
+@media screen and (max-width: 44.9375em) {
+  .md-typeset { font-size: 0.82rem; }
+  .md-typeset img { margin: 1.1em auto; }
 }
