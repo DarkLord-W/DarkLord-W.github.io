@@ -229,41 +229,86 @@
   font-size: 1.25rem;
 }
 
-/* ---------- 关于页：诗句作为版面主体 ---------- */
-/* 关于页没有 H1，Material 会自动补一个页面标题，这里把它居中，和诗句连成一体 */
-.md-content:has(.poem-hero) h1 {
-  text-align: center;
-  font-size: 1.9rem;
-  font-weight: 600;
-  margin: 1.4rem 0 0;
+/* ---------- 关于页：诗句做成竖排立轴 ---------- */
+/* 只含诗里 16 个字的宋体子集（8 KB），保证任何系统上都是同一套字形 */
+@font-face {
+  font-family: "Poem Serif";
+  src: url("../assets/poem-serif.woff2") format("woff2");
+  font-weight: 400 600;
+  font-display: swap;
 }
 .poem-hero {
-  text-align: center;
-  padding: 2.2rem 0 1.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4rem;
+  padding: 2.4rem 0 3rem;
+  min-height: 68vh;
+  justify-content: center;
 }
+
 .poem {
-  display: inline-grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: .7rem 3.4rem;
-  font-size: 1.3rem;
-  letter-spacing: .2em;
-  line-height: 1.9;
-  color: var(--md-default-fg-color--light);
+  /* 竖排、从右往左；四个 <span> 是块级盒子，天然按 block 轴（横向）从右到左排列 */
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: "Poem Serif", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", "SimSun", serif;
+  font-size: 1.9rem;
+  letter-spacing: .34em;
+  line-height: 2.1;
+  color: var(--md-default-fg-color);
 }
-.poem span { display: block; }
-.poem-hero::after {
-  content: "";
+
+.poem span {
   display: block;
-  width: 2.5rem;
-  height: 1px;
-  margin: 1.8rem auto 0;
-  background: var(--md-default-fg-color--lighter);
+  animation: poem-in .9s cubic-bezier(.2, .7, .3, 1) both;
 }
-.poem-sign {
-  text-align: center;
-  color: var(--md-default-fg-color--lighter);
-  font-size: .75rem;
-  letter-spacing: .3em;
+.poem span:not(:last-child) { margin-block-end: 1.2rem; }
+.poem span:nth-child(1) { animation-delay: .05s; }
+.poem span:nth-child(2) { animation-delay: .17s; }
+.poem span:nth-child(3) { animation-delay: .29s; }
+.poem span:nth-child(4) { animation-delay: .41s; }
+
+@keyframes poem-in {
+  from { opacity: .75; transform: translateY(-10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* 落款：印章样式 */
+.poem-seal {
+  writing-mode: horizontal-tb;
+  margin: 0;
+  padding: .38em .5em .3em;
+  border: 2px solid #a63b32;
+  border-radius: 2px;
+  color: #a63b32;
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: .18em;
   text-transform: uppercase;
-  margin: 0 0 2.4rem;
+  transform: rotate(-4deg);
+  animation: seal-in .9s .55s cubic-bezier(.2, .7, .3, 1) both;
+}
+
+@keyframes seal-in {
+  from { opacity: .75; transform: rotate(-4deg) translateY(-8px); }
+  to   { opacity: 1;   transform: rotate(-4deg); }
+}
+
+/* 关于页的标题收成一个小标签，把版面让给诗句 */
+.md-content:has(.poem-hero) h1 {
+  text-align: center;
+  font-size: .78rem;
+  font-weight: 500;
+  letter-spacing: .5em;
+  text-indent: .5em;
+  color: var(--md-default-fg-color--light);
+  margin: 2.4rem 0 0;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .poem { font-size: 1.35rem; gap: .8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poem span, .poem-seal { animation: none; }
 }
