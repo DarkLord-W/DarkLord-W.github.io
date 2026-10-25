@@ -354,4 +354,8 @@
 @media (prefers-reduced-motion: reduce) {
   .poem span, .poem-seal { animation: none; }
 }
-}
+
+/* ---------- 页脚：front matter 写了 hide: footer 的页面，整条黑底页脚一起去掉 ---------- */
+/* Material 对 hide: footer 只给 <nav class="md-footer__inner"> 加 hidden，
+   这里顺着这个标记把整个 .md-footer（含版权行）一起隐藏 */
+.md-footer:has(.md-footer__inner[hidden]) { display: none; }
