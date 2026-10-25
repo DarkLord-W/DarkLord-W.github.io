@@ -23,3 +23,33 @@
     max-width: 100% !important;    /* 内容区拉伸至全宽 */
 }
  
+
+/* ========== 主页身份区 ========== */
+.hero { text-align: center; padding: 2.4rem 0 1.2rem; }
+.hero h1 { font-size: 2rem; font-weight: 600; margin: 0 0 .4rem; }
+.hero > p { color: var(--md-default-fg-color--light); }
+.hero .md-button { margin: .3rem .25rem 0; }
+
+/* ========== 仓库卡片（GitHub 风格） ========== */
+.md-typeset .grid.cards > ul > li {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 6px;
+  padding: 1rem 1.1rem;
+  transition: border-color .15s, box-shadow .15s;
+}
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: #0969da;
+  box-shadow: 0 3px 12px rgba(9, 105, 218, .12);
+}
+.md-typeset .grid.cards > ul > li > p:first-child {
+  color: #0969da;
+  font-weight: 600;
+}
+.lang-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: .3em;
+  vertical-align: baseline;
+}
