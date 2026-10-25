@@ -3,6 +3,17 @@
    目标：长文（截图 + 代码块 + 多步骤）读起来不累
    ============================================================ */
 
+/* ---------- 强调色：朱砂 ---------- */
+/* Material 用 [scheme][accent] 两个属性设变量，这里要用同等特异度才压得住 */
+[data-md-color-scheme="default"][data-md-color-accent="red"] {
+  --md-accent-fg-color: #ab3b30;
+  --md-typeset-a-color: #ab3b30;
+}
+[data-md-color-scheme="slate"][data-md-color-accent="red"] {
+  --md-accent-fg-color: #d0705f;
+  --md-typeset-a-color: #d0705f;
+}
+
 /* ---------- 字体：系统中文栈，零网络请求 ---------- */
 :root {
   --md-text-font: -apple-system, BlinkMacSystemFont, "PingFang SC",
@@ -72,11 +83,11 @@
   max-width: 100%;
   height: auto;
   border: 1px solid #d0d7de;
-  border-radius: 6px;
+  border-radius: 2px;
   padding: 4px;
   background: #fff;
 }
-.md-typeset img:hover { border-color: #0969da; }
+.md-typeset img:hover { border-color: var(--md-accent-fg-color); }
 
 /* glightbox 放大后的图不要再加边框 */
 .glightbox-clean .gslide-image img {
@@ -120,16 +131,16 @@
 /* ---------- 仓库卡片（GitHub 风格） ---------- */
 .md-typeset .grid.cards > ul > li {
   border: 1px solid var(--md-default-fg-color--lightest);
-  border-radius: 6px;
+  border-radius: 2px;
   padding: 1rem 1.1rem;
   transition: border-color .15s, box-shadow .15s;
 }
 .md-typeset .grid.cards > ul > li:hover {
-  border-color: #0969da;
-  box-shadow: 0 3px 12px rgba(9, 105, 218, .12);
+  border-color: var(--md-accent-fg-color);
+  box-shadow: 0 2px 10px rgba(171, 59, 48, .12);
 }
 .md-typeset .grid.cards > ul > li > p:first-child {
-  color: #0969da;
+  color: var(--md-accent-fg-color);
   font-weight: 600;
   margin-top: 0;
 }
@@ -151,7 +162,7 @@
   opacity: .95;
 }
 [data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover {
-  box-shadow: 0 3px 12px rgba(9, 105, 218, .25);
+  box-shadow: 0 2px 10px rgba(171, 59, 48, .25);
 }
 
 /* ---------- 移动端 ---------- */
@@ -295,7 +306,7 @@
   margin: 0;
   padding: .55em .5em .45em;
   background: #a63b32;
-  border-radius: 4px;
+  border-radius: 2px;
   color: #fff;
   font-family: "Poem Brush", "Poem Serif", serif;
   font-size: 1.45rem;

@@ -1,9 +1,6 @@
 site_name: DarkLord-W's Blog
 site_url: https://darklord-w.github.io/
 site_description: 安全研究笔记与个人项目 —— CTF、靶场、Pwn、内网渗透
-repo_url: https://github.com/DarkLord-W/DarkLord-W.github.io
-repo_name: DarkLord-W/DarkLord-W.github.io
-edit_uri: edit/main/docs/
 copyright: © 2026 Darklord · Built with MkDocs Material
 
 theme:
@@ -15,13 +12,15 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
-      accent: indigo
+      primary: black
+      accent: red
       toggle:
         icon: material/weather-sunny
         name: 切换到深色
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: black
+      accent: red
       toggle:
         icon: material/weather-night
         name: 切换到浅色
