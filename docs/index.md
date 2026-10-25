@@ -8,8 +8,6 @@ hide:
 
 # Dark & Lord
 
-朝游东海，暮休寒山。御六气变，乘天地间。
-
 <a class="mona" href="https://github.com/DarkLord-W" target="_blank" rel="noopener">
   <img src="assets/mona.gif" alt="GitHub" width="72" height="72">
   <span>Github</span>
