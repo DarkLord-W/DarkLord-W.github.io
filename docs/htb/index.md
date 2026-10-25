@@ -1,6 +1,10 @@
+<div class="page-hero" markdown>
+
 # HTB
 
 Hack The Box 靶机记录，2 篇。
+
+</div>
 
 <div class="grid cards" markdown>
 

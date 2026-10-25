@@ -1,6 +1,10 @@
+<div class="page-hero" markdown>
+
 # 关于
 
 Darklord，安全方向。这个站点是平时做题、复现漏洞和折腾环境的记录。
+
+</div>
 
 ## 内容
 

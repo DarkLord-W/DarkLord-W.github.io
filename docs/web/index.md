@@ -1,6 +1,10 @@
+<div class="page-hero" markdown>
+
 # Web 与内网
 
 攻防演练、靶场与漏洞复现，共 6 篇。
+
+</div>
 
 <div class="grid cards" markdown>
 

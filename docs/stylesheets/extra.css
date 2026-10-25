@@ -204,3 +204,27 @@
   max-width: 46rem;
   margin-inline: auto;
 }
+
+/* ---------- 栏目页头部：与主页身份区同一套观感 ---------- */
+.page-hero {
+  text-align: center;
+  padding: 1.4rem 0 1.6rem;
+  margin-bottom: .4rem;
+}
+.page-hero h1 {
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0 0 .5rem;
+  letter-spacing: .02em;
+}
+.page-hero > p {
+  max-width: 34rem;
+  margin: .3rem auto;
+  color: var(--md-default-fg-color--light);
+}
+
+/* 栏目页里的分组标题稍微收一点，避免和头部抢 */
+.md-content:has(.page-hero) .md-typeset h2 {
+  margin-top: 2.4em;
+  font-size: 1.25rem;
+}

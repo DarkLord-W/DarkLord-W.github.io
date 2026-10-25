@@ -1,6 +1,10 @@
+<div class="page-hero" markdown>
+
 # 笔记
 
 安全方向的学习记录，共 50 篇，按来源和主题分 6 组。
+
+</div>
 
 <div class="grid cards" markdown>
 
