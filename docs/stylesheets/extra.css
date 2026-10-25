@@ -165,3 +165,28 @@
 .md-content:has(.hero) .md-typeset .grid.cards > ul {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
 }
+
+/* ---------- 主页 GitHub 图标（原来那只 Mona，本地托管） ---------- */
+.hero .mona {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  margin-top: 1.4rem;
+  border-bottom: none;
+  color: var(--md-default-fg-color--light);
+  font-size: .75rem;
+}
+.hero .mona img {
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 72px;
+  height: 72px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  transition: transform .15s;
+}
+.hero .mona:hover { border-bottom: none; }
+.hero .mona:hover img { transform: translateY(-3px); }

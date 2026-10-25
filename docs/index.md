@@ -13,7 +13,11 @@ hide:
 安全方向的学习记录：CTF、靶场、Pwn、内网渗透，以及自己写的工具。
 
 [笔记总览](buuctf/index.md){ .md-button .md-button--primary }
-[GitHub](https://github.com/DarkLord-W){ .md-button }
+
+<a class="mona" href="https://github.com/DarkLord-W" target="_blank" rel="noopener">
+  <img src="assets/mona.gif" alt="GitHub" width="72" height="72">
+  <span>Github</span>
+</a>
 
 </div>
 
