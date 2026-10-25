@@ -1,83 +1,71 @@
 site_name: DarkLord-W's Blog
+site_url: https://darklord-w.github.io/
+site_description: 安全研究笔记与个人项目 —— CTF、靶场、Pwn、内网渗透
+repo_url: https://github.com/DarkLord-W/DarkLord-W.github.io
+repo_name: DarkLord-W/DarkLord-W.github.io
+edit_uri: edit/main/docs/
+copyright: © 2026 Darklord · Built with MkDocs Material
 
 theme:
-    name: 'material'
-    
-    logo: https://avatars.githubusercontent.com/u/42199147
-    
-    palette:
-
-    # Light mode
-    - media: "(prefers-color-scheme: light)" 
-      scheme: default  #配色方案：浅色模式
-      primary: indigo  #原色，默认蓝，用于标题、侧边栏、文本链接和其他几个组件
-      accent: indigo  #强调色，默认蓝，可以交互的元素如悬停链接、按钮和滚动条
+  name: material
+  language: zh
+  font: false                     # 关掉 Google Fonts，改用 extra.css 里的系统中文栈
+  logo: assets/logo.png
+  favicon: assets/favicon.ico
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
       toggle:
-        icon: material/weather-sunny #图标，太阳
-        name: Switch to dark mode
-        
-    # Dark mode       
-    - media: "(prefers-color-scheme: dark)"  
-      scheme: slate  #配色方案：深色模式
+        icon: material/weather-sunny
+        name: 切换到深色
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
       toggle:
-        icon: material/weather-night  #图标，月亮
-        name: Switch to light mode
-        
-# 新增 footer 配置
-    footer:
-      copyright: "Powered By Darklord-W"  # 清空版权区域内容（包含默认的 Made with... 文字）
-      links: []      # 清空页脚的链接区域（如果不需要额外链接可留空）
+        icon: material/weather-night
+        name: 切换到浅色
+  features:
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
 
-
-# Extensions
 markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - md_in_html
+  - def_list
   - footnotes
-  # - attr_list
-  - pymdownx.arithmatex:
-      generic: true
-  # - pymdownx.superfences
-  # - pymdownx.details
-  # - pymdownx.magiclink
+  - pymdownx.details
   - pymdownx.tasklist:
       custom_checkbox: true
-  - def_list
-  - pymdownx.critic
   - pymdownx.caret
-  - pymdownx.keys
   - pymdownx.mark
   - pymdownx.tilde
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-
+  - pymdownx.keys
+  - pymdownx.superfences
   - toc:
       permalink: false
-      
-     
-plugins:
-  - search
-  - roamlinks
-  - rss:
-      match_path: blog/posts/.* 
-      date_from_meta:
-        as_creation: date
-      categories:
-        - categories
-        - tags
-        
 
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+  - glightbox:
+      touchNavigation: true
+      effect: zoom
+      width: 90%
+      height: auto
 
 extra:
-  favicon: https://avatars.githubusercontent.com/u/42199147
-  generator: false  # 这行会移除 "Made with Material for MkDocs"
-  
+  generator: false
+
 extra_css:
   - stylesheets/extra.css
 
 extra_javascript:
-  - javascripts/mathjax.js
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
-  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-  - https://unpkg.com/mermaid/dist/mermaid.min.js 
+  - javascripts/image-fallback.js

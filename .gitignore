@@ -1,0 +1,13 @@
+# MkDocs 构建产物
+site/
+.cache/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 编辑器 / 系统
+.DS_Store
+Thumbs.db
