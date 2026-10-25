@@ -30,7 +30,6 @@ theme:
     - navigation.indexes
     - navigation.tracking
     - navigation.top
-    - navigation.footer
     - toc.follow
     - search.suggest
     - search.highlight

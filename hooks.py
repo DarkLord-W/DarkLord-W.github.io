@@ -18,7 +18,7 @@ import re
 from pathlib import Path
 
 DOCS = Path(__file__).resolve().parent / "docs"
-PLACEHOLDER = re.compile(r"\{\{\s*stats:([A-Za-z0-9_/\-]+)\s*\}\}")
+PLACEHOLDER = re.compile(r"\{\{\s*stats:([A-Za-z0-9_/\-:]+)\s*\}\}")
 CARD_RE = re.compile(r"^- {3}__(.+?)__\s*$", re.M)
 
 # 栏目目录（不计入笔记分区）
@@ -27,8 +27,21 @@ NON_SECTIONS = {"notes", "projects", "about"}
 _cache: dict[str, object] = {}
 
 
+# 这些目录下的 md 是站点自身的辅助页面，不算文章
+NON_CONTENT_DIRS = {"assets", "javascripts", "stylesheets"}
+
+
 def _articles(directory: Path) -> list[Path]:
-    return [p for p in directory.rglob("*.md") if p.name != "index.md"]
+    root = DOCS
+    out = []
+    for p in directory.rglob("*.md"):
+        if p.name == "index.md":
+            continue
+        parts = p.relative_to(root).parts
+        if parts and parts[0] in NON_CONTENT_DIRS:
+            continue
+        out.append(p)
+    return out
 
 
 def _count(rel: str) -> int:
@@ -63,6 +76,49 @@ def _repos() -> list[str]:
     if not path.is_file():
         return []
     return CARD_RE.findall(path.read_text(encoding="utf-8"))
+
+
+def _nav_sections() -> dict[str, list[str]]:
+    """从 nav 里解析每个分区目录下的子分组名（或页面标题）。"""
+    if "nav_sections" in _cache:
+        return _cache["nav_sections"]  # type: ignore[return-value]
+
+    result: dict[str, list[str]] = {}
+    nav = _cache.get("nav") or []
+
+    def walk(node) -> None:
+        if isinstance(node, list):
+            for item in node:
+                walk(item)
+            return
+        if not isinstance(node, dict):
+            return
+        for _title, value in node.items():
+            if isinstance(value, list):
+                first = value[0] if value else None
+                if isinstance(first, str) and first.endswith("/index.md"):
+                    section_dir = first[: -len("/index.md")]
+                    groups: list[str] = []
+                    for child in value[1:]:
+                        if isinstance(child, dict):
+                            groups.append(next(iter(child)))
+                        elif isinstance(child, str):
+                            groups.append(Path(child).stem)
+                    result[section_dir] = groups
+                walk(value)
+
+    walk(nav)
+    _cache["nav_sections"] = result
+    return result
+
+
+def _summary(rel: str) -> str:
+    """「N 篇 · 子分组名」——分组名取自 nav，篇数取自实际文件数。"""
+    groups = list(_nav_sections().get(rel, []))
+    n = _count(rel)
+    if len(groups) > 4:
+        return "%d 篇 · %s 等" % (n, "、".join(groups[:3]))
+    return "%d 篇 · %s" % (n, "、".join(groups)) if groups else "%d 篇" % n
 
 
 def _values() -> dict[str, str]:
@@ -104,6 +160,8 @@ def _replace(markdown: str) -> str:
         key = match.group(1)
         if key in values:
             return values[key]
+        if key.startswith("summary:"):
+            return _summary(key[len("summary:"):])
         # 目录路径形式：{{stats:pwn}} / {{stats:BUUCTF/Web}}
         return str(_count(key))
 
@@ -113,6 +171,7 @@ def _replace(markdown: str) -> str:
 def on_pre_build(config) -> None:
     # mkdocs serve 会在同进程反复构建，每次构建前清缓存
     _cache.clear()
+    _cache["nav"] = config.get("nav") or []
 
 
 def on_page_markdown(markdown: str, page, config, files) -> str:

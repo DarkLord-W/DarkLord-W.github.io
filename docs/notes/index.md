@@ -12,7 +12,7 @@
 
     ---
 
-    {{stats:pwn}} 篇 · Protostar、pwnable.kr、ret2 系列
+    {{stats:summary:pwn}}
 
     [进入](../pwn/index.md)
 
@@ -20,7 +20,7 @@
 
     ---
 
-    {{stats:BUUCTF}} 篇 · Web 题与基础课
+    {{stats:summary:BUUCTF}}
 
     [进入](../BUUCTF/index.md)
 
@@ -28,7 +28,7 @@
 
     ---
 
-    {{stats:web}} 篇 · ATT&CK 红队评估、vulhub、TryHackMe
+    {{stats:summary:web}}
 
     [进入](../web/index.md)
 
@@ -36,7 +36,7 @@
 
     ---
 
-    {{stats:HTB}} 篇 · Starting Point 与中等难度靶机
+    {{stats:summary:HTB}}
 
     [进入](../HTB/index.md)
 
@@ -44,7 +44,7 @@
 
     ---
 
-    {{stats:PortSwigger-Academy}} 篇 · 文件上传漏洞
+    {{stats:summary:PortSwigger-Academy}}
 
     [进入](../PortSwigger-Academy/index.md)
 
@@ -52,7 +52,7 @@
 
     ---
 
-    {{stats:php}} 篇 · 反序列化
+    {{stats:summary:php}}
 
     [进入](../php/index.md)
 
