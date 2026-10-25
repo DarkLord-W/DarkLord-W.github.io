@@ -26,11 +26,91 @@ theme:
         icon: material/weather-night
         name: 切换到浅色
   features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.indexes
+    - navigation.tracking
+    - navigation.top
+    - navigation.footer
     - toc.follow
     - search.suggest
     - search.highlight
     - content.code.copy
     - content.code.annotate
+
+nav:
+  - 首页: index.md
+  - 安全笔记:
+      - BUUCTF:
+          - buuctf/index.md
+          - Web:
+              - HCTF 2018 WarmUp: BUUCTF/Web/HCTF 2018WarmUp.md
+          - Basic:
+              - AWD Test 1: BUUCTF/basic/AWD-Test1.md
+              - BUU BRUTE 1: BUUCTF/basic/BUU BRUTE 1.md
+              - BUU BURP COURSE 1: BUUCTF/basic/BUU BURP COURSE 1.md
+              - BUU CODE REVIEW 1: BUUCTF/basic/BUU CODE REVIEW 1.md
+              - BUU LFI COURSE 1: BUUCTF/basic/BUU LFI COURSE 1.md
+              - BUU SQL COURSE 1: BUUCTF/basic/BUU SQL COURSE 1.md
+              - BUU SQL COURSE 2: BUUCTF/basic/BUU SQL COURSE 2.md
+              - BUU UPLOAD COURSE 1: BUUCTF/basic/BUU UPLOAD COURSE 1.md
+              - BUU XXE COURSE 1: BUUCTF/basic/BUU XXE COURSE 1.md
+      - HTB:
+          - htb/index.md
+          - Starting Point:
+              - Oopsie: HTB/Starting-Point/Oopsie.md
+          - Medium:
+              - VariaType: HTB/Medium/VariaType.md
+      - PortSwigger Academy:
+          - portswigger/index.md
+          - 文件上传漏洞: PortSwigger-Academy/File upload vulnerabilities.md
+      - Php:
+          - php/index.md
+          - PHP 反序列化: php/serialize_unserialize.md
+      - Pwn:
+          - pwn/index.md
+          - Protostar:
+              - stack0: pwn/Protostar_stack0.md
+              - stack1: pwn/Protostar_stack1.md
+              - stack2: pwn/Protostar_stack2.md
+              - stack3: pwn/Protostar_stack3.md
+              - stack4: pwn/Protostar_stack4.md
+              - stack5: pwn/Protostar_stack5.md
+              - stack6: pwn/Protostar_stack6.md
+              - stack7: pwn/Protostar_stack7.md
+              - format0: pwn/Protostar_format0.md
+              - format1: pwn/Protostar_format1.md
+              - format2: pwn/Protostar_format2.md
+              - heap0: pwn/Protostar_heap0.md
+              - heap1: pwn/Protostar_heap1.md
+              - heap2: pwn/Protostar_heap2.md
+              - heap3: pwn/Protostar_heap3.md
+          - pwnable.kr:
+              - fd: "pwn/pwnable--fd -- (File descriptor).md"
+              - collision: pwn/pwnable--collision.md
+              - bof: pwn/pwnable--bof.md
+              - flag: "pwn/pwnable--flag--(reverse).md"
+              - passcode: pwn/pwnable--passcode.md
+              - random: pwn/pwnable--random.md
+              - input: pwn/pwnable--input.md
+          - 练习:
+              - bamboofox · ret2syscall: pwn/bamboofox-ret2syscall-rop.md
+              - pwn-sniper 01: pwn/pwn-sniper-01.md
+              - pwn-sniper 02: pwn/pwn-sniper-02.md
+              - pwn-sniper 03: pwn/pwn-sniper-03.md
+              - ret2shellcode: pwn/ret2shellcode.md
+              - 栈溢出测试: pwn/stack_test.md
+              - xctf · 反应釜开关控制: pwn/xctf--pwn--反应釜开关控制.md
+      - Web 与内网:
+          - web/index.md
+          - ATT&CK 红队评估 01: web/ATTCK红队评估01.md
+          - ATT&CK 红队评估 02: web/ATTCK红队评估02.md
+          - HTB · Pilgrimage: web/HTB Pilgrimage.md
+          - TryHackMe · Overpass: web/tryhackme - Overpass.md
+          - vulhub · DC-9: "web/vulhub    DC-9.md"
+          - vulhub · DIGITALWORLD.LOCAL: "web/vulhub    DIGITALWORLD.LOCAL_ BRAVERY.md"
+  - 项目: projects/index.md
+  - 关于: about/index.md
 
 markdown_extensions:
   - abbr
