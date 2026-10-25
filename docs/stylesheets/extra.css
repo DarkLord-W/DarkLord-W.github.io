@@ -159,3 +159,9 @@
   .md-typeset { font-size: 0.82rem; }
   .md-typeset img { margin: 1.1em auto; }
 }
+
+/* ---------- 主页：全宽三列卡片 ---------- */
+.md-content:has(.hero) { max-width: 54rem; }
+.md-content:has(.hero) .md-typeset .grid.cards > ul {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
