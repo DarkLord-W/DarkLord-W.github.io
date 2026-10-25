@@ -11,6 +11,7 @@
 #   ./auto_push.sh --ssh443         # SSH over 443（github.com:22 被挡时）
 #   ./auto_push.sh --https          # HTTPS + Personal Access Token
 #   ./auto_push.sh --push-only      # 只推已有提交，不做提交
+#   ./auto_push.sh -m "提交信息"    # 非交互指定提交信息
 #   ./auto_push.sh --tags           # 同时推标签
 #   ./auto_push.sh --dry-run        # 只显示将要提交的内容，不提交不推送
 #
@@ -24,6 +25,7 @@ PUSH_TAGS=0
 DRY_RUN=0
 ALLOW_LARGE=0
 PUSH_ONLY=0
+COMMIT_MSG=""
 BRANCH=""
 MAX_FILE_MB=5
 
@@ -35,6 +37,7 @@ while [ $# -gt 0 ]; do
     --tags)      PUSH_TAGS=1 ;;
     --dry-run)   DRY_RUN=1 ;;
     --push-only) PUSH_ONLY=1 ;;
+    -m|--message) shift; COMMIT_MSG="${1:?--message 需要参数}" ;;
     --allow-large) ALLOW_LARGE=1 ;;
     --branch)    shift; BRANCH="${1:?--branch 需要参数}" ;;
     -h|--help)   sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
@@ -151,13 +154,18 @@ if [ "$DRY_RUN" -eq 1 ]; then
 fi
 
 if [ "$ASSUME_YES" -eq 0 ]; then
-  read -r -p "继续提交并推送？[y/N] " ok
+  read -r -p "继续提交并推送？[y/N] " ok || ok=""
   [[ $ok =~ ^[Yy]$ ]] || { warn "已取消。"; exit 0; }
 fi
 
 # ---------- 5. 提交（工作区干净时跳过） ----------
 if [ "$SKIP_COMMIT" -eq 0 ]; then
-  read -r -p "提交信息（留空用默认）: " msg
+  msg="$COMMIT_MSG"
+  if [ -z "$msg" ]; then
+    if [ -t 0 ]; then
+      read -r -p "提交信息（留空用默认）: " msg || msg=""
+    fi
+  fi
   [ -z "$msg" ] && msg="Update: $(date '+%Y-%m-%d %H:%M:%S')"
 
   git commit -q -m "$msg"
@@ -178,6 +186,9 @@ REFSPEC="$BRANCH:$BRANCH"
 [ "$PUSH_TAGS" -eq 1 ] && REFSPEC="$REFSPEC"   # 标签单独再推
 
 say "推送到 $MODE …"
+PUSH_LOG=$(mktemp)
+trap 'rm -f "$PUSH_LOG"' EXIT
+
 set +e
 if [ "$MODE" = "https" ]; then
   # 不走 URL 内嵌 token，改用 GIT_ASKPASS 临时脚本，避免 ps 里看到明文
@@ -197,21 +208,34 @@ EOS
 
   timeout "$PUSH_TIMEOUT" env GIT_TERMINAL_PROMPT=0 GIT_ASKPASS="$ASKPASS" \
     GIT_USERNAME="$(git config user.name)" GIT_TOKEN="$TOKEN" \
-    git push "$PUSH_URL" "$REFSPEC"
-  rc=$?
+    git push "$PUSH_URL" "$REFSPEC" 2>&1 | tee "$PUSH_LOG"
+  rc=${PIPESTATUS[0]}
 else
-  timeout "$PUSH_TIMEOUT" git push "$PUSH_URL" "$REFSPEC"
-  rc=$?
+  timeout "$PUSH_TIMEOUT" git push "$PUSH_URL" "$REFSPEC" 2>&1 | tee "$PUSH_LOG"
+  rc=${PIPESTATUS[0]}
 fi
 set -e
 
 if [ "$rc" -ne 0 ]; then
   echo
-  case "$MODE" in
-    ssh)    warn "SSH 22 端口可能被挡。试试：./auto_push.sh --ssh443" ;;
-    ssh443) warn "检查 ~/.ssh 里是否有密钥、且公钥已加到 GitHub" ;;
-    https)  warn "HTTPS 到 github.com 在本机不通，token 正确也会失败；建议改用 SSH" ;;
-  esac
+  if grep -qi "Permission denied (publickey)" "$PUSH_LOG" 2>/dev/null; then
+    warn "本机没有可用密钥，或公钥没加到 GitHub。生成并添加："
+    echo  "  ssh-keygen -t ed25519 -C \"$(git config user.email)\" -f ~/.ssh/id_ed25519 -N ''"
+    echo  "  cat ~/.ssh/id_ed25519.pub    # 粘到 GitHub → Settings → SSH and GPG keys"
+    echo  "  ssh -T git@github.com        # 应回 Hi ${OWNER}!"
+  elif grep -qi "Could not read from remote repository" "$PUSH_LOG" 2>/dev/null; then
+    warn "SSH 握手或密钥被拒；若 22 端口不通可试：./auto_push.sh --ssh443"
+  elif grep -qiE "Connection timed out|Connection refused|kex_exchange_identification|Network is unreachable" "$PUSH_LOG" 2>/dev/null; then
+    warn "网络到 github.com 不通（22 端口可能被挡）：试 ./auto_push.sh --ssh443，或在本机配代理"
+  elif grep -qi "Could not resolve host" "$PUSH_LOG" 2>/dev/null; then
+    warn "DNS 解析失败，检查网络或 DNS 设置"
+  elif grep -qiE "non-fast-forward|\[rejected\]" "$PUSH_LOG" 2>/dev/null; then
+    warn "远端有你没有的提交，先 git pull --rebase 再推"
+  elif grep -qiE "Authentication failed|Invalid username or password|403" "$PUSH_LOG" 2>/dev/null; then
+    warn "HTTPS 认证失败：token 过期或无 repo 权限（需要 repo scope）"
+  else
+    warn "推送失败，完整输出见上方"
+  fi
   die "推送失败（退出码 $rc）"
 fi
 
