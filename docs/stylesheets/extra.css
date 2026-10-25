@@ -229,102 +229,97 @@
   font-size: 1.25rem;
 }
 
-/* ---------- 关于页：诗句做成竖排立轴 ---------- */
-/* 只含诗里 16 个字的宋体子集（8 KB），保证任何系统上都是同一套字形 */
+/* ---------- 关于页：竖排诗句 + 印章 ---------- */
+/* 毛笔行书子集（Ma Shan Zheng，OFL），只含诗句与印章用到的 18 个字 */
+@font-face {
+  font-family: "Poem Brush";
+  src: url("../assets/poem-brush.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+/* 宋体子集，印章用 */
 @font-face {
   font-family: "Poem Serif";
   src: url("../assets/poem-serif.woff2") format("woff2");
   font-weight: 400 600;
   font-display: swap;
 }
+
+/* 整页不留标题：Material 在内容无 h1 时会自动补一个，这里隐掉 */
+.md-content:has(.poem-hero) h1 { display: none; }
+
 .poem-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.4rem;
-  padding: 2.4rem 0 3rem;
-  min-height: 64vh;
+  gap: 3rem;
+  padding: 3rem 0;
+  min-height: 70vh;
   justify-content: center;
 }
 
-.poem-scroll {
-  display: flex;
-  flex-direction: row-reverse;   /* 诗句在右、款识在左，符合从右往左的阅读方向 */
-  align-items: flex-end;
-  gap: 1.2rem;
-}
-
 .poem {
-  /* 竖排、从右往左；四个 <span> 是块级盒子，天然按 block 轴（横向）从右到左排列 */
+  /* 竖排、从右往左；四个 <span> 是块级盒子，天然按 block 轴从右到左排列 */
   writing-mode: vertical-rl;
   text-orientation: upright;
-  font-family: "Poem Serif", "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", "SimSun", serif;
-  font-size: 1.9rem;
-  letter-spacing: .34em;
+  font-family: "Poem Brush", "Kaiti SC", "STKaiti", "KaiTi", serif;
+  font-size: 2.2rem;
+  letter-spacing: .28em;
   line-height: 2.1;
   color: var(--md-default-fg-color);
 }
 
 .poem span {
   display: block;
-  position: relative;          /* 用 top 做错落，不干扰动画的 transform */
+  position: relative;
   animation: poem-in .9s cubic-bezier(.2, .7, .3, 1) both;
 }
 
-/* 四列高低与列距各不相同，读起来才有行气 */
-.poem span:nth-child(1) { top:  14px; margin-block-end: 0.9rem; }
-.poem span:nth-child(2) { top: -26px; margin-block-end: 2.0rem; font-size: .96em; }
-.poem span:nth-child(3) { top:  22px; margin-block-end: 1.1rem; }
-.poem span:nth-child(4) { top: -12px; margin-block-end: 1.5rem; font-size: 1.04em; }
-.poem span:nth-child(1) { animation-delay: .05s; }
-.poem span:nth-child(2) { animation-delay: .17s; }
-.poem span:nth-child(3) { animation-delay: .29s; }
-.poem span:nth-child(4) { animation-delay: .41s; }
+/* 四列高低与列距差得更大，读起来才有行气 */
+.poem span:nth-child(1) { top:  26px; margin-block-end: 0.8rem; }
+.poem span:nth-child(2) { top: -44px; margin-block-end: 2.4rem; font-size: .93em; }
+.poem span:nth-child(3) { top:  38px; margin-block-end: 1.0rem; }
+.poem span:nth-child(4) { top: -22px; margin-block-end: 0; font-size: 1.06em; }
 
 @keyframes poem-in {
   from { opacity: .75; transform: translateY(-10px); }
   to   { opacity: 1; transform: none; }
 }
 
-/* 落款：印章样式，贴在末列左下（书法款识的位置） */
+/* 落款印章：放在诗句下方，竖排「守静」，白文 */
 .poem-seal {
-  writing-mode: horizontal-tb;
-  margin: 0 0 .55rem .2rem;
-  padding: .38em .5em .3em;
-  border: 2px solid #a63b32;
-  border-radius: 2px;
-  color: #a63b32;
-  font-size: .62rem;
-  font-weight: 600;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  transform: rotate(-4deg);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .08em;
+  margin: 0;
+  padding: .55em .5em .45em;
+  background: #a63b32;
+  border-radius: 4px;
+  color: #fff;
+  font-family: "Poem Brush", "Poem Serif", serif;
+  font-size: 1.45rem;
+  line-height: 1.05;
+  letter-spacing: .02em;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .45);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .12);
+  transform: rotate(-3deg);
   animation: seal-in .9s .55s cubic-bezier(.2, .7, .3, 1) both;
 }
+.poem-seal span { display: block; }
 
 @keyframes seal-in {
-  from { opacity: .75; transform: rotate(-4deg) translateY(-8px); }
-  to   { opacity: 1;   transform: rotate(-4deg); }
-}
-
-/* 关于页的标题收成一个小标签，把版面让给诗句 */
-.md-content:has(.poem-hero) h1 {
-  text-align: center;
-  font-size: .78rem;
-  font-weight: 500;
-  letter-spacing: .5em;
-  text-indent: .5em;
-  color: var(--md-default-fg-color--light);
-  margin: 2.4rem 0 0;
+  from { opacity: .75; transform: rotate(-3deg) translateY(-8px); }
+  to   { opacity: 1;   transform: rotate(-3deg); }
 }
 
 @media screen and (max-width: 44.9375em) {
-  .poem-scroll { flex-wrap: wrap; flex-direction: row; justify-content: center; }
-  .poem { font-size: 1.35rem; }
-  .poem-seal { margin: .6rem auto 0; }
+  .poem { font-size: 1.7rem; }
   .poem span:nth-child(n) { top: 0; }
+  .poem-seal { font-size: 1.2rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .poem span, .poem-seal { animation: none; }
+}
 }
